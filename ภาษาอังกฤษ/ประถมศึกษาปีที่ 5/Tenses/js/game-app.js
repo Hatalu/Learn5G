@@ -1,14 +1,15 @@
 /**
  * Chrono-Beast Game Application Controller
- * Version 3.8: Kid-Friendly Active Learning & Dynamic Scene Edition
+ * Version 4.0: Pet-Aligned Quests & Dynamic Scene Edition
  * 
  * Features:
  * 1. Single-screen 100vh fit (no vertical scrolling)
  * 2. 10 Cool Pet Companions (All Unlocked with Generated Art)
- * 3. Infinite Random Quests (shuffled, no repetitive sequence)
- * 4. Dynamic Field Scenes & Pet Actions per quest (e.g., dragon attacking castle, breathing fire, tiger roaring)
- * 5. Flying Word Animation into Sentence Blank on Correct Answer
- * 6. Responsive Correct / Wrong Feedback Overlays & Sound
+ * 3. Quests aligned directly with currently selected pet (Default: Dragon)
+ * 4. Random quests for the active pet covering 4 Tenses (Past, Present Simple, Continuous, Future)
+ * 5. Dynamic Field Scenes & Pet Actions per quest (e.g. dragon attacking castle, breathing fire, tiger roaring)
+ * 6. Flying Word Animation into Sentence Blank on Correct Answer
+ * 7. Responsive Correct / Wrong Feedback Overlays & Sound
  */
 
 (function () {
@@ -31,14 +32,14 @@
   class ChronoBeastGameApp {
     constructor() {
       this.pixelField = null;
-      this.currentQuestIndex = -1;
-      this.currentPetId = 1; // Default: Ignis Drake
+      this.currentPetId = 1; // ค่าเริ่มต้น: มังกร (Ignis Drake)
+      this.currentQuest = null;
+      this.lastQuestId = null;
       this.score = 0;
       this.streak = 0;
       this.isProcessing = false;
 
-      this.quests = window.CHRONO_QUESTS || [];
-      this.playedHistory = [];
+      this.questsByPet = window.CHRONO_QUESTS_BY_PET || {};
     }
 
     init() {
@@ -46,6 +47,7 @@
       try {
         if (typeof PixelFieldRenderer === 'function') {
           this.pixelField = new PixelFieldRenderer('pixel-field-canvas');
+          this.pixelField.setPet(this.currentPetId);
         }
       } catch (err) {
         console.error('Error initializing PixelFieldRenderer:', err);
@@ -57,13 +59,13 @@
       // 3. Render 10 Pets in Pets Modal (All Unlocked)
       this.renderPetsModal();
 
-      // 4. Load Random Quest
-      this.loadRandomQuest();
+      // 4. Load Random Quest aligned with current pet (Default: Dragon)
+      this.loadRandomQuestForCurrentPet();
 
       // 5. Update UI Stats
       this.updateStatsUI();
 
-      console.log('🐾 Chrono-Beast 2D Dynamic Edition Ready!');
+      console.log('🐾 Chrono-Beast Pet-Aligned Dynamic Edition Ready!');
     }
 
     bindEvents() {
@@ -110,8 +112,8 @@
       const speakBtn = document.getElementById('speak-sentence-btn');
       if (speakBtn) {
         speakBtn.addEventListener('click', () => {
-          if (this.currentQuestIndex >= 0 && this.quests[this.currentQuestIndex]) {
-            const quest = this.quests[this.currentQuestIndex];
+          if (this.currentQuest) {
+            const quest = this.currentQuest;
             const sentenceToSpeak = `${quest.sentenceParts[0]} ${quest.correctAnswer} ${quest.sentenceParts[2]}`;
             if (window.soundFX) {
               window.soundFX.speakEnglish(sentenceToSpeak);
@@ -153,14 +155,31 @@
           </div>
         `;
 
-        // Click handler: Equips pet immediately!
+        // Click handler: Equips pet immediately and switches quests to this pet!
         card.addEventListener('click', () => {
-          this.currentPetId = pet.id;
-          if (this.pixelField) {
-            this.pixelField.setPet(pet.id);
+          if (this.currentPetId !== pet.id) {
+            this.currentPetId = pet.id;
+            this.lastQuestId = null;
+
+            // Change pet in 2D pixel field engine
+            if (this.pixelField) {
+              this.pixelField.setPet(pet.id);
+            }
+
+            // Immediately switch questions to match this selected pet!
+            this.loadRandomQuestForCurrentPet();
+
+            if (window.soundFX) window.soundFX.playClick();
+            this.renderPetsModal(); // Re-render to update equipped badge
+            
+            // Auto close modal after brief selection feedback
+            const petsModal = document.getElementById('pets-modal');
+            if (petsModal) {
+              setTimeout(() => {
+                petsModal.style.display = 'none';
+              }, 250);
+            }
           }
-          if (window.soundFX) window.soundFX.playClick();
-          this.renderPetsModal(); // Re-render to update equipped badge
         });
 
         grid.appendChild(card);
@@ -168,25 +187,24 @@
     }
 
     /* ========================================================================
-       Infinite Random Quest Selector (No repetitiveness)
+       Random Quest aligned with Currently Selected Pet
        ======================================================================== */
-    loadRandomQuest() {
-      if (!this.quests || this.quests.length === 0) return;
+    loadRandomQuestForCurrentPet() {
+      const petQuests = this.questsByPet[this.currentPetId] || this.questsByPet[1] || [];
+      if (petQuests.length === 0) return;
 
-      // Pick a random index different from currentQuestIndex
-      let nextIndex;
-      if (this.quests.length === 1) {
-        nextIndex = 0;
-      } else {
-        do {
-          nextIndex = Math.floor(Math.random() * this.quests.length);
-        } while (nextIndex === this.currentQuestIndex && this.quests.length > 1);
+      // Filter to avoid repeating the immediately previous question
+      let candidates = petQuests;
+      if (petQuests.length > 1 && this.lastQuestId) {
+        candidates = petQuests.filter(q => q.id !== this.lastQuestId);
       }
 
-      this.currentQuestIndex = nextIndex;
-      this.isProcessing = false;
+      const randomIdx = Math.floor(Math.random() * candidates.length);
+      const quest = candidates[randomIdx];
 
-      const quest = this.quests[nextIndex];
+      this.currentQuest = quest;
+      this.lastQuestId = quest.id;
+      this.isProcessing = false;
 
       // 1. Time Clue Pill
       const timeClueText = document.getElementById('time-clue-text');
@@ -197,7 +215,7 @@
       // 2. Top Center Tense Banner on Open Field (e.g. Tense: Past (อดีต))
       this.updateFieldTenseBanner(quest.tense);
 
-      // 3. Dynamic Scene & Pet Action on Field (e.g., castle attack, breathe fire)
+      // 3. Dynamic Scene & Pet Action on Field (e.g., dragon attacking castle, breathing fire, tiger roaring)
       if (this.pixelField) {
         this.pixelField.setSceneAndAction(quest.scene || 'meadow', quest.petAction || 'walk');
       }
@@ -300,7 +318,7 @@
        - Speech Synthesis speaks completed sentence
        - Pet Celebratory Cheer Jump
        - Score & Streak Boost
-       - Advance to next random quest
+       - Advance to next random quest for this pet
        ======================================================================== */
     handleCorrectAnswer(btn, card, quest) {
       this.isProcessing = true;
@@ -347,10 +365,10 @@
         `ยอดเยี่ยมมาก! เติมคำว่า "${card.text}" ได้ถูกต้องตาม Tense`
       );
 
-      // 8. Progress to next random quest after 2.3s
+      // 8. Progress to next random quest for this pet after 2.3s
       setTimeout(() => {
         this.hideTitleFeedback();
-        this.loadRandomQuest();
+        this.loadRandomQuestForCurrentPet();
       }, 2300);
     }
 
