@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chrono-Beast: Evolution of Tenses (ภาษาอังกฤษ ป.5)</title>
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>🐲</text></svg>">
+</head>
+<body>
+
+  <!-- Ambient Glowing Background -->
+  <div class="ambient-bg"></div>
+
+  <!-- Header: Navigation, Pets Button & Auth User Status -->
+  <header class="chrono-header">
+    <div class="logo-group">
+      <div class="logo-badge">🐲</div>
+      <div class="logo-text">
+        <h1>CHRONO-BEAST</h1>
+        <span>Evolution of Tenses • ภาษาอังกฤษ ป.5</span>
+      </div>
+    </div>
+
+    <div class="header-tools">
+      <!-- Supabase Auth User Badge (Dynamic) -->
+      <div class="user-auth-badge" id="user-auth-badge" style="display: none;">
+        <span class="auth-user-role" id="auth-user-role">👑 สมาชิก</span>
+        <span class="auth-username" id="auth-username">User</span>
+        <span class="auth-premium-pill" id="auth-premium-pill">⭐ Premium</span>
+        <button class="auth-logout-btn" id="auth-logout-btn" title="ออกจากระบบ">🚪 ออก</button>
+      </div>
+
+      <!-- Pets Companion Button -->
+      <button class="header-btn btn-pets" id="open-pets-btn" title="เปิดหน้าเลือกสัตว์เลี้ยงคู่หู">
+        <span class="btn-icon">🐾</span>
+        <span class="btn-label">Pets (สัตว์เลี้ยง)</span>
+      </button>
+
+      <!-- Score & Streak Pills -->
+      <div class="stat-pill">✨ คะแนน: <span id="score-val">0</span></div>
+      <div class="stat-pill">🔥 คอมโบ: <span id="streak-val">0</span></div>
+
+      <!-- Sound Toggle -->
+      <button class="icon-btn" id="sound-toggle" title="เปิด/ปิดเสียง">🔊</button>
+    </div>
+  </header>
+
+  <!-- Main App Container (Single Screen No-Scroll Fit) -->
+  <main class="app-container">
+
+    <!-- 1. Open Field Section (Dynamic 2D Pixel Environment & Animated Pet) -->
+    <section class="open-field-container">
+      
+      <!-- Top Center Tense Banner on Open Field -->
+      <div class="field-tense-banner" id="field-tense-banner">
+        <span class="tense-icon">⚡</span>
+        <span id="field-tense-text">Tense: Past (อดีต)</span>
+      </div>
+
+      <!-- 2D Pixel Canvas Meadow & Dynamic Scene -->
+      <canvas id="pixel-field-canvas"></canvas>
+    </section>
+
+    <!-- 2. Center Bottom: Big Sentence Hero Box & 4 Big Choices -->
+    <section class="bottom-quest-cockpit">
+
+      <!-- Time Clue Bar -->
+      <div class="cockpit-top-bar">
+        <div class="time-clue-pill" id="time-clue-pill">
+          ⏰ คำบอกเวลา: <strong id="time-clue-text">every morning</strong>
+        </div>
+      </div>
+
+      <!-- Large Sentence Hero Box -->
+      <div class="sentence-hero-box" id="sentence-hero-box">
+        <div class="sentence-display" id="sentence-display">
+          <span id="sentence-part-before">Ignis the dragon</span>
+          <span class="sentence-blank" id="sentence-blank">[ _______ ]</span>
+          <span id="sentence-part-after">fire from the mountain every morning.</span>
+        </div>
+
+        <!-- Sentence Tools (Meaning & Listen Voice) -->
+        <div class="sentence-bottom-row">
+          <div class="sentence-meaning" id="sentence-meaning">
+            🇹🇭 "มังกร Ignis พ่นไฟออกจากภูเขาเป็นประจำทุกๆ เช้า"
+          </div>
+          <button class="speak-btn" id="speak-sentence-btn" title="ฟังการออกเสียงภาษาอังกฤษ">
+            🔊 ฟังเสียงประโยค
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Big Prominent Choice Buttons -->
+      <div class="choices-container">
+        <div class="choices-grid" id="choices-grid">
+          <!-- 4 Big Choices Dynamically Injected -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- Result Title Overlay (Correct / Wrong Feedback)                       -->
+  <!-- ===================================================================== -->
+  <div class="result-title-overlay" id="result-title-overlay" style="display: none;">
+    <div class="result-title-card" id="result-title-card">
+      <div class="result-title-icon" id="result-title-icon">✨</div>
+      <h2 class="result-title-heading" id="result-title-heading">ถูกต้องยอดเยี่ยม!</h2>
+      <p class="result-title-sub" id="result-title-sub">ยอดเยี่ยมมาก! กริยาผันตาม Tense ถูกต้อง</p>
+    </div>
+  </div>
+
+  <!-- Flying Word Animation Clone Container -->
+  <div id="flying-word-container" class="flying-word-container"></div>
+
+  <!-- ===================================================================== -->
+  <!-- Pets Popup Modal (10 Pets, 5 per row, All Unlocked with Generated Art)-->
+  <!-- ===================================================================== -->
+  <div class="custom-modal-overlay" id="pets-modal" style="display: none;">
+    <div class="custom-modal-card pets-modal-card">
+      
+      <!-- Modal Header -->
+      <div class="modal-header-row">
+        <div class="modal-title-group">
+          <span class="modal-badge-icon">🐾</span>
+          <div>
+            <h3>สวนสัตว์เลี้ยงคู่หู (PET COMPANIONS)</h3>
+            <p>เลือกสัตว์เลี้ยงคู่หูที่จะร่วมเดินเล่น ผจญภัย และเปลี่ยนการกระทำตามโจทย์ Tenses ไปกับคุณ</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-pets-btn" title="ปิดหน้าต่าง">✕</button>
+      </div>
+
+      <!-- Pets Grid: 10 Pets, 5 per row -->
+      <div class="pets-grid-5cols" id="pets-grid">
+        <!-- 10 Pet Cards rendered dynamically with cool artwork -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pets-modal-footer">
+        <div class="pets-unlock-notice">
+          ⭐ <strong>ปลดล็อคสัตว์เลี้ยงครบทุกตัวแล้ว!</strong> แตะที่สัตว์ตัวใดก็ได้เพื่อเปลี่ยนคู่หูลงสนามได้ทันที
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- Supabase Cosmic Auth Gate Modal (Mandatory Login Gate)                -->
+  <!-- ===================================================================== -->
+  <div class="auth-gate-overlay" id="auth-gate-modal">
+    <div class="auth-gate-card">
+      <div class="auth-logo-badge">🐲</div>
+      <h2 class="auth-title">เข้าสู่สำนักฝึกสัตว์วิเศษ</h2>
+      <p class="auth-subtitle">ระบบสื่อประถม 5G นวัตกรรมการเรียนรู้ • ป.5 Tenses</p>
+
+      <!-- Error / Alert Message -->
+      <div class="auth-alert" id="auth-alert" style="display: none;">
+        <span class="auth-alert-icon" id="auth-alert-icon">⚠️</span>
+        <div class="auth-alert-msg" id="auth-alert-msg">ข้อความแจ้งเตือน</div>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="auth-login-form">
+        <div class="auth-input-group">
+          <label for="auth-username-input">👤 ชื่อผู้ใช้งาน (Username)</label>
+          <input 
+            type="text" 
+            id="auth-username-input" 
+            placeholder="ใส่ชื่อที่คุณได้รับมาจากเพจ" 
+            autocomplete="username" 
+            required
+          />
+        </div>
+
+        <div class="auth-input-group">
+          <label for="auth-password-input">🔒 รหัสผ่าน (Password)</label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="auth-password-input" 
+              placeholder="กรอกรหัสผ่านของคุณ" 
+              autocomplete="current-password" 
+              required
+            />
+            <button type="button" class="toggle-pw-btn" id="auth-toggle-pw-btn" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-info-note">
+          ✨ <strong>เงื่อนไขสิทธิ์การเข้าใช้งาน:</strong> เฉพาะบัญชีที่มีสถานะ <strong>Premium</strong> เท่านั้น หากหมดอายุหรือยังไม่ได้รับสิทธิ์ (สถานะ: -) จะไม่สามารถเข้าเล่นได้
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="auth-submit-btn">
+          <span class="btn-text">⚔️ เข้าสู่สำนักฝึกสัตว์วิเศษ</span>
+          <div class="btn-spinner" id="auth-btn-spinner" style="display: none;"></div>
+        </button>
+      </form>
+
+      <div class="auth-card-footer">
+        เชื่อมต่อระบบตรวจสอบสิทธิ์กลาง Supabase • Educational Media Hub
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS Client for Authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Game Scripts -->
+  <script src="js/audio.js?v=4"></script>
+  <script src="js/beast-data.js?v=4"></script>
+  <script src="js/pixel-field-renderer.js?v=4"></script>
+  <script src="js/game-app.js?v=4"></script>
+  <script src="js/supabase-auth-guard.js?v=4"></script>
+
+</body>
+</html>
