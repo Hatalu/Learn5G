@@ -25,6 +25,14 @@
     </div>
 
     <div class="header-tools">
+      <!-- Supabase Authenticated User Pill & Logout -->
+      <div class="user-auth-badge" id="user-auth-badge" style="display: none;">
+        <span class="auth-user-role" id="auth-user-role">👑 ผู้พัฒนา</span>
+        <span class="auth-username" id="auth-username">Hatalu001</span>
+        <span class="auth-premium-pill" id="auth-premium-pill">⭐ Premium</span>
+        <button class="auth-logout-btn" id="auth-logout-btn" title="ออกจากระบบห้องควบคุมยาน">🚪 ออกจากระบบ</button>
+      </div>
+
       <button class="icon-btn" id="sound-toggle" title="เปิด/ปิดเสียงเอฟเฟกต์">🔊</button>
       <button class="icon-btn" id="bgm-toggle" title="เปิด/ปิดดนตรีบรรเลง">🎶</button>
     </div>
@@ -270,12 +278,86 @@
   <!-- Confetti Canvas -->
   <canvas class="confetti-canvas" id="confetti-canvas"></canvas>
 
+  <!-- ===================================================================== -->
+  <!-- Supabase Cosmic Auth Gate Modal (Required before playing)             -->
+  <!-- ===================================================================== -->
+  <div class="auth-gate-overlay" id="auth-gate-modal">
+    <div class="auth-gate-card">
+      <div class="auth-card-glow"></div>
+      
+      <!-- Logo / Icon -->
+      <div class="auth-header">
+        <div class="auth-logo-badge">🪐</div>
+        <h2 class="auth-title">เข้าสู่ระบบห้องควบคุมยานกาลเวลา</h2>
+        <p class="auth-subtitle">ระบบสื่อประถม 5G นวัตกรรมการเรียนรู้ • ป.4 เวลา</p>
+      </div>
+
+      <!-- Error / Notice Alert Box -->
+      <div class="auth-alert" id="auth-alert" style="display: none;">
+        <span class="auth-alert-icon" id="auth-alert-icon">⚠️</span>
+        <div class="auth-alert-msg" id="auth-alert-msg">ข้อความแจ้งเตือน</div>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="auth-login-form">
+        <div class="auth-input-group">
+          <label for="auth-username-input">
+            <span>👤</span> ชื่อผู้ใช้งาน (Username)
+          </label>
+          <input 
+            type="text" 
+            id="auth-username-input" 
+            placeholder="เช่น student01 หรือ Hatalu001" 
+            autocomplete="username" 
+            required
+          />
+        </div>
+
+        <div class="auth-input-group">
+          <label for="auth-password-input">
+            <span>🔒</span> รหัสผ่าน (Password)
+          </label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="auth-password-input" 
+              placeholder="กรอกรหัสผ่านของคุณ" 
+              autocomplete="current-password" 
+              required
+            />
+            <button type="button" class="toggle-pw-btn" id="auth-toggle-pw-btn" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-info-note">
+          ✨ <strong>เงื่อนไขสิทธิ์การเข้าใช้งาน:</strong> เฉพาะบัญชีที่มีสถานะ <strong>Premium</strong> เท่านั้น หากหมดอายุหรือยังไม่ได้รับสิทธิ์ (สถานะ: -) จะไม่สามารถเข้าเล่นได้
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="auth-submit-btn">
+          <span class="btn-text">🚀 ยืนยันตัวตน & เข้าสู่เกม</span>
+          <div class="btn-spinner" id="auth-btn-spinner" style="display: none;"></div>
+        </button>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="auth-card-footer">
+        เชื่อมต่อระบบตรวจสอบสิทธิ์กลาง Supabase • Educational Media Hub
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <!-- Scripts -->
   <script src="js/audio.js"></script>
   <script src="js/clock-engine.js"></script>
   <script src="js/sky-renderer.js"></script>
   <script src="js/levels-data.js"></script>
   <script src="js/game-app.js"></script>
+  
+  <!-- Supabase Auth Guard Script (Secures Game Gate) -->
+  <script src="js/supabase-auth-guard.js"></script>
 
 </body>
 </html>
