@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chrono-Express Galaxy: รถไฟอวกาศข้ามจักรวาลกาลเวลา (คณิตศาสตร์ ป.4 สสวท.)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22><text y=%2226%22 font-size=%2226%22>🚀</text></svg>">
+</head>
+<body>
+
+  <!-- Unified Fullscreen Cosmos Canvas (Flows behind world stage and center glass window!) -->
+  <div class="cosmos-unified-viewport">
+    <canvas id="sky-canvas"></canvas>
+  </div>
+
+  <!-- Top Header: Focused Single-Screen Header (No Nav Tabs) -->
+  <header class="chrono-header">
+    <div class="logo-group">
+      <div class="logo-icon">🚀</div>
+      <div class="logo-text">
+        <h1>CHRONO GALAXY</h1>
+        <span>รถไฟอวกาศข้ามจักรวาลกาลเวลา • ป.4</span>
+      </div>
+    </div>
+
+    <div class="header-tools">
+      <button class="icon-btn" id="sound-toggle" title="เปิด/ปิดเสียงเอฟเฟกต์">🔊</button>
+      <button class="icon-btn" id="bgm-toggle" title="เปิด/ปิดดนตรีบรรเลง">🎶</button>
+    </div>
+  </header>
+
+  <!-- World Stage: Spacious Upper Area (210px) with Space Train Rail & Stardust Exhaust -->
+  <div class="world-stage">
+    <div class="world-overlay-info">
+      <div>
+        <div style="font-size: 0.65rem; color: #a5f3fc; text-transform: uppercase;">เวลาสถานีอวกาศ (24 ชม.)</div>
+        <div class="digital-clock-badge" id="digital-time-display">08:00 น.</div>
+      </div>
+      <div id="period-pill" class="period-pill period-day">
+        ☀️ กลางวัน (06:00-18:00)
+      </div>
+      <div class="station-status-pill" id="thai-oral-display">
+        แปดโมงเช้าตรง
+      </div>
+    </div>
+  </div>
+
+  <!-- Main View Container -->
+  <main class="app-container">
+    <div class="cockpit-grid">
+      
+      <!-- Left Column: Concise Story, Map Button & Big Glowing Target Time Box -->
+      <section class="mission-card">
+        <div class="card-top-row">
+          <div class="junction-tag" id="junction-tag">
+            🪐 ภารกิจที่ 1/12 • ชุมทางแสงแรก
+          </div>
+          <!-- Interactive 360° Star Map Button (Glowing Planisphere Orb) -->
+          <button class="celestial-starmap-btn" id="open-galaxy-map-btn" title="เปิดแผนที่จักรวาล 360°">
+            <div class="starmap-orb-wrapper">
+              <img src="assets/galaxy-starmap-icon.jpg" alt="แผนที่จักรวาล 360°" class="starmap-orb-img">
+              <div class="starmap-orb-ring"></div>
+            </div>
+            <div class="starmap-btn-info">
+              <span class="starmap-btn-title">แผนที่จักรวาล</span>
+              <span class="starmap-btn-sub">360° ซูมสำรวจ</span>
+            </div>
+          </button>
+        </div>
+
+        <h2 class="mission-title" id="mission-title">
+          ขบวนด่วนสายอรุณรุ่ง
+        </h2>
+
+        <!-- Short Story -->
+        <div class="story-box-compact" id="mission-story">
+          ปล่อยยานส่งจดหมายดวงดาวรอบเช้าตรู่
+        </div>
+
+        <!-- Big Prominent Target Time Box -->
+        <div class="target-time-box">
+          <div class="target-label">🎯 เป้าหมายเวลาที่ต้องตั้ง</div>
+          <div class="target-time-val" id="target-time-val">07:15 น.</div>
+          <div class="target-sub-desc" id="target-sub-desc">เจ็ดโมงเช้าสิบห้านาที (กลางวัน)</div>
+        </div>
+
+        <!-- Compact Owl Hint -->
+        <div class="owl-hint-compact">
+          <span class="owl-icon">🦉</span>
+          <span id="owl-speech">กัปตัน: กลางวัน 7 โมงเช้า = 07:00 น. หมุนเข็มยาวไปเลข 3 นะ!</span>
+        </div>
+
+        <div class="mission-actions">
+          <button class="btn-secondary" id="hint-btn">
+            💡 ขอคำใบ้
+          </button>
+          <button class="btn-secondary" id="reset-btn">
+            🔄 รีเซ็ตด่าน
+          </button>
+        </div>
+      </section>
+
+      <!-- Center Column: Transparent Glass Observatory Window (NO TEXT ABOVE CLOCK) -->
+      <section class="dial-workspace">
+        <!-- Big Symmetrical Cosmic Clock (290px) -->
+        <div class="clock-assembly" id="clock-bezel" title="แตะแล้วหมุนเข็มยาวตามต้องการ">
+          <div class="clock-bezel">
+            <div class="dial-face" id="dial-face">
+              <!-- 60 ticks and 12 numbers generated with exact symmetry by JS -->
+            </div>
+            <div class="hand hour-hand" id="hour-hand"></div>
+            <div class="hand minute-hand" id="minute-hand"></div>
+            <div class="clock-center-pin"></div>
+          </div>
+        </div>
+
+        <!-- Time Scrubber Rail -->
+        <div class="timeline-rail-box">
+          <div class="timeline-header">
+            <span>รางมิติเวลา 24 ชั่วโมง (หมุนเข็มนาฬิกา หรือ ลากแถบเวลา)</span>
+            <span style="color: var(--neon-yellow);">00:00 - 24:00 น.</span>
+          </div>
+          <input type="range" min="0" max="1439" value="480" class="scrubber-slider" id="time-scrubber">
+          <div class="timeline-ticks">
+            <span>00:00 (เที่ยงคืน)</span>
+            <span>06:00 (เช้า)</span>
+            <span>12:00 (เที่ยงวัน)</span>
+            <span>18:00 (ค่ำ)</span>
+            <span>24:00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Stations and Times ONLY + Giant Emoji-Free Launch Button -->
+      <section class="dispatch-panel">
+        <div class="panel-title">
+          ตารางการเดินทาง
+        </div>
+
+        <!-- Clean Route Card: Start and End Stations + Times -->
+        <div class="route-info-card">
+          <div class="route-point">
+            <span class="point-badge start-badge">สถานีต้นทาง</span>
+            <span class="point-name" id="station-departure-name">ท่าอวกาศอรุณรุ่ง</span>
+            <span class="point-time" id="station-departure-time">07:15 น.</span>
+          </div>
+
+          <div class="route-divider">
+            <div class="route-line"></div>
+            <div class="route-duration-pill" id="route-duration-pill">ระยะเวลา: 1 ชม. 15 นาที</div>
+          </div>
+
+          <div class="route-point">
+            <span class="point-badge end-badge">สถานีปลายทาง</span>
+            <span class="point-name" id="station-arrival-name">ชุมทางดาวพุธ</span>
+            <span class="point-time" id="station-arrival-time">08:30 น.</span>
+          </div>
+        </div>
+
+        <!-- Math Input Area (for conversion/duration levels) -->
+        <div class="math-input-box" id="math-input-area" style="display: none;">
+          <div style="font-size: 0.72rem; color: var(--neon-yellow); font-weight: 700;">
+            ระบุผลลัพธ์การคำนวณ (ชั่วโมง และ นาที)
+          </div>
+          <div class="math-row">
+            <button class="stepper-btn" id="step-h-minus">-</button>
+            <div class="num-stepper" id="stepper-hours">0</div>
+            <button class="stepper-btn" id="step-h-plus">+</button>
+            <span style="font-weight: 600; font-size: 0.85rem;">ชั่วโมง</span>
+          </div>
+          <div class="math-row">
+            <button class="stepper-btn" id="step-m-minus">-</button>
+            <div class="num-stepper" id="stepper-minutes">0</div>
+            <button class="stepper-btn" id="step-m-plus">+</button>
+            <span style="font-weight: 600; font-size: 0.85rem;">นาที</span>
+          </div>
+        </div>
+
+        <!-- Giant Launch Action Button (NO EMOJI) -->
+        <button class="launch-button-giant" id="launch-btn">
+          ปล่อยรถไฟอวกาศ
+        </button>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Interactive Galaxy Star Map Modal (50% Transparency) -->
+  <div class="galaxy-map-modal" id="galaxy-map-modal">
+    <div class="galaxy-map-container">
+      <div class="galaxy-map-header">
+        <div class="galaxy-map-title">
+          <h3>🌌 แผนที่จักรวาล 360 องศา (360° Cosmic Deep Space Map)</h3>
+          <p>ลากหน้าจอเพื่อสำรวจรอบทิศทาง • เลื่อนลูกกลิ้งหรือกดปุ่ม +/- เพื่อซูมเข้า-ออก • ดาวแต่ละดวงมีเอกลักษณ์เฉพาะตัว</p>
+        </div>
+        <button class="map-close-btn" id="close-galaxy-map-btn" title="ปิดแผนที่">✕</button>
+      </div>
+
+      <!-- Floating Map Zoom & Orientation HUD -->
+      <div class="map-controls-hud">
+        <button class="map-ctrl-btn" id="map-zoom-in-btn" title="ซูมเข้า (+)">➕</button>
+        <button class="map-ctrl-btn" id="map-zoom-out-btn" title="ซูมออก (-)">➖</button>
+        <button class="map-ctrl-btn" id="map-center-ship-btn" title="พิกัดยานของเรา (Center Ship)">🎯 พิกัดยาน</button>
+        <button class="map-ctrl-btn" id="map-reset-view-btn" title="ภาพรวมจักรวาล (Reset View)">🌌 ภาพรวม</button>
+        <div class="map-zoom-indicator" id="map-zoom-indicator">100%</div>
+      </div>
+
+      <!-- 360° Pannable and Zoomable Viewport -->
+      <div class="galaxy-map-viewport" id="galaxy-map-viewport">
+        <div class="map-plane-360" id="map-plane-360">
+          <!-- Supermassive Galactic Core -->
+          <div class="galactic-core-center">
+            <div class="core-pulsar-disk"></div>
+            <div class="core-pulsar-core"></div>
+            <span class="core-label">ใจกลางกาแล็กซี่ (GALACTIC CORE)</span>
+          </div>
+
+          <!-- Connecting Space Lanes & Constellation Lines -->
+          <svg class="map-svg-overlay-360" id="map-svg-lines"></svg>
+
+          <!-- 12 Unique Planetary Worlds in 360° -->
+          <div id="map-planets-container"></div>
+        </div>
+      </div>
+
+      <!-- Bottom HUD for Selected Planet -->
+      <div class="map-selected-hud" id="map-selected-card">
+        <div class="hud-planet-preview" id="map-preview-thumb"></div>
+        <div class="hud-details">
+          <div class="hud-top-meta">
+            <span class="hud-sector-badge" id="map-selected-sector">เซกเตอร์อวกาศ</span>
+            <span class="hud-concept-badge" id="map-selected-concept">บทเรียน สสวท.</span>
+          </div>
+          <h4 id="map-selected-name">ดาวเป้าหมาย</h4>
+          <p id="map-selected-duration">ระยะทาง • ระยะเวลาเดินทาง</p>
+        </div>
+        <button class="map-course-btn" id="map-confirm-btn">
+          🚀 วางแผนเดินทางสู่ดาวดวงนี้ (SET COURSE)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cinematic Centered Status Overlay (Electric Shock Error for 3s / Countdown 3, 2, 1) -->
+  <div class="status-overlay" id="status-overlay">
+    <div class="status-card" id="status-overlay-card">
+      <div class="status-title" id="status-title">เวลายังตั้งไม่ตรง</div>
+      <div class="status-subtitle" id="status-subtitle">รถไฟไม่สามารถเดินทางได้</div>
+    </div>
+  </div>
+
+  <!-- Celebration Modal Popup -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-badge-icon" id="modal-badge">🏆</div>
+      <h2 class="modal-title" id="modal-title">ภารกิจสำเร็จ!</h2>
+      <p class="modal-desc" id="modal-desc">รถไฟอวกาศเข้าเทียบท่าอย่างแม่นยำตรงเวลา</p>
+      <div class="modal-concept-card" id="modal-concept">
+        สรุปความรู้ สสวท.
+      </div>
+      <div class="modal-actions">
+        <button class="launch-button-giant" id="modal-next-btn" style="margin-top: 0; padding: 10px 24px; font-size: 1.05rem;">
+          ไปภารกิจถัดไป
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/clock-engine.js"></script>
+  <script src="js/sky-renderer.js"></script>
+  <script src="js/levels-data.js"></script>
+  <script src="js/game-app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1662 @@
+/* ==========================================================================
+   Chrono-Express Galaxy: Cosmic Space Train Stylesheet
+   Features:
+   - Single-Screen Focused Experience (No Nav Tabs)
+   - Interactive Galaxy Star Map Modal (50% transparent background)
+   - Character avatar located on current planet with flight lines
+   - Electric Shock & Glitch Shake error overlay with 20% blur
+   - High-speed plasma trails and dense smoke trailing space train
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Chakra+Petch:wght@500;700;800&family=Comfortaa:wght@700&display=swap');
+
+:root {
+  --cosmic-dark: #070913;
+  --cosmic-card: rgba(14, 18, 38, 0.94);
+  --cosmic-border: #3b3780;
+  --neon-cyan: #06b6d4;
+  --neon-cyan-glow: #22d3ee;
+  --neon-pink: #ec4899;
+  --neon-pink-glow: #f472b6;
+  --neon-yellow: #fde047;
+  --neon-amber: #f59e0b;
+  --neon-purple: #8b5cf6;
+  --neon-emerald: #10b981;
+  --neon-red: #ef4444;
+  --font-main: 'Prompt', -apple-system, sans-serif;
+  --font-digital: 'Chakra Petch', monospace;
+  --font-title: 'Comfortaa', 'Prompt', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--cosmic-dark);
+  color: #f8fafc;
+  font-family: var(--font-main);
+  position: relative;
+}
+
+/* Master Fullscreen Canvas Container */
+.cosmos-unified-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#sky-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   Header: Sleek Single-Page Navigation
+   ========================================================================== */
+.chrono-header {
+  height: 48px;
+  background: rgba(9, 13, 26, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--neon-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  box-shadow: 0 2px 14px rgba(6, 182, 212, 0.25);
+  z-index: 100;
+  position: relative;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px var(--neon-pink));
+}
+
+.logo-text h1 {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #38bdf8, #f472b6, #fde047);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+}
+
+.logo-text span {
+  font-size: 0.65rem;
+  color: #a5f3fc;
+  display: block;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: #1e1b4b;
+  border: 1px solid var(--neon-cyan);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* ==========================================================================
+   World Stage: Top Area (210px) with Space Train Rail
+   ========================================================================== */
+.world-stage {
+  width: 100%;
+  height: 210px;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+  background: transparent;
+  border-bottom: 2px solid rgba(6, 182, 212, 0.4);
+}
+
+.world-overlay-info {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 12px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.digital-clock-badge {
+  font-family: var(--font-digital);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.6);
+  letter-spacing: 1px;
+}
+
+.period-pill {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.period-day {
+  background: rgba(254, 240, 138, 0.2);
+  color: #fef08a;
+  border: 1px solid #fde047;
+}
+
+.period-night {
+  background: rgba(99, 102, 241, 0.25);
+  color: #c7d2fe;
+  border: 1px solid #818cf8;
+}
+
+.station-status-pill {
+  font-size: 0.74rem;
+  color: #e2e8f0;
+}
+
+/* ==========================================================================
+   Main App Container
+   ========================================================================== */
+.app-container {
+  height: calc(100vh - 258px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.cockpit-grid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 295px 1fr 295px;
+  gap: 12px;
+  padding: 8px 12px;
+  overflow: hidden;
+}
+
+/* Side Cards */
+.mission-card, .dispatch-panel {
+  background: var(--cosmic-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--cosmic-border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+}
+
+/* Left Card: Concise Briefing & Map Button */
+.mission-card {
+  gap: 10px;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.junction-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+/* ==========================================================================
+   Celestial Star Map Button (Astrolabe / Planisphere Orb)
+   Large, prominent, glowing with cosmic breathing aura as requested
+   ========================================================================== */
+.celestial-starmap-btn {
+  background: linear-gradient(135deg, rgba(14, 18, 48, 0.95) 0%, rgba(30, 27, 75, 0.95) 100%);
+  border: 2px solid #38bdf8;
+  border-radius: 40px;
+  padding: 4px 12px 4px 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 
+    0 0 14px rgba(56, 189, 248, 0.65),
+    0 0 28px rgba(139, 92, 246, 0.4),
+    inset 0 0 10px rgba(56, 189, 248, 0.3);
+  position: relative;
+}
+
+.celestial-starmap-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: #fde047;
+  box-shadow: 
+    0 0 24px rgba(253, 224, 71, 0.85),
+    0 0 45px rgba(56, 189, 248, 0.7),
+    inset 0 0 14px rgba(253, 224, 71, 0.5);
+}
+
+.starmap-orb-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.starmap-orb-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #fde047;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
+  animation: orb-spin-slow 40s linear infinite;
+}
+
+@keyframes orb-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.starmap-orb-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px dashed #38bdf8;
+  animation: ring-pulse 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes ring-pulse {
+  0% { transform: scale(0.96) rotate(0deg); opacity: 0.6; }
+  100% { transform: scale(1.08) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 6px #38bdf8); }
+}
+
+.starmap-btn-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.starmap-btn-title {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+  white-space: nowrap;
+}
+
+.starmap-btn-sub {
+  font-family: var(--font-digital);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--neon-yellow);
+  white-space: nowrap;
+}
+
+.mission-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.story-box-compact {
+  background: rgba(15, 23, 42, 0.6);
+  border-left: 3px solid var(--neon-cyan);
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+/* Big Glowing Target Time Box */
+.target-time-box {
+  background: linear-gradient(135deg, rgba(253, 224, 71, 0.12) 0%, rgba(236, 72, 153, 0.12) 100%);
+  border: 2px solid var(--neon-yellow);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(253, 224, 71, 0.25);
+}
+
+.target-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--neon-yellow);
+  text-transform: uppercase;
+}
+
+.target-time-val {
+  font-family: var(--font-digital);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 14px rgba(253, 224, 71, 0.9);
+  line-height: 1.1;
+  margin: 4px 0;
+}
+
+.target-sub-desc {
+  font-size: 0.76rem;
+  color: #a5f3fc;
+  font-weight: 600;
+}
+
+.owl-hint-compact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #141238;
+  border: 1px dashed var(--neon-pink);
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  line-height: 1.3;
+}
+
+.owl-icon {
+  font-size: 1.2rem;
+}
+
+.mission-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Center: Transparent Glass Observatory Window
+   ========================================================================== */
+.dial-workspace {
+  position: relative;
+  border-radius: 16px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 40%, rgba(6, 182, 212, 0.04) 100%),
+    rgba(6, 182, 212, 0.04);
+  backdrop-filter: blur(1px);
+  border: 2px solid rgba(6, 182, 212, 0.75);
+  box-shadow: 
+    0 0 30px rgba(6, 182, 212, 0.3),
+    inset 0 0 25px rgba(6, 182, 212, 0.1);
+}
+
+/* Big Clock Assembly (290px) */
+.clock-assembly {
+  position: relative;
+  z-index: 10;
+  width: 290px;
+  height: 290px;
+  margin: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+.clock-assembly:active {
+  cursor: grabbing;
+}
+
+.clock-bezel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(6px);
+  background: radial-gradient(circle, rgba(26, 21, 65, 0.75) 0%, rgba(10, 14, 30, 0.85) 75%, rgba(4, 7, 18, 0.95) 100%);
+  border: 8px solid rgba(6, 182, 212, 0.85);
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.9),
+    0 0 25px rgba(6, 182, 212, 0.5),
+    0 8px 30px rgba(0, 0, 0, 0.75);
+}
+
+.clock-bezel::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px dashed rgba(236, 72, 153, 0.45);
+  pointer-events: none;
+  animation: rotate-slow-aura 50s linear infinite;
+}
+
+@keyframes rotate-slow-aura {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dial-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.clock-tick {
+  position: absolute;
+  transform-origin: center center;
+  border-radius: 2px;
+}
+
+.clock-tick.minor-tick {
+  width: 2px;
+  height: 4px;
+  background: rgba(148, 163, 184, 0.4);
+}
+
+.clock-tick.major-tick {
+  width: 3px;
+  height: 9px;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 6px var(--neon-cyan);
+}
+
+.dial-num {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+}
+
+.num-main {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.num-24h-sub {
+  font-family: var(--font-digital);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--neon-yellow);
+  background: rgba(15, 23, 42, 0.85);
+  padding: 1px 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  margin-top: 1px;
+}
+
+.clock-center-pin {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #ffffff 20%, var(--neon-yellow) 60%, var(--neon-amber) 100%);
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 35;
+  box-shadow: 0 0 14px var(--neon-yellow);
+}
+
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.hour-hand {
+  width: 8px;
+  height: 70px;
+  margin-left: -4px;
+  background: linear-gradient(90deg, #f59e0b, #fde047, #d97706);
+  z-index: 20;
+  box-shadow: 0 0 10px rgba(253, 224, 71, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.minute-hand {
+  width: 6px;
+  height: 102px;
+  margin-left: -3px;
+  background: linear-gradient(90deg, #06b6d4, #a5f3fc, #0284c7);
+  z-index: 25;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.minute-hand::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -5px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border: 3px solid var(--neon-pink);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--neon-pink);
+}
+
+.timeline-rail-box {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.scrubber-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 7px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, 
+    #1e1b4b 0%, #38bdf8 25%, #fde047 50%, #ec4899 75%, #1e1b4b 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.scrubber-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff, var(--neon-yellow));
+  border: 2px solid #06b6d4;
+  box-shadow: 0 0 10px rgba(253, 224, 71, 0.9);
+  cursor: grab;
+}
+
+.timeline-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   Right Card: Stations and Times ONLY + Giant Emoji-Free Launch Button
+   ========================================================================== */
+.dispatch-panel {
+  gap: 12px;
+}
+
+.panel-title {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  color: var(--neon-cyan);
+  border-bottom: 1px solid #334155;
+  padding-bottom: 4px;
+}
+
+.route-info-card {
+  background: linear-gradient(135deg, rgba(21, 19, 54, 0.85) 0%, rgba(9, 13, 26, 0.9) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.5);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-point {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.point-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.start-badge {
+  color: #38bdf8;
+}
+
+.end-badge {
+  color: var(--neon-yellow);
+}
+
+.point-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.point-time {
+  font-family: var(--font-digital);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--neon-yellow);
+}
+
+.route-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0;
+}
+
+.route-line {
+  flex: 1;
+  height: 1px;
+  background: #334155;
+}
+
+.route-duration-pill {
+  font-size: 0.72rem;
+  color: #a5f3fc;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  border-radius: 12px;
+  padding: 2px 8px;
+}
+
+.math-input-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--neon-pink);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.math-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.num-stepper {
+  flex: 1;
+  background: #090b16;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 6px;
+  padding: 4px;
+  color: #fff;
+  font-family: var(--font-digital);
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.stepper-btn {
+  background: #1e1b4b;
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-yellow);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Giant Launch Button (No Emoji) */
+.launch-button-giant {
+  width: 100%;
+  margin-top: auto;
+  padding: 16px 10px;
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  border: 2px solid #ffffff;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: var(--font-main);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 20px rgba(6, 182, 212, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.launch-button-giant:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+  box-shadow: 
+    0 6px 25px rgba(6, 182, 212, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+.launch-button-giant:active {
+  transform: translateY(1px);
+}
+
+.btn-secondary {
+  background: #1e1b4b;
+  border: 1px solid var(--neon-cyan);
+  color: #a5f3fc;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: var(--font-main);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-secondary:hover {
+  background: #312e81;
+}
+
+/* ==========================================================================
+   Electric Shock & Shake Error Overlay (20% Blur, Flicker & Severe Shake)
+   ========================================================================== */
+.status-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.status-overlay.active {
+  display: flex;
+}
+
+/* Blur only 20% on error */
+.status-overlay.error-mode {
+  backdrop-filter: blur(3px); /* 20% subtle blur as requested */
+  background: rgba(5, 7, 18, 0.25);
+}
+
+.status-overlay.countdown-mode {
+  backdrop-filter: blur(10px);
+  background: rgba(5, 7, 18, 0.75);
+}
+
+.status-card {
+  max-width: 480px;
+  width: 100%;
+  padding: 28px 24px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+}
+
+/* Electric Shock Glitch Shake Keyframes */
+@keyframes electric-shock-shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-6px, -4px) rotate(-1.5deg); }
+  20% { transform: translate(6px, 4px) rotate(1.5deg); }
+  30% { transform: translate(-8px, 6px) rotate(-2deg); }
+  40% { transform: translate(7px, -5px) rotate(2deg); }
+  50% { transform: translate(-5px, -3px) rotate(-1deg); }
+  60% { transform: translate(5px, 3px) rotate(1deg); }
+  70% { transform: translate(-4px, 4px) rotate(-0.5deg); }
+  80% { transform: translate(4px, -2px) rotate(0.5deg); }
+  90% { transform: translate(-2px, 2px) rotate(0deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes electric-flicker {
+  0%, 100% {
+    border-color: #ef4444;
+    box-shadow: 0 0 45px rgba(239, 68, 68, 0.85), inset 0 0 25px rgba(239, 68, 68, 0.4);
+  }
+  25% {
+    border-color: #ffffff;
+    box-shadow: 0 0 65px rgba(255, 255, 255, 0.95), inset 0 0 35px rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    border-color: #f87171;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+  }
+  75% {
+    border-color: #ffffff;
+    box-shadow: 0 0 70px rgba(239, 68, 68, 1), inset 0 0 40px rgba(255, 255, 255, 0.8);
+  }
+}
+
+.status-overlay.error-mode .status-card {
+  background: rgba(30, 8, 14, 0.95);
+  border: 3.5px solid #ef4444;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.8), inset 0 0 20px rgba(239, 68, 68, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Shake exclusively for the first 0.5s as requested */
+.status-overlay.error-mode.shaking .status-card {
+  animation: electric-shock-shake 0.5s ease-in-out 1, electric-flicker 0.5s steps(2) 1;
+}
+
+.status-overlay.error-mode .status-title {
+  color: #fca5a5;
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.9);
+}
+
+.status-overlay.error-mode .status-subtitle {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Countdown State */
+.status-overlay.countdown-mode .status-card {
+  background: rgba(10, 18, 40, 0.95);
+  border: 3px solid #06b6d4;
+  box-shadow: 0 0 45px rgba(6, 182, 212, 0.75);
+}
+
+.status-overlay.countdown-mode .status-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  text-shadow: 0 0 15px rgba(253, 224, 71, 0.9);
+}
+
+.status-overlay.countdown-mode .status-subtitle {
+  color: #a5f3fc;
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   Interactive 360° Galaxy Star Map Modal (50% Transparency & Infinite Zoom/Pan)
+   ========================================================================== */
+.galaxy-map-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1800;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  background: rgba(8, 12, 28, 0.5); /* 50% transparency */
+  padding: 14px;
+}
+
+.galaxy-map-modal.active {
+  display: flex;
+}
+
+.galaxy-map-container {
+  width: 95%;
+  max-width: 1140px;
+  height: 86vh;
+  background: rgba(9, 13, 30, 0.75); /* Translucent starry cockpit HUD */
+  border: 2px solid var(--neon-cyan);
+  border-radius: 20px;
+  box-shadow: 0 0 50px rgba(6, 182, 212, 0.5), inset 0 0 30px rgba(6, 182, 212, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.galaxy-map-header {
+  padding: 10px 18px;
+  background: rgba(9, 13, 28, 0.88);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+}
+
+.galaxy-map-title h3 {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.6);
+}
+
+.galaxy-map-title p {
+  font-size: 0.73rem;
+  color: #a5f3fc;
+}
+
+.map-close-btn {
+  background: #1e1b4b;
+  border: 1.5px solid var(--neon-cyan);
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.map-close-btn:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Floating Zoom & Orientation HUD Controls */
+.map-controls-hud {
+  position: absolute;
+  top: 60px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 5px 8px;
+  border-radius: 12px;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+.map-ctrl-btn {
+  background: #1e1b4b;
+  border: 1px solid var(--neon-cyan);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+
+.map-ctrl-btn:hover {
+  background: #312e81;
+  border-color: var(--neon-yellow);
+  color: var(--neon-yellow);
+  transform: scale(1.05);
+}
+
+.map-zoom-indicator {
+  font-family: var(--font-digital);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--neon-yellow);
+  padding: 0 6px;
+}
+
+/* 360° Infinite Viewport & Transform Plane */
+.galaxy-map-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+    radial-gradient(circle at 25% 30%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 75% 70%, rgba(6, 182, 212, 0.12) 0%, transparent 50%);
+}
+
+.galaxy-map-viewport:active {
+  cursor: grabbing;
+}
+
+.map-plane-360 {
+  width: 2600px;
+  height: 2000px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* Supermassive Galactic Core (Center at x: 1300, y: 1000) */
+.galactic-core-center {
+  position: absolute;
+  left: 1300px;
+  top: 1000px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.core-pulsar-disk {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, rgba(56, 189, 248, 0.25) 45%, transparent 70%);
+  animation: core-disk-spin 25s linear infinite;
+  border: 1px dashed rgba(168, 85, 247, 0.3);
+}
+
+@keyframes core-disk-spin {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.08); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+.core-pulsar-core {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, #fde047 35%, #ec4899 70%, #8b5cf6 100%);
+  box-shadow: 
+    0 0 30px #ffffff,
+    0 0 60px var(--neon-pink),
+    0 0 100px var(--neon-purple);
+  animation: core-pulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes core-pulse {
+  0% { transform: scale(0.9); opacity: 0.85; }
+  100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 20px #fde047); }
+}
+
+.core-label {
+  margin-top: 14px;
+  font-family: var(--font-digital);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #c084fc;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px #a855f7;
+  white-space: nowrap;
+}
+
+/* SVG Overlay for Space Lanes */
+.map-svg-overlay-360 {
+  position: absolute;
+  inset: 0;
+  width: 2600px;
+  height: 2000px;
+  pointer-events: none;
+  z-index: 8;
+}
+
+/* Animated Space Lane SVG styling */
+.space-lane-line {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 2.5;
+  stroke-dasharray: 6, 6;
+  animation: lane-flow 20s linear infinite;
+}
+
+@keyframes lane-flow {
+  to { stroke-dashoffset: -120; }
+}
+
+.space-lane-active {
+  stroke: #fde047;
+  stroke-width: 4;
+  stroke-dasharray: 8, 4;
+  filter: drop-shadow(0 0 8px #fde047);
+  animation: active-flow 10s linear infinite;
+}
+
+@keyframes active-flow {
+  to { stroke-dashoffset: -120; }
+}
+
+/* ==========================================================================
+   Bespoke Unique Planets (12 Distinct Cosmic Identities)
+   ========================================================================== */
+.map-planet-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.map-planet-node:hover {
+  transform: translate(-50%, -50%) scale(1.22);
+  z-index: 40;
+}
+
+.planet-sphere {
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  transition: box-shadow 0.2s;
+}
+
+.map-planet-node:hover .planet-sphere {
+  box-shadow: 0 0 35px var(--neon-yellow);
+}
+
+/* 1. Dawn Sun / Solar Flare Planet */
+.p-theme-1 {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fef08a 25%, #f59e0b 65%, #b45309 100%);
+  box-shadow: 0 0 30px #f59e0b, 0 0 60px rgba(245, 158, 11, 0.5);
+  animation: solar-breathe 3s ease-in-out infinite alternate;
+}
+@keyframes solar-breathe {
+  0% { filter: brightness(1) drop-shadow(0 0 10px #f59e0b); }
+  100% { filter: brightness(1.2) drop-shadow(0 0 25px #fde047); }
+}
+
+/* 2. Verdant Eden Biosphere (With Orbiting Moon) */
+.p-theme-2 {
+  background: radial-gradient(circle at 30% 30%, #a7f3d0 0%, #34d399 30%, #059669 70%, #064e3b 100%);
+  box-shadow: 0 0 25px #10b981;
+}
+.planet-mini-moon {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f8fafc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: orbit-mini-moon 5s linear infinite;
+}
+@keyframes orbit-mini-moon {
+  0% { transform: rotate(0deg) translateX(36px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(36px) rotate(-360deg); }
+}
+
+/* 3. Silver Moon Oasis */
+.p-theme-3 {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #cbd5e1 35%, #64748b 75%, #334155 100%);
+  box-shadow: 0 0 25px #94a3b8, 0 0 40px rgba(148, 163, 184, 0.4);
+}
+
+/* 4. Steampunk Chrono-Gear World */
+.p-theme-4 {
+  background: radial-gradient(circle at 35% 35%, #fed7aa 0%, #f97316 40%, #7c2d12 80%, #431407 100%);
+  box-shadow: 0 0 25px #ea580c;
+}
+.planet-gear-ring {
+  position: absolute;
+  inset: -6px;
+  border: 3px dashed #fde047;
+  border-radius: 50%;
+  animation: gear-spin 12s linear infinite;
+  pointer-events: none;
+}
+@keyframes gear-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 5. Crystalline Peak (Amethyst Spikes) */
+.p-theme-5 {
+  background: radial-gradient(circle at 30% 30%, #f5d0fe 0%, #c084fc 35%, #7e22ce 75%, #3b0764 100%);
+  box-shadow: 0 0 28px #a855f7;
+}
+
+/* 6. Diamond Ice & Tilted Asteroid Ring */
+.p-theme-6 {
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #7dd3fc 35%, #0284c7 75%, #0c4a6e 100%);
+  box-shadow: 0 0 30px #38bdf8;
+}
+.planet-ice-ring {
+  position: absolute;
+  width: 180%;
+  height: 50%;
+  border: 3px solid rgba(224, 242, 254, 0.85);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  box-shadow: 0 0 12px #38bdf8;
+  pointer-events: none;
+}
+
+/* 7. Quantum Time Vortex */
+.p-theme-7 {
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #ec4899 30%, #8b5cf6 65%, #09090b 100%);
+  box-shadow: 0 0 30px #ec4899, 0 0 50px #8b5cf6;
+  animation: vortex-spin 8s linear infinite;
+}
+@keyframes vortex-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 8. Royal Starlight Sovereign */
+.p-theme-8 {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fef08a 35%, #eab308 70%, #713f12 100%);
+  box-shadow: 0 0 35px #facc15, 0 0 60px rgba(234, 179, 8, 0.5);
+}
+.planet-crown-halo {
+  position: absolute;
+  inset: -8px;
+  border: 2px dotted #fde047;
+  border-radius: 50%;
+  animation: crown-pulse 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes crown-pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px #fde047); }
+}
+
+/* 9. Amber Desert Mirage & Dual Rings */
+.p-theme-9 {
+  background: radial-gradient(circle at 35% 35%, #ffedd5 0%, #fb923c 40%, #c2410c 75%, #431407 100%);
+  box-shadow: 0 0 26px #f97316;
+}
+.planet-dual-rings {
+  position: absolute;
+  width: 190%;
+  height: 55%;
+  border: 2.5px solid rgba(253, 186, 116, 0.75);
+  border-radius: 50%;
+  transform: rotate(20deg);
+  box-shadow: 0 0 10px #f97316;
+  pointer-events: none;
+}
+
+/* 10. Midnight Constellation Obsidian */
+.p-theme-10 {
+  background: radial-gradient(circle at 35% 35%, #1e293b 0%, #0f172a 40%, #020617 80%, #000000 100%);
+  border: 2.5px solid #38bdf8 !important;
+  box-shadow: 0 0 30px #0284c7, inset 0 0 15px #38bdf8;
+}
+
+/* 11. Abyssal Pulsar Beacon */
+.p-theme-11 {
+  background: radial-gradient(circle at 50% 50%, #ffffff 0%, #6366f1 35%, #1e1b4b 75%, #030712 100%);
+  box-shadow: 0 0 35px #6366f1, 0 0 65px rgba(99, 102, 241, 0.6);
+}
+.planet-pulsar-jets {
+  position: absolute;
+  width: 4px;
+  height: 180%;
+  background: linear-gradient(180deg, #ffffff 0%, #6366f1 50%, #ffffff 100%);
+  box-shadow: 0 0 16px #38bdf8;
+  animation: pulsar-beam-spin 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes pulsar-beam-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 12. Grand Chrono Singularity (The Grandest Planet) */
+.p-theme-12 {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #fde047 25%, #ec4899 55%, #8b5cf6 80%, #09090b 100%);
+  box-shadow: 
+    0 0 45px #fde047,
+    0 0 80px #ec4899,
+    0 0 120px #8b5cf6;
+  animation: singularity-radiance 4s ease-in-out infinite alternate;
+}
+@keyframes singularity-radiance {
+  0% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.08); filter: brightness(1.25) drop-shadow(0 0 30px #fde047); }
+}
+.planet-grand-triple-rings {
+  position: absolute;
+  width: 220%;
+  height: 60%;
+  border: 3px double #fde047;
+  border-radius: 50%;
+  transform: rotate(-15deg);
+  box-shadow: 0 0 20px #ec4899;
+  pointer-events: none;
+}
+
+/* Done Check Badge */
+.done-check {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 8px #10b981;
+}
+
+/* Planet Labels below sphere */
+.planet-label {
+  margin-top: 8px;
+  text-align: center;
+  background: rgba(10, 14, 32, 0.9);
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.p-num {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--neon-yellow);
+  letter-spacing: 0.5px;
+}
+
+.p-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* Character Marker on Current Planet with Radiating Radar Ping */
+.character-marker {
+  position: absolute;
+  top: -54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.char-owl-avatar {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 14px #38bdf8);
+  animation: float-char 2s ease-in-out infinite alternate;
+}
+
+@keyframes float-char {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+.char-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  color: #0b1120;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 0 12px #38bdf8;
+  margin-top: -4px;
+}
+
+.radar-ping-ring {
+  position: absolute;
+  top: 60px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  animation: radar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-ping {
+  0% { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.map-planet-node.selected-planet .planet-sphere {
+  outline: 4px solid #fde047;
+  outline-offset: 6px;
+  filter: drop-shadow(0 0 18px #fde047);
+}
+
+/* Map Selected Planet Details HUD at Bottom */
+.map-selected-hud {
+  padding: 12px 20px;
+  background: rgba(9, 13, 28, 0.95);
+  border-top: 2px solid var(--neon-cyan);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 50;
+}
+
+.hud-planet-preview {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+.hud-details {
+  flex: 1;
+}
+
+.hud-top-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.hud-sector-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--neon-yellow);
+  background: rgba(253, 224, 71, 0.15);
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.hud-concept-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #a5f3fc;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+.hud-details h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.hud-details p {
+  font-size: 0.8rem;
+  color: #a5f3fc;
+}
+
+.map-course-btn {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.map-course-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(6, 182, 212, 0.8);
+}
+
+/* Modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 9, 19, 0.85);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  padding: 16px;
+}
+
+.modal-backdrop.active {
+  display: flex;
+}
+
+.modal-box {
+  background: linear-gradient(180deg, #18153d 0%, #080a18 100%);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 18px;
+  padding: 20px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  text-align: center;
+}
+
+.modal-badge-icon {
+  font-size: 3rem;
+  margin-bottom: 6px;
+}
+
+.modal-title {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  color: var(--neon-yellow);
+  margin-bottom: 4px;
+}
+
+.modal-desc {
+  font-size: 0.86rem;
+  color: #e2e8f0;
+  margin-bottom: 10px;
+}
+
+.modal-concept-card {
+  background: rgba(15, 23, 42, 0.85);
+  border-left: 3px solid var(--neon-emerald);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  text-align: left;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin-bottom: 14px;
+}
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3000;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .cockpit-grid {
+    grid-template-columns: 240px 1fr 240px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  .clock-assembly {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+  }
+  .app-container {
+    height: auto;
+    overflow: visible;
+  }
+  .cockpit-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+  .clock-assembly {
+    width: 280px;
+    height: 280px;
+  }
+}
