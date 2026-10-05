@@ -23,14 +23,6 @@
     </div>
 
     <div class="header-tools">
-      <!-- Supabase Auth User Badge (Dynamic) -->
-      <div class="user-auth-badge" id="user-auth-badge" style="display: none;">
-        <span class="auth-user-role" id="auth-user-role">👑 สมาชิก</span>
-        <span class="auth-username" id="auth-username">User</span>
-        <span class="auth-premium-pill" id="auth-premium-pill">⭐ Premium</span>
-        <button class="auth-logout-btn" id="auth-logout-btn" title="ออกจากระบบ">🚪 ออก</button>
-      </div>
-
       <!-- Pets Companion Button -->
       <button class="header-btn btn-pets" id="open-pets-btn" title="เปิดหน้าเลือกสัตว์เลี้ยงคู่หู">
         <span class="btn-icon">🐾</span>
@@ -149,73 +141,11 @@
     </div>
   </div>
 
-  <!-- ===================================================================== -->
-  <!-- Supabase Cosmic Auth Gate Modal (Mandatory Login Gate)                -->
-  <!-- ===================================================================== -->
-  <div class="auth-gate-overlay" id="auth-gate-modal">
-    <div class="auth-gate-card">
-      <div class="auth-logo-badge">🐲</div>
-      <h2 class="auth-title">เข้าสู่สำนักฝึกสัตว์วิเศษ</h2>
-      <p class="auth-subtitle">ระบบสื่อประถม 5G นวัตกรรมการเรียนรู้ • ป.5 Tenses</p>
-
-      <!-- Error / Alert Message -->
-      <div class="auth-alert" id="auth-alert" style="display: none;">
-        <span class="auth-alert-icon" id="auth-alert-icon">⚠️</span>
-        <div class="auth-alert-msg" id="auth-alert-msg">ข้อความแจ้งเตือน</div>
-      </div>
-
-      <!-- Login Form -->
-      <form class="auth-form" id="auth-login-form">
-        <div class="auth-input-group">
-          <label for="auth-username-input">👤 ชื่อผู้ใช้งาน (Username)</label>
-          <input 
-            type="text" 
-            id="auth-username-input" 
-            placeholder="ใส่ชื่อที่คุณได้รับมาจากเพจ" 
-            autocomplete="username" 
-            required
-          />
-        </div>
-
-        <div class="auth-input-group">
-          <label for="auth-password-input">🔒 รหัสผ่าน (Password)</label>
-          <div class="password-wrapper">
-            <input 
-              type="password" 
-              id="auth-password-input" 
-              placeholder="กรอกรหัสผ่านของคุณ" 
-              autocomplete="current-password" 
-              required
-            />
-            <button type="button" class="toggle-pw-btn" id="auth-toggle-pw-btn" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
-          </div>
-        </div>
-
-        <div class="auth-info-note">
-          ✨ <strong>เงื่อนไขสิทธิ์การเข้าใช้งาน:</strong> เฉพาะบัญชีที่มีสถานะ <strong>Premium</strong> เท่านั้น หากหมดอายุหรือยังไม่ได้รับสิทธิ์ (สถานะ: -) จะไม่สามารถเข้าเล่นได้
-        </div>
-
-        <button type="submit" class="auth-submit-btn" id="auth-submit-btn">
-          <span class="btn-text">⚔️ เข้าสู่สำนักฝึกสัตว์วิเศษ</span>
-          <div class="btn-spinner" id="auth-btn-spinner" style="display: none;"></div>
-        </button>
-      </form>
-
-      <div class="auth-card-footer">
-        เชื่อมต่อระบบตรวจสอบสิทธิ์กลาง Supabase • Educational Media Hub
-      </div>
-    </div>
-  </div>
-
-  <!-- Supabase JS Client for Authentication -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <!-- Game Scripts -->
   <script src="js/audio.js?v=4"></script>
   <script src="js/beast-data.js?v=4"></script>
   <script src="js/pixel-field-renderer.js?v=4"></script>
   <script src="js/game-app.js?v=4"></script>
-  <script src="js/supabase-auth-guard.js?v=4"></script>
 
 </body>
 </html>
