@@ -212,10 +212,7 @@
         timeClueText.textContent = `"${quest.timeClue}" (${quest.timeClueTh})`;
       }
 
-      // 2. Top Center Tense Banner on Open Field (e.g. Tense: Past (อดีต))
-      this.updateFieldTenseBanner(quest.tense);
-
-      // 3. Dynamic Scene & Pet Action on Field (e.g., dragon attacking castle, breathing fire, tiger roaring)
+      // 2. Dynamic Scene & Pet Action on Field (e.g., dragon attacking castle, breathing fire, tiger roaring)
       if (this.pixelField) {
         this.pixelField.setSceneAndAction(quest.scene || 'meadow', quest.petAction || 'walk');
       }
@@ -244,26 +241,7 @@
       this.renderChoices(quest);
     }
 
-    /* ========================================================================
-       Top Center Tense Banner Formatter
-       Displays prominently e.g. "Tense: Past (อดีต)"
-       ======================================================================== */
-    updateFieldTenseBanner(tense) {
-      const bannerText = document.getElementById('field-tense-text');
-      if (!bannerText) return;
 
-      if (tense === 'past_simple') {
-        bannerText.textContent = 'Tense: Past (อดีต)';
-      } else if (tense === 'present_simple') {
-        bannerText.textContent = 'Tense: Present (ปัจจุบัน/กิจวัตร)';
-      } else if (tense === 'present_continuous') {
-        bannerText.textContent = 'Tense: Present Continuous (กำลังทำอยู่)';
-      } else if (tense === 'future_simple') {
-        bannerText.textContent = 'Tense: Future (อนาคต)';
-      } else {
-        bannerText.textContent = 'Tense: English Grade 5';
-      }
-    }
 
     /* ========================================================================
        Render 4 Big Prominent Choice Buttons
