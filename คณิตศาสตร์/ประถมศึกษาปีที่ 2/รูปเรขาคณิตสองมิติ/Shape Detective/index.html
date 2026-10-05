@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SHAPE DETECTIVE — คดีปริศนาเมืองรูปทรง (คณิตศาสตร์ ป.2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Itim&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=1">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2242%22 cy=%2242%22 r=%2230%22 fill=%22%23bbdefb%22 stroke=%22%23c9a227%22 stroke-width=%2210%22/><rect x=%2262%22 y=%2260%22 width=%2214%22 height=%2236%22 rx=%225%22 transform=%22rotate(-45 69 78)%22 fill=%22%236d4c41%22/></svg>">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================= TITLE ================= -->
+  <section id="scr-title" class="screen active">
+    <div id="user-auth-badge" class="user-auth-badge" style="display: none;">
+      <div class="user-auth-info">
+        <span id="auth-user-role" class="auth-user-role"></span>
+        <strong id="auth-username" class="auth-username"></strong>
+        <span id="auth-premium-pill" class="auth-premium-pill"></span>
+      </div>
+      <button id="auth-logout-btn" class="auth-logout-btn" title="ออกจากระบบ">🚪 ออกจากระบบ</button>
+    </div>
+    <svg class="title-town" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <rect width="1600" height="900" fill="#ffe9c2"/>
+      <circle cx="1300" cy="200" r="110" fill="#ffd54f"/>
+      <g fill="#f4c58a" stroke="#3b2a20" stroke-width="5" stroke-linejoin="round">
+        <rect x="80" y="560" width="200" height="340"/><polygon points="60,560 180,430 300,560"/>
+        <rect x="330" y="480" width="160" height="420"/><circle cx="410" cy="560" r="44" fill="#fff"/>
+        <polygon points="320,480 410,360 500,480" fill="#7986cb"/>
+        <rect x="1150" y="600" width="260" height="300" fill="#ffab91"/><polygon points="1130,600 1280,500 1430,600" fill="#e57373"/>
+        <rect x="1440" y="520" width="140" height="380" fill="#c5e1a5"/><polygon points="1440,520 1510,430 1580,520" fill="#ffca28"/>
+        <circle cx="1060" cy="700" r="90" fill="#66bb6a"/><rect x="1045" y="760" width="30" height="140" fill="#8d6e63"/>
+      </g>
+      <rect y="860" width="1600" height="40" fill="#e0b97c"/>
+    </svg>
+    <div class="title-chars">
+      <div class="title-owl" id="title-owl"></div>
+      <div class="title-det" id="title-det"></div>
+    </div>
+    <div class="title-card paper">
+      <div class="title-kicker">คณิตศาสตร์ ป.2 · รูปเรขาคณิตสองมิติ</div>
+      <h1 class="logo">SHAPE<span>DETECTIVE</span></h1>
+      <div class="logo-th">คดีปริศนาเมืองรูปทรง</div>
+      <p class="tagline">“มองให้ดี…ทุกที่มีเบาะแส และทุกเบาะแสกำลังบอกความลับของรูปเรขาคณิต”</p>
+      <label class="name-field">ชื่อนักสืบ: <input id="det-name" maxlength="20" placeholder="พิมพ์ชื่อของเธอ"></label>
+      <div class="title-btns">
+        <button class="btn btn-big btn-orange" id="btn-story"><span class="i">🔍</span> เริ่มไขคดี <small>เรียนด้วยตัวเอง</small></button>
+        <button class="btn btn-big btn-teal" id="btn-explore"><span class="i">🗺️</span> สำรวจเมือง <small>Explore the Town</small></button>
+        <button class="btn btn-big btn-purple" id="btn-teacher"><span class="i">👩‍🏫</span> โหมดครู <small>Teacher Mode</small></button>
+      </div>
+      <button class="link-btn" id="btn-reset">เริ่มคดีใหม่ทั้งหมด</button>
+    </div>
+  </section>
+
+  <!-- ================= STORY INTRO ================= -->
+  <section id="scr-intro" class="screen">
+    <div class="storybook paper">
+      <div class="story-art" id="story-art"></div>
+      <div class="story-text" id="story-text"></div>
+      <div class="story-nav">
+        <div class="story-dots" id="story-dots"></div>
+        <button class="btn btn-orange" id="story-next">ต่อไป ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOWN MAP ================= -->
+  <section id="scr-map" class="screen">
+    <svg id="map-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+  </section>
+
+  <!-- ================= DISTRICT ================= -->
+  <section id="scr-district" class="screen">
+    <div id="scene-wrap">
+      <svg id="scene-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet"></svg>
+      <div id="lens-legend" class="lens-legend"><span class="lg-straight">━ เส้นตรง</span><span class="lg-curve">━ เส้นโค้ง</span></div>
+    </div>
+  </section>
+
+  <!-- ================= TEACHER ================= -->
+  <section id="scr-teacher" class="screen">
+    <div class="teacher-board paper">
+      <header class="tb-head">
+        <div>
+          <div class="title-kicker">TEACHER MODE · โหมดครู</div>
+          <h2>แผนการสอน “คดีปริศนาเมืองรูปทรง”</h2>
+          <p class="muted">เลือกช่วงกิจกรรมที่ต้องการใช้หน้าห้องได้ทันที ไม่จำเป็นต้องเล่นทั้งเรื่อง (ทุกพื้นที่ถูกปลดล็อกในโหมดนี้)</p>
+        </div>
+        <div class="tb-actions">
+          <button class="btn btn-small" id="tb-report">📊 รายงานผล</button>
+          <button class="btn btn-small" id="tb-home">🏠 หน้าแรก</button>
+        </div>
+      </header>
+      <div class="tb-grid" id="tb-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= HUD ================= -->
+  <div id="hud" class="hud hidden">
+    <div id="mission-card" class="mission-card paper pinned"></div>
+    <div class="hud-right">
+      <div id="user-auth-badge-hud" class="user-auth-badge hud-badge" style="display: none;">
+        <span class="hud-user-icon">🕵️</span>
+        <strong id="auth-username-hud" class="auth-username"></strong>
+        <button id="auth-logout-btn-hud" class="auth-logout-btn" title="ออกจากระบบ">🚪</button>
+      </div>
+      <div id="keyring" class="keyring" title="กุญแจรูปทรง"></div>
+      <button class="round-btn" id="btn-music" title="เพลง">🎵</button>
+      <button class="round-btn" id="btn-home" title="หน้าแรก">🏠</button>
+    </div>
+  </div>
+
+  <nav id="toolbelt" class="toolbelt hidden">
+    <button class="tool" data-tool="map"><span class="ti" data-icon="map"></span><span>แผนที่</span></button>
+    <button class="tool" data-tool="notebook"><span class="ti" data-icon="notebook"></span><span>สมุดนักสืบ</span></button>
+    <button class="tool" data-tool="lens"><span class="ti" data-icon="lens"></span><span>Shape Lens</span></button>
+    <button class="tool" data-tool="scanner"><span class="ti" data-icon="scanner"></span><span>Clue Scanner</span></button>
+    <button class="tool" data-tool="pen"><span class="ti" data-icon="pen"></span><span>Shape Pen</span></button>
+    <button class="tool" data-tool="bag"><span class="ti" data-icon="bag"></span><span>ถุงหลักฐาน</span></button>
+    <button class="tool tool-hint" data-tool="hint"><span class="ti" data-icon="hint"></span><span>คำใบ้</span></button>
+  </nav>
+
+  <div id="mentor" class="mentor hidden">
+    <div class="mentor-owl" id="mentor-owl"></div>
+    <div class="mentor-bubble">
+      <div id="mentor-text"></div>
+      <button class="speak-btn" id="mentor-speak" title="ฟังเสียงอ่าน">🔊</button>
+    </div>
+  </div>
+
+  <!-- ================= OVERLAYS ================= -->
+  <div id="panel" class="overlay hidden">
+    <div class="panel-book paper">
+      <header class="panel-head">
+        <div class="panel-title" id="panel-title"></div>
+        <div class="panel-tools">
+          <button class="round-btn small" id="panel-hint" title="คำใบ้">💡</button>
+          <button class="round-btn small" id="panel-close" title="ปิด">✕</button>
+        </div>
+      </header>
+      <div class="panel-body" id="panel-body"></div>
+      <footer class="panel-say" id="panel-say">
+        <div class="say-owl" id="say-owl"></div>
+        <div class="say-text" id="say-text"></div>
+        <button class="speak-btn" id="say-speak" title="ฟังเสียงอ่าน">🔊</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="reward" class="overlay hidden"></div>
+  <div id="scan-card" class="scan-card hidden"></div>
+  <div id="toast" class="toast"></div>
+  <div id="fx-layer"></div>
+
+  <!-- ================= AUTH GATE MODAL ================= -->
+  <div class="auth-gate-overlay" id="auth-gate-modal" style="display: none;">
+    <div class="auth-gate-card paper">
+      <div class="auth-card-glow"></div>
+      
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo-badge">🔍</div>
+        <h2 class="auth-title">สถานีตำรวจสืบสวน Shape Town</h2>
+        <p class="auth-subtitle">ระบบสื่อประถม 5G นวัตกรรมการเรียนรู้ · ป.2 รูปเรขาคณิตสองมิติ</p>
+      </div>
+
+      <!-- Alert -->
+      <div class="auth-alert" id="auth-alert" style="display: none;">
+        <span class="auth-alert-icon" id="auth-alert-icon">⚠️</span>
+        <div class="auth-alert-msg" id="auth-alert-msg">ข้อความแจ้งเตือน</div>
+      </div>
+
+      <!-- Form -->
+      <form class="auth-form" id="auth-login-form">
+        <div class="auth-input-group">
+          <label for="auth-username-input">
+            <span>👤</span> ชื่อผู้ใช้งาน (Username)
+          </label>
+          <input 
+            type="text" 
+            id="auth-username-input" 
+            placeholder="ใส่ชื่อที่คุณได้รับมาจากเพจ" 
+            autocomplete="username" 
+            required
+          />
+        </div>
+
+        <div class="auth-input-group">
+          <label for="auth-password-input">
+            <span>🔒</span> รหัสผ่าน (Password)
+          </label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="auth-password-input" 
+              placeholder="กรอกรหัสผ่านของคุณ" 
+              autocomplete="current-password" 
+              required
+            />
+            <button type="button" class="toggle-pw-btn" id="auth-toggle-pw-btn" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-info-note">
+          ✨ <strong>เงื่อนไขสิทธิ์การเข้าใช้งาน:</strong> เฉพาะบัญชีที่มีสถานะ <strong>Premium</strong> เท่านั้น หากหมดอายุหรือยังไม่ได้รับสิทธิ์ (สถานะ: -) จะไม่สามารถเข้าเล่นได้
+        </div>
+
+        <button type="submit" class="auth-submit-btn btn btn-orange" id="auth-submit-btn">
+          <span class="btn-text">🔍 ยืนยันตัวตน & เริ่มไขคดี</span>
+          <div class="btn-spinner" id="auth-btn-spinner" style="display: none;"></div>
+        </button>
+      </form>
+
+      <div class="auth-card-footer">
+        เชื่อมต่อระบบตรวจสอบสิทธิ์กลาง Supabase · Educational Media Hub
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Supabase JS Client CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/shapes.js?v=1"></script>
+<script src="js/audio.js?v=1"></script>
+<script src="js/scenes.js?v=1"></script>
+<script src="js/data.js?v=1"></script>
+<script src="js/recognizer.js?v=1"></script>
+<script src="js/activities.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+<script src="js/supabase-auth-guard.js?v=1"></script>
+</body>
+</html>
