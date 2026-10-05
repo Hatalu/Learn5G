@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>THE GREAT MAP MAKERS — สำรวจโลก วาดเส้น สร้างมุม แล้วสร้างแผนที่ของเรา (คณิตศาสตร์ ป.4)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Prompt:wght@400;500;600;700;800&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=1">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2244%22 fill=%22%23ffe082%22 stroke=%22%23c9a227%22 stroke-width=%228%22/><polygon points=%2250,18 60,50 50,46%22 fill=%22%23d32f2f%22/><polygon points=%2250,82 60,50 50,54%22 fill=%22%231976d2%22/><circle cx=%2250%22 cy=%2250%22 r=%226%22 fill=%22%23fff%22/></svg>">
+</head>
+<body>
+<div id="app">
+
+  <!-- ================= 1. TITLE SCREEN ================= -->
+  <section id="scr-title" class="screen active">
+    <!-- User Auth Badge in Title Corner -->
+    <div id="user-auth-badge" class="user-auth-badge" style="display: none;">
+      <div class="user-auth-info">
+        <span id="auth-user-role" class="auth-user-role"></span>
+        <strong id="auth-username" class="auth-username"></strong>
+        <span id="auth-premium-pill" class="auth-premium-pill"></span>
+      </div>
+      <button id="auth-logout-btn" class="auth-logout-btn" title="ออกจากระบบ">🚪 ออกจากระบบ</button>
+    </div>
+
+    <!-- Animated World Backdrop -->
+    <div class="title-backdrop">
+      <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" class="title-bg-svg">
+        <rect width="1600" height="900" fill="#b2ebf2"/>
+        <path d="M 0 650 Q 400 580 800 660 T 1600 640 L 1600 900 L 0 900 Z" fill="#ffe082"/>
+        <path d="M 0 680 Q 400 620 800 700 T 1600 670 L 1600 900 L 0 900 Z" fill="#c8e6c9"/>
+      </svg>
+    </div>
+
+    <!-- Characters on sides -->
+    <div class="title-characters">
+      <div id="title-char-slot" class="char-float-anim"></div>
+      <div id="title-compass-slot" class="compass-bob-anim"></div>
+    </div>
+
+    <!-- Central Parchment Card -->
+    <div class="title-card paper">
+      <div class="title-kicker">คณิตศาสตร์ ป.4 · สื่อประถม 5G นวัตกรรมการเรียนรู้</div>
+      <h1 class="logo-title">THE GREAT<span>MAP MAKERS</span></h1>
+      <div class="logo-th">สำรวจโลก วาดเส้น สร้างมุม แล้วสร้างแผนที่ของเรา</div>
+      <p class="tagline">“ดินแดน Maporia กำลังรอคนทำแผนที่คนใหม่อยู่... มาร่วมสังเกตจุด เส้น และมุม เพื่อสร้างแผนที่ที่มีชีวิต!”</p>
+
+      <div class="name-entry-wrap">
+        <label>ชื่อนักทำแผนที่: <input id="student-name-input" maxlength="20" placeholder="พิมพ์ชื่อของเธอ"></label>
+      </div>
+
+      <div class="title-actions">
+        <button class="btn btn-big btn-amber" id="btn-start-adventure">
+          <span class="btn-icon">🗺️</span>
+          <span>เริ่มการผจญภัย</span>
+          <small>Start Adventure</small>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. MODE SELECTION SCREEN ================= -->
+  <section id="scr-mode" class="screen">
+    <div class="mode-select-card paper">
+      <h2>เลือกรูปแบบการเรียนรู้</h2>
+      <p class="muted">เลือกโหมดที่เหมาะสมกับกิจกรรมของคุณ</p>
+
+      <div class="modes-grid">
+        <div class="mode-box paper" id="mode-btn-self">
+          <div class="mode-icon">🧒</div>
+          <h3>เรียนรู้ด้วยตัวเอง (Self-Learning)</h3>
+          <p>สวมบทบาทนักสำรวจ ออกผจญภัยตามเนื้อเรื่อง ปลดล็อกหมอกทีละดินแดน และสร้างแผนที่ Maporia</p>
+          <button class="btn btn-orange">ออกสำรวจเลย ▶</button>
+        </div>
+
+        <div class="mode-box paper" id="mode-btn-teacher">
+          <div class="mode-icon">🧑‍🏫</div>
+          <h3>โหมดครูผู้สอน (Teacher Mode)</h3>
+          <p>ปลดล็อกทุกพื้นที่ทันที พร้อมชุดคำถามชวนคิดหน้าห้องเรียน และกิจกรรมกลุ่มสำหรับ Smart Board</p>
+          <button class="btn btn-teal">เปิดโหมดการสอน ▶</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. STORY INTRO SCREEN ================= -->
+  <section id="scr-intro" class="screen">
+    <div class="storybook-modal paper">
+      <div class="story-char-stage" id="story-char-art"></div>
+      <div class="story-text-stage">
+        <h3>กัปตันดอท (Captain Dot) กล่าว:</h3>
+        <p id="story-caption">“Maporia เป็นดินแดนที่หมอกหนาบดบังจนไม่มีใครรู้ว่าเมืองอยู่ที่ใด... เราคือนักทำแผนที่รุ่นเยาว์ ที่จะใช้ความรู้เรื่อง จุด เส้นตรง รังสี มุม และสี่เหลี่ยมมุมฉาก เพื่อสร้างแผนที่ของเราขึ้นมา!”</p>
+      </div>
+      <div class="story-footer">
+        <button class="btn btn-big btn-orange" id="story-next-btn">กางแผนที่ออกสำรวจ! 🗺️</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 4. MAPORIA WORLD MAP ================= -->
+  <section id="scr-map" class="screen">
+    <div class="map-viewport-container" id="world-map-viewport"></div>
+  </section>
+
+  <!-- ================= 5. INTERACTIVE WORKSPACE SCREEN ================= -->
+  <section id="scr-workspace" class="screen"></section>
+
+  <!-- ================= 6. TEACHER DASHBOARD ================= -->
+  <section id="scr-teacher" class="screen">
+    <div class="teacher-container paper">
+      <header class="teacher-header">
+        <div>
+          <span class="badge-tag">TEACHER MODE · โหมดครูผู้สอน</span>
+          <h2>แผนการจัดการเรียนรู้ “The Great Map Makers”</h2>
+          <p class="muted">เครื่องมือสนับสนุนการสอนเรขาคณิต ป.4 สำหรับใช้ร่วมกับจอ Smart Board หรือโปรเจกเตอร์</p>
+        </div>
+        <div class="teacher-actions">
+          <button class="btn btn-small btn-amber" id="tb-btn-home">🗺️ แผนที่โลก</button>
+        </div>
+      </header>
+      <div class="teacher-content-grid" id="teacher-grid"></div>
+    </div>
+  </section>
+
+  <!-- ================= GLOBAL HUD ================= -->
+  <div id="main-hud" class="main-hud hidden">
+    <!-- Left: Navigation & Map -->
+    <div class="hud-left">
+      <button class="round-btn" id="btn-hud-map" title="แผนที่โลก Maporia">🗺️</button>
+      <button class="round-btn" id="btn-hud-discovery" title="สมุดค้นพบ Discovery Book">📖</button>
+      <button class="round-btn" id="btn-hud-sound" title="เปิด/ปิดเสียง">🔊</button>
+    </div>
+
+    <!-- Center: Progress Meter -->
+    <div class="hud-center paper">
+      <span class="prog-label">🗺️ สำรวจแผนที่:</span>
+      <div class="prog-bar-track">
+        <div class="prog-bar-fill" id="hud-progress-fill" style="width: 16%;"></div>
+      </div>
+      <span class="prog-pct" id="hud-progress-text">16%</span>
+    </div>
+
+    <!-- Right: User Auth Badge & Teacher Shortcut -->
+    <div class="hud-right">
+      <div id="user-auth-badge-hud" class="user-auth-badge hud-badge" style="display: none;">
+        <span class="hud-user-icon">🧭</span>
+        <strong id="auth-username-hud" class="auth-username"></strong>
+        <button id="auth-logout-btn-hud" class="auth-logout-btn" title="ออกจากระบบ">🚪</button>
+      </div>
+      <button class="btn btn-small btn-purple" id="btn-hud-teacher">โหมดครู</button>
+    </div>
+  </div>
+
+  <!-- ================= DISCOVERY BOOK MODAL ================= -->
+  <div class="modal-overlay" id="discovery-modal" style="display: none;">
+    <div class="modal-card discovery-book paper">
+      <div class="modal-head">
+        <h2>📖 สมุดบันทึกนักสำรวจ (Discovery Book)</h2>
+        <button class="round-btn small" id="disc-modal-close">✕</button>
+      </div>
+      <p class="muted">รวมมโนทัศน์เรขาคณิตสำคัญที่ค้นพบจากการสำรวจ Maporia</p>
+      <div class="disc-grid" id="disc-items-grid"></div>
+    </div>
+  </div>
+
+  <!-- ================= REWARD / SUCCESS MODAL ================= -->
+  <div class="modal-overlay" id="reward-modal" style="display: none;">
+    <div class="modal-card reward-card paper">
+      <div class="reward-icon-badge">🏆</div>
+      <h2 id="reward-title">ภารกิจสำเร็จ!</h2>
+      <p id="reward-text"></p>
+      <button class="btn btn-big btn-orange" id="reward-next-btn">สำรวจพื้นที่ถัดไป ▶</button>
+    </div>
+  </div>
+
+  <!-- ================= AUTH GATE MODAL ================= -->
+  <div class="auth-gate-overlay" id="auth-gate-modal" style="display: none;">
+    <div class="auth-gate-card paper">
+      <div class="auth-card-glow"></div>
+      
+      <!-- Header -->
+      <div class="auth-header">
+        <div class="auth-logo-badge">🧭</div>
+        <h2 class="auth-title">สมาคมนักทำแผนที่ Maporia</h2>
+        <p class="auth-subtitle">ระบบสื่อประถม 5G นวัตกรรมการเรียนรู้ · ป.4 มุมและรูปสี่เหลี่ยมมุมฉาก</p>
+      </div>
+
+      <!-- Alert -->
+      <div class="auth-alert" id="auth-alert" style="display: none;">
+        <span class="auth-alert-icon" id="auth-alert-icon">⚠️</span>
+        <div class="auth-alert-msg" id="auth-alert-msg">ข้อความแจ้งเตือน</div>
+      </div>
+
+      <!-- Form -->
+      <form class="auth-form" id="auth-login-form">
+        <div class="auth-input-group">
+          <label for="auth-username-input">
+            <span>👤</span> ชื่อผู้ใช้งาน (Username)
+          </label>
+          <input 
+            type="text" 
+            id="auth-username-input" 
+            placeholder="ใส่ชื่อที่คุณได้รับมาจากเพจ" 
+            autocomplete="username" 
+            required
+          />
+        </div>
+
+        <div class="auth-input-group">
+          <label for="auth-password-input">
+            <span>🔒</span> รหัสผ่าน (Password)
+          </label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="auth-password-input" 
+              placeholder="กรอกรหัสผ่านของคุณ" 
+              autocomplete="current-password" 
+              required
+            />
+            <button type="button" class="toggle-pw-btn" id="auth-toggle-pw-btn" title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-info-note">
+          ✨ <strong>เงื่อนไขสิทธิ์การเข้าใช้งาน:</strong> เฉพาะบัญชีที่มีสถานะ <strong>Premium</strong> เท่านั้น หากหมดอายุหรือยังไม่ได้รับสิทธิ์ (สถานะ: -) จะไม่สามารถเข้าเล่นได้
+        </div>
+
+        <button type="submit" class="auth-submit-btn btn btn-amber" id="auth-submit-btn">
+          <span class="btn-text">🧭 ยืนยันตัวตน & เริ่มสำรวจ</span>
+          <div class="btn-spinner" id="auth-btn-spinner" style="display: none;"></div>
+        </button>
+      </form>
+
+      <div class="auth-card-footer">
+        เชื่อมต่อระบบตรวจสอบสิทธิ์กลาง Supabase · Educational Media Hub
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/audio.js?v=1"></script>
+<script src="js/characters.js?v=1"></script>
+<script src="js/geometry-engine.js?v=1"></script>
+<script src="js/data.js?v=1"></script>
+<script src="js/world-renderer.js?v=1"></script>
+<script src="js/activities.js?v=1"></script>
+<script src="js/app.js?v=1"></script>
+<script src="js/supabase-auth-guard.js?v=1"></script>
+</body>
+</html>
