@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff3df">
+<title>ร้านพายปันปัน — ภารกิจเศษส่วน ป.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-60 -60 120 120'%3E%3Ccircle r='56' fill='%23e0a458' stroke='%234a2e2b' stroke-width='6'/%3E%3Cpath d='M0 0 L0 -50 A50 50 0 1 1 -50 0 Z' fill='%23e8667a'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- gradients ที่ใช้ร่วมกันในพายทุกชิ้น -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gBerry" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#ff9db0"/><stop offset="1" stop-color="#e2506b"/></radialGradient>
+    <radialGradient id="gLemon" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#fff2a8"/><stop offset="1" stop-color="#f5bf2e"/></radialGradient>
+    <radialGradient id="gBlue" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#a9b8ff"/><stop offset="1" stop-color="#5a6fd8"/></radialGradient>
+    <radialGradient id="gChoco" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#c58f68"/><stop offset="1" stop-color="#7a4a31"/></radialGradient>
+    <pattern id="pLattice" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="12" height="12" fill="none"/><rect width="4" height="12" fill="rgba(255,236,200,.55)"/>
+    </pattern>
+  </defs>
+</svg>
+
+<div id="loading"><div class="ld-pie"></div><p>กำลังอุ่นเตาอบ...</p></div>
+
+<div class="bg-wall"></div>
+<div class="bg-bunting" id="bunting"></div>
+<div class="bg-counter"></div>
+
+<!-- ═════════ TITLE ═════════ -->
+<section id="scr-title" class="screen active">
+  <button class="icon-btn corner btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  <div class="title-wrap">
+    <div class="title-sign">
+      <div class="title-pie" id="titlePie"></div>
+      <h1 class="logo"><span class="logo-a">ร้านพาย</span><span class="logo-b">ปันปัน</span></h1>
+      <p class="tagline">ภารกิจแบ่งพายวันเทศกาล</p>
+      <div class="title-btns">
+        <button class="btn btn-big btn-go" id="btnNew" data-icon="play"><span>เริ่มผจญภัย</span></button>
+        <button class="btn" id="btnContinue" data-icon="map" hidden><span>เล่นต่อ</span></button>
+      </div>
+      <p class="meta">คณิตศาสตร์ ป.4 · เรื่อง เศษส่วน</p>
+    </div>
+    <div class="title-chars"><div class="tc tc-pp" id="titlePP"></div><div class="tc tc-mix" id="titleMix"></div></div>
+  </div>
+</section>
+
+<!-- ═════════ MAP ═════════ -->
+<section id="scr-map" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnMapHome" data-icon="home" aria-label="หน้าแรก"></button>
+    <div class="hud-title"><b>หมู่บ้านขนมหวาน</b><small>เลือกร้านที่จะไปซ่อม</small></div>
+    <div class="hud-chip" id="mapStars"></div>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดสูตรลับ"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="map" id="map">
+    <svg class="map-road" id="mapRoad"></svg>
+    <div class="map-nodes" id="mapNodes"></div>
+  </div>
+</section>
+
+<!-- ═════════ PLAY ═════════ -->
+<section id="scr-play" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnPlayHome" data-icon="map" aria-label="กลับแผนที่"></button>
+    <div class="hud-stage" id="hudStage"></div>
+    <div class="hud-mid"><div class="hud-pips" id="hudPips"></div><div class="hud-level" id="hudLevel"></div></div>
+    <div class="hud-chip" id="hudScore"></div>
+    <button class="icon-btn hint-btn" id="btnHint" data-icon="bulb" aria-label="ขอคำใบ้"></button>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดสูตรลับ"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <main class="play">
+    <div class="task-head"><span class="task-tag" id="taskTag"></span><h2 class="task-title" id="taskTitle"></h2></div>
+    <div class="work" id="work"></div>
+  </main>
+</section>
+
+<!-- ═════════ FINAL ═════════ -->
+<section id="scr-final" class="screen">
+  <div class="final-scroll"><div class="final-card" id="finalBody"></div></div>
+</section>
+
+<!-- ═════════ GUIDE (ปันปัน + กล่องคำพูด) ═════════ -->
+<div id="guide" class="guide hidden">
+  <div class="g-char" id="gPP"></div>
+  <div class="bubble" id="bubble">
+    <div class="b-name" id="bName">ปันปัน</div>
+    <div class="b-text" id="bText"></div>
+    <button class="icon-btn b-speak" id="bSpeak" aria-label="ฟังเสียงอ่าน"></button>
+  </div>
+  <div class="g-char g-mix hidden" id="gMix"></div>
+  <button class="btn btn-next hidden" id="btnNext"></button>
+</div>
+
+<!-- ═════════ OVERLAYS ═════════ -->
+<div class="ov hidden" id="ovResult"><div class="ov-card res-card" id="resBody"></div></div>
+
+<div class="ov hidden" id="ovBook">
+  <div class="ov-card book-card">
+    <div class="book-top"><h3 class="book-h">สมุดสูตรลับของปันปัน</h3><button class="icon-btn" id="bookClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <div class="book-tabs" id="bookTabs"></div>
+    <div class="book-body" id="bookBody"></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovSettings">
+  <div class="ov-card set-card">
+    <div class="book-top"><h3 class="book-h">ตั้งค่า</h3><button class="icon-btn" id="setClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <label class="set-row"><span>ความดังเสียง</span><input type="range" id="setVol" min="0" max="100" step="5"></label>
+    <label class="set-row"><span>เพลงประกอบ</span><input type="checkbox" class="tgl" id="setMusic"></label>
+    <label class="set-row"><span>อ่านข้อความออกเสียงอัตโนมัติ<small id="voiceNote"></small></span><input type="checkbox" class="tgl" id="setVoice"></label>
+    <label class="set-row"><span>โหมดครู<small>เปิดทุกร้าน + คำถามชวนคิดหลังจบด่าน</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <button class="btn btn-soft" id="setReset" data-icon="refresh"><span>เริ่มใหม่ทั้งหมด</span></button>
+    <p class="set-note">ความก้าวหน้าเก็บไว้ในเครื่องนี้เท่านั้น ไม่มีการเก็บข้อมูลส่วนตัว</p>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovConfirm">
+  <div class="ov-card cf-card">
+    <p id="cfText"></p>
+    <div class="res-btns">
+      <button class="btn btn-soft" id="cfNo"><span>ไม่ใช่</span></button>
+      <button class="btn btn-go" id="cfYes"><span>ใช่</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div id="fx"></div>
+
+<script src="js/frac.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/art.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/stages.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
