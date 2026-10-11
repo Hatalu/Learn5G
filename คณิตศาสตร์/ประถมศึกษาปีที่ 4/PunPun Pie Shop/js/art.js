@@ -154,6 +154,9 @@
     minus: '<path d="M5 12 H19"/>',
     play: '<path d="M8 5 L19 12 L8 19 Z" class="ic-fill"/>',
     knife: '<path d="M3 17 L15 5 Q19 3 20 6 L8 18 Z" class="ic-fill-soft"/><path d="M8 18 L5.5 20.5 Q4 22 3 20.5 Q2 19 3.5 17.5 L6 15"/>',
+    eye: '<path d="M2.5 12 Q12 3.5 21.5 12 Q12 20.5 2.5 12 Z"/><circle cx="12" cy="12" r="3" class="ic-fill"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21 Q4 14 12 14 Q20 14 20 21"/>',
+    key: '<circle cx="8" cy="12" r="4"/><path d="M12 12 H21 M18 12 V15.5 M15 12 V14.5"/>',
     map: '<path d="M3 6 L9 3.5 L15 6 L21 3.5 V18 L15 20.5 L9 18 L3 20.5 Z"/><path d="M9 3.5 V18 M15 6 V20.5"/>',
     help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5 A2.5 2.5 0 1 1 12 12 V14"/><circle cx="12" cy="17.3" r="0.6" class="ic-fill"/>'
   };

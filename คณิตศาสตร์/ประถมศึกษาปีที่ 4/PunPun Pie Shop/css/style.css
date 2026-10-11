@@ -753,6 +753,64 @@ body.has-guide .bg-counter { opacity: 1; }
 .set-note { font-size: .8rem; color: var(--ink-soft); text-align: center; margin: 0; }
 .cf-card { text-align: center; font-size: 1.15rem; font-weight: 700; width: min(420px, 100%); }
 
+/* ═════════ LOGIN ═════════ */
+.login-ov {
+  z-index: 1800; overflow-y: auto; align-items: safe center;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,159,178,.55), transparent 35%),
+    radial-gradient(circle at 80% 80%, rgba(201,179,236,.55), transparent 35%),
+    repeating-linear-gradient(45deg, #fff3df 0 22px, #ffe9cc 22px 44px);
+}
+.lg-card {
+  position: relative; width: min(400px, 100%);
+  background: var(--paper); border: 4px solid var(--ink); border-radius: 34px; box-shadow: 0 9px 0 var(--ink);
+  padding: 74px 24px 20px; text-align: center; margin-top: 60px; animation: lgIn .6s cubic-bezier(.3,1.5,.5,1);
+}
+@keyframes lgIn { from { transform: translateY(40px) scale(.9); opacity: 0; } }
+.lg-top { position: absolute; left: 50%; top: -78px; transform: translateX(-50%); width: 170px; height: 150px; }
+.lg-pie { position: absolute; right: -34px; top: 60px; width: 70px; animation: spin 18s linear infinite; }
+.lg-pie .pie { width: 70px; }
+.lg-mascot { position: absolute; inset: 0; }
+.lg-mascot svg { width: 100%; height: 100%; overflow: visible; }
+.lg-title { margin: 0; font-size: 1.15rem; display: flex; flex-direction: column; line-height: 1.3; }
+.lg-title b { font-size: 2rem; color: var(--berry); text-shadow: 2px 2px 0 var(--ink); }
+.lg-sub { margin: 4px 0 14px; color: var(--ink-soft); font-weight: 600; }
+#lgForm { display: flex; flex-direction: column; gap: 12px; }
+.lg-field {
+  display: flex; align-items: center; gap: 8px; background: #fff; border: 3px solid var(--ink); border-radius: 20px;
+  padding: 4px 8px 4px 12px; box-shadow: var(--shadow-s); transition: transform .15s, box-shadow .15s;
+}
+.lg-field:focus-within { transform: translateY(-2px); box-shadow: 0 5px 0 var(--ink), 0 0 0 5px rgba(255,159,178,.45); }
+.lg-ic { width: 34px; height: 34px; border-radius: 50%; background: var(--berry-l); display: grid; place-items: center; flex: none; }
+.lg-field:nth-child(2) .lg-ic { background: #fff1b8; }
+.lg-ic .ic { width: 20px; height: 20px; }
+.lg-field input {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-family: var(--font); font-size: 1.15rem; font-weight: 600;
+  color: var(--ink); padding: 10px 0; -webkit-user-select: text; user-select: text;
+}
+.lg-field input::placeholder { color: #b9a294; }
+.lg-eye { width: 38px; height: 38px; border: 0; background: none; cursor: pointer; border-radius: 50%; display: grid; place-items: center; opacity: .5; }
+.lg-eye.on { opacity: 1; background: var(--mint-l); }
+.lg-eye .ic { width: 22px; height: 22px; }
+.lg-go { width: 100%; margin-top: 4px; }
+.lg-go.loading span { animation: talk .6s steps(2) infinite; }
+.lg-alert { display: flex; align-items: center; gap: 8px; text-align: left; border: 3px solid; border-radius: 16px; padding: 8px 12px; font-weight: 600; font-size: .95rem; }
+.lg-alert.bad { color: #a8364c; border-color: #e8667a; background: #fff0f2; }
+.lg-alert.info { color: #2d7a57; border-color: var(--mint); background: #eafff4; }
+.lg-alert .ic { width: 22px; height: 22px; flex: none; }
+.lg-note { margin: 12px 0 0; font-size: .82rem; color: var(--ink-soft); }
+.user-badge {
+  position: fixed; left: 50%; top: 36px; transform: translateX(-50%); z-index: 60;
+  display: flex; align-items: center; gap: 6px; background: var(--paper); border: 3px solid var(--ink);
+  border-radius: 22px; padding: 2px 4px 2px 12px; box-shadow: var(--shadow-s);
+}
+#scr-play.active ~ .user-badge, body:has(#scr-play.active) .user-badge, body:has(#scr-map.active) .user-badge { display: none; }
+.ub-txt { display: flex; flex-direction: column; line-height: 1.1; }
+.ub-txt b { font-size: .9rem; }
+.ub-txt small { font-size: .7rem; color: var(--ink-soft); }
+.ub-out { width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid var(--ink); background: var(--berry-l); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.ub-out .ic { width: 18px; height: 18px; }
+
 /* ═════════ FINAL ═════════ */
 #scr-final { padding: 40px 12px calc(var(--guide-h) + 10px); }
 .final-scroll { flex: 1; overflow-y: auto; display: flex; justify-content: center; }

@@ -132,6 +132,37 @@
   </div>
 </div>
 
+<!-- ═════════ LOGIN ═════════ -->
+<div class="ov login-ov hidden" id="ovLogin">
+  <div class="lg-card" id="lgCard">
+    <div class="lg-top">
+      <div class="lg-pie" id="lgPie"></div>
+      <div class="lg-mascot" id="lgMascot"></div>
+    </div>
+    <h2 class="lg-title">ยินดีต้อนรับสู่<b>ร้านพายปันปัน</b></h2>
+    <p class="lg-sub">บอกชื่อกับรหัสลับก่อนเข้าครัวนะ</p>
+    <form id="lgForm" autocomplete="on">
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcU"></span>
+        <input id="lgUser" type="text" placeholder="ชื่อผู้ใช้งาน" autocomplete="username" autocapitalize="off" spellcheck="false">
+      </label>
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcP"></span>
+        <input id="lgPass" type="password" placeholder="รหัสผ่าน" autocomplete="current-password">
+        <button type="button" class="lg-eye" id="lgEye" aria-label="แสดงรหัสผ่าน"></button>
+      </label>
+      <div class="lg-alert hidden" id="lgAlert"></div>
+      <button class="btn btn-big btn-go lg-go" id="lgGo" type="submit"><span>เข้าร้านพาย</span></button>
+    </form>
+    <p class="lg-note">ใส่ชื่อที่คุณได้รับมาจากเพจ</p>
+  </div>
+</div>
+
+<div class="user-badge hidden" id="userBadge">
+  <div class="ub-txt"><b id="ubName"></b><small id="ubRole"></small></div>
+  <button class="ub-out" id="ubOut" title="ออกจากระบบ" aria-label="ออกจากระบบ"></button>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
 <div id="fx"></div>
 
@@ -142,5 +173,7 @@
 <script src="js/widgets.js"></script>
 <script src="js/stages.js"></script>
 <script src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>
