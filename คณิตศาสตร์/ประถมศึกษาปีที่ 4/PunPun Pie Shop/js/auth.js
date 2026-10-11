@@ -48,7 +48,20 @@
     $('#lgGo').classList.toggle('loading', on);
   }
 
+  /* ล้างช่องที่เบราว์เซอร์เติมให้อัตโนมัติ (autofill มาช้ากว่าหน้าโหลด) */
+  function clearFields() {
+    let typed = false;
+    const mark = () => { typed = true; };
+    $('#lgUser').addEventListener('keydown', mark, { once: true });
+    $('#lgPass').addEventListener('keydown', mark, { once: true });
+    [0, 300, 900, 1800].forEach(ms => setTimeout(() => {
+      if (typed && ms) return;
+      $('#lgUser').value = ''; $('#lgPass').value = '';
+    }, ms));
+  }
+
   function showGate() {
+    clearFields();
     $('#ovLogin').classList.remove('hidden');
     $('#userBadge').classList.add('hidden');
     setTimeout(() => $('#lgUser').focus(), 150);
