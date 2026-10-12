@@ -383,10 +383,10 @@
       p.type = 'button';
       p.style.animationDelay = (i * 0.1) + 's';
       p.addEventListener('click', () => {
-        if (p.classList.contains('open')) { audio.tts(M.KIND_TH[it.k] + ' ' + it.l.split('').join(' '), 'p'); return; }
+        if (p.classList.contains('open')) { ui.guide.say('rv_' + it.k); return; }
         p.classList.add('open'); n++;
         sfx('unlock'); sparkle(p, 12);
-        ui.guide.say({ text: M.KIND_TH[it.k] + ' ' + it.l, voice: M.KIND_TH[it.k] + ' ' + it.l.split('').join(' ') });
+        ui.guide.say('rv_' + it.k);
         if (n === T.items.length) setTimeout(() => c.win(T.ok, row), 1600);
       });
       row.appendChild(p);
@@ -772,13 +772,13 @@
       const allA = angOk.every(x => x !== null), allL = len.every(x => x !== null);
       if (k === 'none') {
         if (anyBad) return ok(k);
-        if (!allA) { c.say('ตรวจมุมให้ครบทั้งสี่มุมก่อนตัดสินนะ'); pulse(tCorner); return; }
+        if (!allA) { c.say('chkAng'); pulse(tCorner); return; }
         c.miss('มุมทั้งสี่เป็นมุมฉากครบแล้วนะ จึงเป็นรูปสี่เหลี่ยมมุมฉาก', stamps);
         return;
       }
       if (anyBad) { c.miss('มีมุมที่ไม่ใช่มุมฉาก จึงไม่เป็นรูปสี่เหลี่ยมมุมฉากนะ', stamps); return; }
-      if (!allA) { c.say('ใช้ตัวเช็กมุมฉาก ตรวจให้ครบทั้งสี่มุมก่อนนะ'); setTool('corner'); pulse(tCorner); return; }
-      if (!allL) { c.say('ใช้ไม้บรรทัดวัดด้านให้ครบทั้งสี่ด้านก่อนนะ'); setTool('ruler'); pulse(tRuler); return; }
+      if (!allA) { c.say('chkAng'); setTool('corner'); pulse(tCorner); return; }
+      if (!allL) { c.say('chkLen'); setTool('ruler'); pulse(tRuler); return; }
       const allEq = len.every(x => Math.abs(x - len[0]) < 0.05);
       const truth = allEq ? 'square' : 'rect';
       if (k === truth) return ok(k);

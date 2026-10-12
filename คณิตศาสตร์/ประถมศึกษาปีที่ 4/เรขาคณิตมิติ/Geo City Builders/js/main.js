@@ -93,9 +93,9 @@
     paintMap();
     const next = ZONES.find(z => !S.zones[z.id]);
     setTimeout(() => {
-      if (!next) guide.say('เมืองเรขาสวยงามแล้ว! เลือกย่านไหนเล่นซ้ำก็ได้นะ');
-      else if (next.id === 1) guide.say('แตะย่านที่มีป้ายกระพริบ เพื่อเริ่มซ่อมเมืองเลย!');
-      else guide.say('ย่านถัดไปคือ ' + next.name + ' แตะเลย!');
+      if (!next) guide.say('mapDone');
+      else if (next.id === 1) guide.say('mapStart');
+      else guide.say('mapStart');
     }, 350);
   }
   function paintMap() {
@@ -129,7 +129,7 @@
     m.querySelectorAll('.node').forEach(n => {
       const go = () => {
         const id = +n.dataset.id;
-        if (!unlocked(id)) { ui.shake(n); audio.sfx('nope'); guide.say('ซ่อมย่านก่อนหน้าให้เสร็จก่อนนะ'); return; }
+        if (!unlocked(id)) { ui.shake(n); audio.sfx('nope'); guide.say('mapLock'); return; }
         audio.sfx('whoosh');
         startZone(ZONES[id - 1]);
       };
@@ -281,7 +281,6 @@
     const L = GB.LINES[oops];
     guide.say({ id: oops, who: 'p', text: ui.strip(L[1]) + ' ' + text, voice: L[2] });
     /* ปุ่มลำโพงจะอ่านคำอธิบายให้ฟัง */
-    guide.last = { id: null, who: 'p', text: text, voice: text };
     return n;
   }
   function setHint(cur, lv, auto) {
@@ -293,7 +292,6 @@
       audio.sfx('hint');
       const v = lv >= 3 ? 'hintB' : 'hintA';
       guide.say({ id: v, who: 'p', text: t, voice: GB.LINES[v][2] });
-      guide.last = { id: null, who: 'p', text: t, voice: t };
     }
   }
   $('#btnHint').addEventListener('click', () => {
@@ -419,9 +417,8 @@
         if (f && typeof f === 'object') fig = GB.figSvg(f, 150, 80);
         else if (typeof f === 'string') fig = art.symbol(f, f === 'angle' ? 'ABC' : 'AB', { scale: 1.2 });
         else if (zid === 5) fig = '<svg class="mini" viewBox="0 0 150 80"><rect x="' + (i === 1 ? 45 : 25) + '" y="12" width="' + (i === 1 ? 60 : 100) + '" height="' + (i === 1 ? 60 : 56) + '" fill="#ffe7a8" stroke="currentColor" stroke-width="4"/></svg>';
-        return '<div class="bk-item">' + (fig ? '<div class="bk-fig">' + fig + '</div>' : '') + '<div><b>' + esc(b[0]) + '</b><p>' + esc(b[1]) + '</p></div><button class="icon-btn bk-say" aria-label="ฟัง">' + art.icon('speaker') + '</button></div>';
+        return '<div class="bk-item">' + (fig ? '<div class="bk-fig">' + fig + '</div>' : '') + '<div><b>' + esc(b[0]) + '</b><p>' + esc(b[1]) + '</p></div></div>';
       }).join('');
-      $('#bookBody').querySelectorAll('.bk-say').forEach((b, i) => b.onclick = () => guide.say({ text: z.book[i][0] + ' ' + z.book[i][1] }));
     }
     ov.classList.remove('hidden');
   }

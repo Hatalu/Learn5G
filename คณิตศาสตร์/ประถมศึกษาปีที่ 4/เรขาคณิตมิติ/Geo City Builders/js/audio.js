@@ -322,7 +322,7 @@
     const has = id && GB.VOICED && GB.VOICED.indexOf(id) >= 0;
     duck(true);
     const end = () => { if (my === voiceToken) duck(false); };
-    if (!has) return tts(fallbackText, who).then(end);
+    if (!has) { const t = String(fallbackText || '').replace(/[[^]]*]/g, ''); return new Promise(r => setTimeout(r, Math.min(4500, 700 + t.length * 55))).then(end); }
     return new Promise(res => {
       const a = new Audio('audio/voice/' + id + '.mp3');
       curVoice = a;
@@ -331,9 +331,9 @@
       const fin = () => { if (done) return; done = true; if (curFin === fin) curFin = null; end(); res(); };
       curFin = fin;
       a.onended = fin;
-      a.onerror = () => { if (my !== voiceToken) return fin(); tts(fallbackText, who).then(fin); };
+      a.onerror = fin;
       const p = a.play();
-      if (p && p.catch) p.catch(() => { if (my !== voiceToken) return fin(); tts(fallbackText, who).then(fin); });
+      if (p && p.catch) p.catch(() => setTimeout(fin, 1500));
       setTimeout(fin, 15000);
     });
   }
