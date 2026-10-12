@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d4fa3">
+<title>ปิ๊งช่างเรขา กู้เมืองเส้นตรง — รูปเรขาคณิต ป.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231d4fa3'/%3E%3Cpath d='M6 4v15h15' stroke='%23ffcf3f' stroke-width='3' fill='none'/%3E%3Crect x='6' y='13' width='6' height='6' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<div id="loading"><div class="ld-sq"></div><p>กำลังกางพิมพ์เขียว...</p></div>
+
+<!-- ฉากหลังพิมพ์เขียว -->
+<div class="bg-blue"></div>
+<div class="bg-grid"></div>
+<div class="bg-shapes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- ═════════ หน้าแรก ═════════ -->
+<section id="scr-title" class="screen active">
+  <button class="icon-btn corner btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  <div class="title-wrap">
+    <div class="title-card">
+      <p class="kicker">ภารกิจรูปเรขาคณิต ป.4</p>
+      <h1 class="logo"><span class="lg-a">ปิ๊งช่างเรขา</span><span class="lg-b">กู้เมืองเส้นตรง!</span></h1>
+      <p class="tagline">ใช้เส้น มุม และรูปสี่เหลี่ยมมุมฉาก สร้างเมืองที่ถูกลบคืนมา</p>
+      <button class="btn btn-big btn-go" id="btnStart" data-icon="play"><span>เริ่มภารกิจ!</span></button>
+      <p class="meta">คณิตศาสตร์ ป.4 · เรื่อง รูปเรขาคณิต</p>
+    </div>
+    <div class="title-stage">
+      <div class="t-ping" id="titlePing"></div>
+      <div class="t-lob" id="titleLob"></div>
+    </div>
+  </div>
+  <div class="title-city" id="titleCity"></div>
+</section>
+
+<!-- ═════════ แผนที่ ═════════ -->
+<section id="scr-map" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnMapHome" data-icon="home" aria-label="หน้าแรก"></button>
+    <div class="hud-title"><b>แผนที่เมืองเรขา</b><small>ซ่อมทีละย่านจนถึงประตูเมือง</small></div>
+    <div class="hud-chip" id="mapStars"></div>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดช่าง"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="map" id="map"></div>
+</section>
+
+<!-- ═════════ เล่นภารกิจ ═════════ -->
+<section id="scr-play" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnPlayHome" data-icon="map" aria-label="กลับแผนที่"></button>
+    <div class="hud-title" id="hudZone"></div>
+    <div class="hud-prog" id="hudProg"></div>
+    <div class="hud-chip" id="hudScore"></div>
+    <button class="icon-btn hint-btn" id="btnHint" data-icon="bulb" aria-label="ขอคำใบ้"></button>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดช่าง"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="boss-bar hidden" id="bossBar"><div class="boss-face" id="bossFace"></div><div class="boss-meter"><small>พลังของลบลบ</small><div class="boss-hp" id="bossHP"></div></div></div>
+  <main class="play">
+    <div class="task-head"><span class="task-tag" id="taskTag"></span><h2 class="task-title" id="taskTitle"></h2></div>
+    <div class="work" id="work"></div>
+  </main>
+  <div class="zone-banner hidden" id="zoneBanner"></div>
+</section>
+
+<!-- ═════════ ตอนจบ ═════════ -->
+<section id="scr-final" class="screen">
+  <div class="final-scroll"><div class="final-card" id="finalBody"></div></div>
+</section>
+
+<!-- ═════════ ผู้นำทาง (แถบล่าง) ═════════ -->
+<div id="guide" class="guide hidden">
+  <div class="g-char" id="gChar"></div>
+  <div class="g-bubble" id="gBubble">
+    <div class="g-name" id="gName">ปิ๊ง</div>
+    <div class="g-text" id="gText"></div>
+  </div>
+  <button class="icon-btn g-speak silent" id="gSpeak" aria-label="ฟังอีกครั้ง"></button>
+  <div class="g-actions" id="gActions"></div>
+</div>
+
+<!-- ═════════ ฉากเล่าเรื่อง ═════════ -->
+<div class="ov story-ov hidden" id="ovStory">
+  <div class="st-city" id="stCity"></div>
+  <div class="st-chars"><div class="st-ping" id="stPing"></div><div class="st-lob hide" id="stLob"></div></div>
+  <button class="btn btn-soft btn-sm st-skip" id="stSkip"><span>ข้าม</span></button>
+</div>
+
+<!-- ═════════ OVERLAYS ═════════ -->
+<div class="ov hidden" id="ovResult"><div class="ov-card res-card" id="resBody"></div></div>
+
+<div class="ov hidden" id="ovBook">
+  <div class="ov-card book-card">
+    <div class="book-top"><h3 class="book-h">สมุดช่างเรขา</h3><button class="icon-btn" id="bookClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <div class="book-tabs" id="bookTabs"></div>
+    <div class="book-body" id="bookBody"></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovSettings">
+  <div class="ov-card set-card">
+    <div class="book-top"><h3 class="book-h">ตั้งค่า</h3><button class="icon-btn" id="setClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <label class="set-row"><span>ความดังเสียง</span><input type="range" id="setVol" min="0" max="100" step="5"></label>
+    <label class="set-row"><span>เพลงประกอบ</span><input type="checkbox" class="tgl" id="setMusic"></label>
+    <label class="set-row"><span>เสียงพากย์ตัวละคร<small>ปิ๊งและลบลบพูดอัตโนมัติ</small></span><input type="checkbox" class="tgl" id="setVoice"></label>
+    <label class="set-row"><span>โหมดครู<small>เปิดทุกย่าน + คำถามชวนคิด + รายงาน</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <button class="btn btn-soft" id="setReset" data-icon="refresh"><span>เริ่มใหม่ทั้งหมด</span></button>
+    <p class="set-note">ความก้าวหน้าไม่ถูกเก็บถาวร เปิดเว็บใหม่ = เริ่มใหม่ ไม่มีการเก็บข้อมูลส่วนตัว</p>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovConfirm">
+  <div class="ov-card cf-card">
+    <p id="cfText"></p>
+    <div class="res-btns">
+      <button class="btn btn-soft" id="cfNo"><span>ไม่ใช่</span></button>
+      <button class="btn btn-go" id="cfYes"><span>ใช่</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ LOGIN ═════════ -->
+<div class="ov login-ov hidden" id="ovLogin">
+  <div class="lg-card" id="lgCard">
+    <div class="lg-top"><div class="lg-mascot" id="lgMascot"></div></div>
+    <h2 class="lg-title">ยินดีต้อนรับสู่<b>เมืองเรขา</b></h2>
+    <p class="lg-sub">ลงชื่อนายช่างก่อนเข้าเมืองนะ</p>
+    <form id="lgForm" autocomplete="off">
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcU"></span>
+        <input id="lgUser" type="text" placeholder="ชื่อผู้ใช้งาน" autocomplete="off" name="gc-user-x" autocapitalize="off" spellcheck="false">
+      </label>
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcP"></span>
+        <input id="lgPass" type="password" placeholder="รหัสผ่าน" autocomplete="new-password" name="gc-pass-x">
+        <button type="button" class="lg-eye" id="lgEye" aria-label="แสดงรหัสผ่าน"></button>
+      </label>
+      <div class="lg-alert hidden" id="lgAlert"></div>
+      <button class="btn btn-big btn-go lg-go" id="lgGo" type="submit"><span>เข้าเมืองเรขา</span></button>
+    </form>
+    <p class="lg-note">ใส่ชื่อที่คุณได้รับมาจากเพจ</p>
+  </div>
+</div>
+
+<div class="user-badge hidden" id="userBadge">
+  <div class="ub-txt"><b id="ubName"></b><small id="ubRole"></small></div>
+  <button class="ub-out" id="ubOut" title="ออกจากระบบ" aria-label="ออกจากระบบ"></button>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div id="fx"></div>
+
+<script src="js/lines.js?v=2"></script>
+<script src="js/voiced.js?v=2"></script>
+<script src="js/audio.js?v=2"></script>
+<script src="js/art.js?v=2"></script>
+<script src="js/ui.js?v=2"></script>
+<script src="js/geo.js?v=2"></script>
+<script src="js/tasks.js?v=2"></script>
+<script src="js/zones.js?v=2"></script>
+<script src="js/main.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js?v=2"></script>
+</body>
+</html>
