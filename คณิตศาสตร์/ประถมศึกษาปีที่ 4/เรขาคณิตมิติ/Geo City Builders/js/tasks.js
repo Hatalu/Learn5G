@@ -807,7 +807,7 @@
   /* ═════════ 10) สร้างรูปสี่เหลี่ยมมุมฉากตามขั้นตอน (ไม้บรรทัด + ไม้ฉาก) ═════════ */
   ENG.construct = function (T, c) {
     const B = geo.board(c.stage, { w: 12, h: 8, grid: 'dots', cls: 'yard' });
-    const A = { x: T.A.x, y: T.A.y, n: 'A' };
+    const A = { x: Math.round(T.A.x), y: Math.round(T.A.y), n: 'A' };
     const Bp = { x: A.x + T.L, y: A.y, n: 'B' };
     const D = { x: A.x, y: A.y - T.Wd, n: 'D' };
     const C = { x: Bp.x, y: Bp.y - T.Wd, n: 'C' };
@@ -817,7 +817,7 @@
       { from: Bp, to: C, guide: 'v', len: T.Wd, line: T.lines[2], sq: true },
       { from: D, to: C, guide: 'h', len: T.L, line: T.lines[3] }
     ];
-    let si = 0, rubber = null, rlab = null;
+    let si = 0, rubber = null, rlab = null, lastQ = null;
     const ptL = B.el('top', 'g');
     const shown = new Set();
     function showPt(p) { if (shown.has(p.n)) return; shown.add(p.n); B.point(ptL, p, p.n, { cls: 'big pop-in', off: [p.n === 'A' || p.n === 'D' ? -0.45 : 0.45, p.n === 'A' || p.n === 'B' ? 0.5 : -0.4] }); }
@@ -848,7 +848,7 @@
         if (!c.alive() || si >= 4) return;
         const s = steps[si];
         if (!M.near(p, s.from, 0.8)) { note(c, 'เริ่มลากจากจุด ' + s.from.n + ' นะ'); pulse(ptL.children[[...shown].indexOf(s.from.n)]); return; }
-        rubber = B.seg('draw', s.from, s.from, 'b-rubber');
+        rubber = B.seg('draw', s.from, s.from, 'b-rubber'); lastQ = null;
         rlab = B.text('ui', s.from.x, s.from.y, '', { class: 'live-len', 'text-anchor': 'middle' });
         sfx('stretch');
       },
@@ -857,6 +857,7 @@
         const s = steps[si];
         let q = snap(p);
         if (s.guide === 'h') q.y = s.from.y; else q.x = s.from.x;
+        lastQ = q;
         rubber.setAttribute('x2', q.x); rubber.setAttribute('y2', q.y);
         const L = Math.round(M.dist(s.from, q));
         rlab.textContent = L ? L + ' หน่วย' : '';
@@ -866,11 +867,15 @@
       up(p) {
         if (!rubber) return;
         const s = steps[si];
-        let q = snap(p);
-        const off = s.guide === 'h' ? Math.abs(q.y - s.from.y) : Math.abs(q.x - s.from.x);
+        // ใช้ตำแหน่งสุดท้ายที่เด็กเห็นตอนลาก (นิ้วยกแล้วอาจขยับเล็กน้อยบนจอสัมผัส)
+        const raw = snap(p);
+        const off = s.guide === 'h' ? Math.abs(raw.y - s.from.y) : Math.abs(raw.x - s.from.x);
+        let q = lastQ || raw;
         if (s.guide === 'h') q.y = s.from.y; else q.x = s.from.x;
-        rubber.remove(); rlab.remove(); rubber = null;
+        rubber.remove(); rlab.remove(); rubber = null; lastQ = null;
         const L = Math.round(M.dist(s.from, q));
+        const wrongWay = s.guide === 'h' ? Math.sign(q.x - s.from.x) !== Math.sign(s.to.x - s.from.x) : q.y > s.from.y;
+        if (L === s.len && !wrongWay) q = { x: s.to.x, y: s.to.y };
         if (q.x === s.to.x && q.y === s.to.y) {
           B.seg('base', s.from, s.to, 'b-solid built-line');
           showPt(s.to);
@@ -880,7 +885,7 @@
           else finish();
         } else if (L === 0) {
           return;
-        } else if (off > 1.2) {
+        } else if (off > 1.2 || wrongWay) {
           c.miss('ลากไปตามเส้นประนะ', scr(B, q));
         } else {
           c.miss('ตอนนี้ยาว ' + L + ' หน่วย ต้องยาว ' + s.len + ' หน่วยนะ ลองนับจุดดู', scr(B, q));
