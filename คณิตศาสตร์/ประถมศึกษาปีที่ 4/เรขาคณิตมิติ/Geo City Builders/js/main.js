@@ -16,12 +16,21 @@
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ settings: S.settings })); } catch (e) {} };
 
   function applySettings() {
+    document.body.classList.toggle('dev', dev);
     audio.setVolume(S.settings.vol);
     audio.setMusic(S.settings.music);
     audio.setVoice(S.settings.voice);
     document.body.classList.toggle('teacher', !!S.settings.teacher);
   }
-  const unlocked = id => id === 1 || S.settings.teacher || !!S.zones[id - 1];
+  /* ── โหมดนักพัฒนา: ใส่รหัสในหน้าตั้งค่าเพื่อเข้าทุกย่านได้ (ผู้เล่นทั่วไปยังต้องผ่านตามลำดับ) ── */
+  const DEV_KEY = 'geoCityBuilders.dev';
+  const DEV_HASH = '2bimdt';
+  const devHash = s => { let x = 5381; for (const ch of s) x = ((x * 33) ^ ch.charCodeAt(0)) >>> 0; return x.toString(36); };
+  let dev = false;
+  try { dev = localStorage.getItem(DEV_KEY) === DEV_HASH; } catch (e) {}
+  const unlocked = id => id === 1 || dev || !!S.zones[id - 1];
+  /* ย่านแรกที่ยังไม่ผ่าน ซึ่งขวางย่าน id อยู่ */
+  const blocker = id => ZONES.find(z => z.id < id && !S.zones[z.id]);
   const rand = a => a[Math.floor(Math.random() * a.length)];
 
   /* ══════════ HUD / ปุ่มทั่วไป ══════════ */
@@ -129,7 +138,12 @@
     m.querySelectorAll('.node').forEach(n => {
       const go = () => {
         const id = +n.dataset.id;
-        if (!unlocked(id)) { ui.shake(n); audio.sfx('nope'); guide.say('mapLock'); return; }
+        if (!unlocked(id)) {
+          ui.shake(n); audio.sfx('nope');
+          const bz = blocker(id);
+          guide.say(bz ? { id: 'mapLock', text: 'ต้องเล่นย่าน ' + bz.id + ' ' + bz.name.replace(' (ด่านลบลบ)', '') + ' ให้ผ่านก่อนนะ' } : 'mapLock');
+          return;
+        }
         audio.sfx('whoosh');
         startZone(ZONES[id - 1]);
       };
@@ -403,7 +417,7 @@
   function openBook(zid) {
     const ov = $('#ovBook');
     const avail = ZONES.filter(z => z.book.length);
-    const can = z => S.settings.teacher || S.zones[z.id] || (run && run.z.id === z.id);
+    const can = z => S.settings.teacher || dev || S.zones[z.id] || (run && run.z.id === z.id);
     zid = zid || (run && run.z.book.length ? run.z.id : (avail.find(can) || avail[0]).id);
     $('#bookTabs').innerHTML = avail.map(z => '<button class="btab' + (z.id === zid ? ' on' : '') + (can(z) ? '' : ' locked') + '" data-id="' + z.id + '">' + z.id + '</button>').join('');
     $('#bookTabs').querySelectorAll('.btab').forEach(b => b.onclick = () => openBook(+b.dataset.id));
@@ -430,6 +444,7 @@
     $('#setMusic').checked = S.settings.music;
     $('#setVoice').checked = S.settings.voice;
     $('#setTeacher').checked = S.settings.teacher;
+    paintDev();
     $('#ovSettings').classList.remove('hidden');
   }
   $('#setClose').addEventListener('click', () => $('#ovSettings').classList.add('hidden'));
@@ -438,6 +453,26 @@
   $('#setVoice').addEventListener('change', e => { S.settings.voice = e.target.checked; applySettings(); save(); });
   $('#setTeacher').addEventListener('change', e => {
     S.settings.teacher = e.target.checked; applySettings(); save();
+    if ($('#scr-map').classList.contains('active')) paintMap();
+  });
+  function paintDev() {
+    $('#devForm').classList.toggle('on', dev);
+    $('#devForm').classList.remove('bad');
+    $('#devState').textContent = dev ? 'เปิดอยู่ เข้าได้ทุกย่าน' : 'เปิดทุกย่านเพื่อทดสอบ';
+    $('#devBtn').textContent = dev ? 'ออก' : 'ตกลง';
+    $('#devCode').value = '';
+  }
+  $('#devForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (dev) dev = false;
+    else if (devHash($('#devCode').value.trim()) === DEV_HASH) dev = true;
+    else {
+      const f = $('#devForm'); f.classList.remove('bad'); void f.offsetWidth; f.classList.add('bad');
+      audio.sfx('nope'); $('#devCode').value = ''; return;
+    }
+    try { dev ? localStorage.setItem(DEV_KEY, DEV_HASH) : localStorage.removeItem(DEV_KEY); } catch (err) {}
+    audio.sfx(dev ? 'unlock' : 'click');
+    applySettings(); paintDev();
     if ($('#scr-map').classList.contains('active')) paintMap();
   });
   $('#setReset').addEventListener('click', () => confirmBox('ล้างความก้าวหน้าแล้วเริ่มใหม่ทั้งหมดไหม?', () => {

@@ -11,10 +11,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231d4fa3'/%3E%3Cpath d='M6 4v15h15' stroke='%23ffcf3f' stroke-width='3' fill='none'/%3E%3Crect x='6' y='13' width='6' height='6' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 </head>
 <body>
+<div class="dev-badge" aria-hidden="true">DEV</div>
 
 <div id="loading"><div class="ld-sq"></div><p>กำลังกางพิมพ์เขียว...</p></div>
 
@@ -113,7 +114,11 @@
     <label class="set-row"><span>ความดังเสียง</span><input type="range" id="setVol" min="0" max="100" step="5"></label>
     <label class="set-row"><span>เพลงประกอบ</span><input type="checkbox" class="tgl" id="setMusic"></label>
     <label class="set-row"><span>เสียงพากย์ตัวละคร<small>ปิ๊งและลบลบพูดอัตโนมัติ</small></span><input type="checkbox" class="tgl" id="setVoice"></label>
-    <label class="set-row"><span>โหมดครู<small>เปิดทุกย่าน + คำถามชวนคิด + รายงาน</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <label class="set-row"><span>โหมดครู<small>คำถามชวนคิด + รายงาน</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <form class="set-row set-dev" id="devForm" autocomplete="off">
+      <span>รหัสนักพัฒนา<small id="devState">เปิดทุกย่านเพื่อทดสอบ</small></span>
+      <span class="dev-in"><input type="password" id="devCode" placeholder="รหัส" aria-label="รหัสนักพัฒนา" maxlength="32"><button type="submit" class="btn btn-sm" id="devBtn">ตกลง</button></span>
+    </form>
     <button class="btn btn-soft" id="setReset" data-icon="refresh"><span>เริ่มใหม่ทั้งหมด</span></button>
     <p class="set-note">ความก้าวหน้าไม่ถูกเก็บถาวร เปิดเว็บใหม่ = เริ่มใหม่ ไม่มีการเก็บข้อมูลส่วนตัว</p>
   </div>
@@ -160,16 +165,16 @@
 <div class="toast-wrap" id="toastWrap"></div>
 <div id="fx"></div>
 
-<script src="js/lines.js?v=5"></script>
-<script src="js/voiced.js?v=5"></script>
-<script src="js/audio.js?v=5"></script>
-<script src="js/art.js?v=5"></script>
-<script src="js/ui.js?v=5"></script>
-<script src="js/geo.js?v=5"></script>
-<script src="js/tasks.js?v=5"></script>
-<script src="js/zones.js?v=5"></script>
-<script src="js/main.js?v=5"></script>
+<script src="js/lines.js?v=6"></script>
+<script src="js/voiced.js?v=6"></script>
+<script src="js/audio.js?v=6"></script>
+<script src="js/art.js?v=6"></script>
+<script src="js/ui.js?v=6"></script>
+<script src="js/geo.js?v=6"></script>
+<script src="js/tasks.js?v=6"></script>
+<script src="js/zones.js?v=6"></script>
+<script src="js/main.js?v=6"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/auth.js?v=5"></script>
+<script src="js/auth.js?v=6"></script>
 </body>
 </html>
