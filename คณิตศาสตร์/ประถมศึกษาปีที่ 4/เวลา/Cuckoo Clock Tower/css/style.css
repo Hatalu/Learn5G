@@ -935,3 +935,20 @@ body.has-guide .user-badge { display: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ───────── คำถามซ้าย / ช่องตอบขวา (จอกว้าง) ───────── */
+.qa { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+.qa-q, .qa-a { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; }
+.qa-q { width: 100%; }
+.qa-a { width: 100%; }
+@media (min-width: 700px) and (min-aspect-ratio: 5/4) {
+  .qa { flex-direction: row; align-items: center; justify-content: center; gap: 28px; }
+  .qa-q { flex: 1 1 50%; max-width: 480px; }
+  .qa-a { flex: 0 1 340px; }
+  .qa-q .ticket { transform-origin: center; }
+  .qa-q .tk-val { font-size: 40px; }
+  .qa-q .du { font-size: 1.25em; }
+  .qa-q .ck-pair .ckc .ck { width: 130px; }
+  .qa-q .grp-row .gbox { min-width: 110px; }
+  .qa-q .gbox b { font-size: 32px; } .qa-q .gbox i, .qa-q .gbox span { font-size: 16px; }
+}

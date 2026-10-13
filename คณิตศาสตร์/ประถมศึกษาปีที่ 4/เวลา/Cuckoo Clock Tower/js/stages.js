@@ -144,8 +144,8 @@
         : 'แบ่งเป็นกลุ่มละ ' + M.f + ' ได้กี่กลุ่ม แล้วเหลือเศษเท่าไร?'),
       judSay: o.judSay,
       render(el, api) {
-        el.innerHTML = '<div class="row-center">' + ticket('ใบสั่งเฟือง', rich(tok(q.from)) + '<b class="eq">=</b><span class="qm">?</span>') + '</div>' +
-          '<div class="viz"></div><div class="w-host"></div>' + goBtn('ตรวจคำตอบ');
+        el.innerHTML = '<div class="qa"><div class="qa-q"><div class="row-center">' + ticket('ใบสั่งเฟือง', rich(tok(q.from)) + '<b class="eq">=</b><span class="qm">?</span>') + '</div>' +
+          '<div class="viz"></div></div><div class="qa-a"><div class="w-host"></div>' + goBtn('ตรวจคำตอบ') + '</div></div>';
         viz = el.querySelector('.viz');
         if (o.viz) showViz(false);
         const go = el.querySelector('.act-go');
@@ -247,7 +247,7 @@
         if (mode === 'dur') top = '<div class="ck-pair">' + art.clockCard(q.start, 'เริ่ม') + '<div class="ck-arrow">' + art.icon('right') + '</div>' + art.clockCard(q.end, 'จบ') + '</div>';
         else if (mode === 'end') top = '<div class="row-center">' + ticket('เริ่ม', art.led(q.start)) + ticket('ใช้เวลา', rich(mtok(q.dur))) + '</div>';
         else top = '<div class="row-center">' + ticket('จบ', art.led(q.end)) + ticket('ใช้เวลา', rich(mtok(q.dur))) + '</div>';
-        el.innerHTML = (o.story ? '<p class="story">' + rich(o.story) + '</p>' : '') + top + '<div class="viz"></div><div class="w-host"></div>' + goBtn('ตรวจคำตอบ');
+        el.innerHTML = '<div class="qa"><div class="qa-q">' + (o.story ? '<p class="story">' + rich(o.story) + '</p>' : '') + top + '<div class="viz"></div></div><div class="qa-a"><div class="w-host"></div>' + goBtn('ตรวจคำตอบ') + '</div></div>';
         viz = el.querySelector('.viz');
         const go = el.querySelector('.act-go');
         kp = W.keypad(el.querySelector('.w-host'), mode === 'dur'
@@ -664,8 +664,8 @@
       title: 'ต้องถึงไม่เกิน ' + tt(bw.D) + ' ต้องเริ่มเตรียมตัวกี่โมง?',
       say: 'ย้อนเวลากลับทีละขั้น! จากเวลาที่ต้องถึง ย้อนไปเวลาออกเดินทาง แล้วย้อนไปเวลาเริ่มเตรียมตัว!',
       render(el, api) {
-        el.innerHTML = '<div class="row-center">' + ticket('ถึงไม่เกิน', art.led(bw.D)) + ticket('เดินทาง', rich(mtok(bw.a))) + ticket('เตรียมตัว', rich(mtok(bw.b))) + '</div>' +
-          '<div class="viz"></div><div class="w-host"></div>' + goBtn('ตรวจคำตอบ');
+        el.innerHTML = '<div class="qa"><div class="qa-q"><div class="row-center">' + ticket('ถึงไม่เกิน', art.led(bw.D)) + ticket('เดินทาง', rich(mtok(bw.a))) + ticket('เตรียมตัว', rich(mtok(bw.b))) + '</div>' +
+          '<div class="viz"></div></div><div class="qa-a"><div class="w-host"></div>' + goBtn('ตรวจคำตอบ') + '</div></div>';
         viz = el.querySelector('.viz');
         const go = el.querySelector('.act-go');
         kp = W.keypad(el.querySelector('.w-host'), { fields: timeFields(), clock: true, autoNext: true, onEnter: () => go.click() });
