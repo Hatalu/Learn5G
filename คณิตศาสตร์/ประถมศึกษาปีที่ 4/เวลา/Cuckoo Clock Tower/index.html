@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3a2f7a">
+<title>กุ๊กกู๊กู้หอนาฬิกา — ปฏิบัติการกู้เวลา ป.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Ccircle r='46' fill='%23ff5a4e' stroke='%232b2440' stroke-width='7'/%3E%3Ccircle r='34' fill='%23fffaf0' stroke='%232b2440' stroke-width='5'/%3E%3Cpath d='M0 0V-22M0 0L14 8' stroke='%232b2440' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<div id="loading"><div class="ld-gear"></div><p>กำลังไขลานหอนาฬิกา...</p></div>
+
+<!-- ฉากหลังเมืองเวลา -->
+<div class="bg-sky"></div>
+<div class="bg-gears" id="bgGears"></div>
+<div class="bg-bunting" id="bunting"></div>
+<div class="bg-town" id="bgTown"></div>
+<div class="bg-ground"></div>
+
+<!-- ═════════ TITLE ═════════ -->
+<section id="scr-title" class="screen active">
+  <button class="icon-btn corner btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  <div class="title-wrap">
+    <div class="title-sign">
+      <p class="title-kicker">ปฏิบัติการกู้เวลา</p>
+      <h1 class="logo"><span class="logo-a">กุ๊กกู๊</span><span class="logo-b">กู้หอนาฬิกา!</span></h1>
+      <p class="tagline">พาติ๊กตี้ไขลานหอนาฬิกา เก็บระฆัง 5 ใบ ด้วยพลังวินาที นาที ชั่วโมง</p>
+      <div class="title-btns">
+        <button class="btn btn-big btn-go" id="btnNew" data-icon="bell"><span>เริ่มไขลาน!</span></button>
+        <button class="btn" id="btnContinue" data-icon="map" hidden><span>ไขลานต่อ</span></button>
+      </div>
+      <p class="meta">คณิตศาสตร์ ป.4 · เรื่อง เวลา</p>
+    </div>
+    <div class="title-stage">
+      <div class="tc tc-guk" id="titleGuk"></div>
+      <div class="tc tc-tik" id="titleTikti"></div>
+      <div class="tc tc-fon" id="titleFon"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ MAP ═════════ -->
+<section id="scr-map" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnMapHome" data-icon="home" aria-label="หน้าแรก"></button>
+    <div class="hud-title"><b>เมืองเวลา</b><small>ขึ้นหอนาฬิกาไปทีละชั้น</small></div>
+    <div class="hud-chip" id="mapBells"></div>
+    <div class="hud-chip" id="mapStars"></div>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดบันทึกนักไขลาน"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="map" id="map">
+    <svg class="map-road" id="mapRoad"></svg>
+    <div class="map-tik" id="mapTik"></div>
+    <div class="map-nodes" id="mapNodes"></div>
+  </div>
+</section>
+
+<!-- ═════════ PLAY ═════════ -->
+<section id="scr-play" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnPlayHome" data-icon="map" aria-label="กลับแผนที่"></button>
+    <div class="hud-stage" id="hudStage"></div>
+    <div class="hud-level" id="hudLevel"></div>
+    <div class="hud-chip" id="hudScore"></div>
+    <button class="icon-btn hint-btn" id="btnHint" data-icon="bulb" aria-label="ขอคำใบ้"></button>
+    <button class="icon-btn btn-book" data-icon="book" aria-label="สมุดบันทึกนักไขลาน"></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="trail" aria-hidden="true">
+    <div class="trail-road"></div>
+    <div class="trail-cps" id="trailCps"></div>
+    <div class="trail-tik" id="trailTik"></div>
+    <div class="trail-bell" id="trailBell"></div>
+  </div>
+  <main class="play">
+    <div class="task-head"><span class="task-tag" id="taskTag"></span><h2 class="task-title" id="taskTitle"></h2></div>
+    <div class="work" id="work"></div>
+  </main>
+</section>
+
+<!-- ═════════ FINAL ═════════ -->
+<section id="scr-final" class="screen">
+  <div class="final-scroll"><div class="final-card" id="finalBody"></div></div>
+</section>
+
+<!-- ═════════ GUIDE (กุ๊กกู๊ + กล่องคำพูด) ═════════ -->
+<div id="guide" class="guide hidden">
+  <div class="g-char" id="gGuk"></div>
+  <div class="bubble" id="bubble">
+    <div class="b-name" id="bName">กุ๊กกู๊</div>
+    <div class="b-text" id="bText"></div>
+    <button class="icon-btn b-speak" id="bSpeak" aria-label="ฟังเสียงพากย์"></button>
+  </div>
+  <div class="g-char g-fon hidden" id="gFon"></div>
+  <button class="btn btn-next hidden" id="btnNext"></button>
+</div>
+
+<!-- ═════════ OVERLAYS ═════════ -->
+<div class="ov count-ov hidden" id="ovCount">
+  <div class="cd-box">
+    <div class="cd-lights"><i class="cd-light"></i><i class="cd-light"></i><i class="cd-light"></i></div>
+    <div class="cd-text" id="cdText">3</div>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovResult"><div class="ov-card res-card" id="resBody"></div></div>
+
+<div class="ov hidden" id="ovBook">
+  <div class="ov-card book-card">
+    <div class="book-top"><h3 class="book-h">สมุดบันทึกนักไขลาน</h3><button class="icon-btn" id="bookClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <div class="book-tabs" id="bookTabs"></div>
+    <div class="book-body" id="bookBody"></div>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovSettings">
+  <div class="ov-card set-card">
+    <div class="book-top"><h3 class="book-h">ตั้งค่า</h3><button class="icon-btn" id="setClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <label class="set-row"><span>ความดังเสียง</span><input type="range" id="setVol" min="0" max="100" step="5"></label>
+    <label class="set-row"><span>เพลงประกอบ</span><input type="checkbox" class="tgl" id="setMusic"></label>
+    <label class="set-row"><span>เสียงพากย์อัตโนมัติ<small id="voiceNote"></small></span><input type="checkbox" class="tgl" id="setVoice"></label>
+    <label class="set-row"><span>น้ำเสียงตื่นเต้นเร้าใจ<small>ไล่ระดับเสียงสูง-ต่ำตามอารมณ์ ไม่โมโนโทน</small></span><input type="checkbox" class="tgl" id="setHype"></label>
+    <div class="set-row col"><span>เสียงพากย์</span>
+      <div class="set-voice"><select id="setVoiceName"></select><button class="btn btn-soft btn-sm" id="setTest" data-icon="speaker"><span>ทดลองฟัง</span></button></div>
+    </div>
+    <label class="set-row"><span>โหมดครู<small>เปิดทุกชั้น + คำถามชวนคิดหลังจบชั้น</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <button class="btn btn-soft" id="setReset" data-icon="refresh"><span>เริ่มใหม่ทั้งหมด</span></button>
+    <p class="set-note">ความก้าวหน้าเก็บไว้ในเครื่องนี้เท่านั้น ไม่มีการเก็บข้อมูลส่วนตัว</p>
+  </div>
+</div>
+
+<div class="ov hidden" id="ovConfirm">
+  <div class="ov-card cf-card">
+    <p id="cfText"></p>
+    <div class="res-btns">
+      <button class="btn btn-soft" id="cfNo"><span>ไม่ใช่</span></button>
+      <button class="btn btn-go" id="cfYes"><span>ใช่</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ LOGIN ═════════ -->
+<div class="ov login-ov hidden" id="ovLogin">
+  <div class="lg-card" id="lgCard">
+    <div class="lg-top">
+      <div class="lg-car" id="lgCar"></div>
+      <div class="lg-mascot" id="lgMascot"></div>
+    </div>
+    <h2 class="lg-title">ยินดีต้อนรับสู่<b>กุ๊กกู๊กู้หอนาฬิกา</b></h2>
+    <p class="lg-sub">ลงชื่อนักไขลานก่อนเข้าหอนะ</p>
+    <form id="lgForm" autocomplete="off">
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcU"></span>
+        <input id="lgUser" type="text" placeholder="ชื่อผู้ใช้งาน" autocomplete="off" name="ct-user-x" autocapitalize="off" spellcheck="false">
+      </label>
+      <label class="lg-field">
+        <span class="lg-ic" id="lgIcP"></span>
+        <input id="lgPass" type="password" placeholder="รหัสผ่าน" autocomplete="new-password" name="ct-pass-x">
+        <button type="button" class="lg-eye" id="lgEye" aria-label="แสดงรหัสผ่าน"></button>
+      </label>
+      <div class="lg-alert hidden" id="lgAlert"></div>
+      <button class="btn btn-big btn-go lg-go" id="lgGo" type="submit"><span>เข้าหอนาฬิกา</span></button>
+    </form>
+    <p class="lg-note">ใส่ชื่อที่คุณได้รับมาจากเพจ</p>
+  </div>
+</div>
+
+<div class="user-badge hidden" id="userBadge">
+  <div class="ub-txt"><b id="ubName"></b><small id="ubRole"></small></div>
+  <button class="ub-out" id="ubOut" title="ออกจากระบบ" aria-label="ออกจากระบบ"></button>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div id="fx"></div>
+
+<script src="js/tm.js?v=1"></script>
+<script src="js/audio.js?v=1"></script>
+<script src="js/art.js?v=1"></script>
+<script src="js/ui.js?v=1"></script>
+<script src="js/widgets.js?v=1"></script>
+<script src="js/stages.js?v=1"></script>
+<script src="js/main.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/auth.js?v=1"></script>
+</body>
+</html>
