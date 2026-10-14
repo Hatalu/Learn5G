@@ -118,6 +118,11 @@
   }
 
   async function init() {
+    /* ทดลองเล่นจากเว็บหลัก: โทเคนที่เซิร์ฟเวอร์เซ็นไว้ ไม่ต้องล็อกอิน (เกมล็อกเองเมื่อหมดเวลา) */
+    try {
+      const trial = window.L5GTrial ? await window.L5GTrial.check() : null;
+      if (trial) { grant({ username: 'ผู้ทดลองเล่น', role: 'trial', premium_until: null }); window.L5GTrial.begin(trial); return; }
+    } catch (e) { /* ใช้ขั้นตอนล็อกอินปกติ */ }
     $('#lgMascot').innerHTML = art.guk('happy');
     $('#lgCar').innerHTML = art.tikti('happy', 'walk');
     $('#lgEye').innerHTML = art.icon('eye');
