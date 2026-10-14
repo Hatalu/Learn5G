@@ -946,3 +946,25 @@ body.has-guide .user-badge { display: none; }
   .build-stage { width: min(100%, 440px); } .mystery .my-left, .mystery .my-right { width: min(100%, 480px); }
   .b-text { font-size: 21px; }
 }
+
+/* ───────── เลย์เอาต์ไม่มีภาพทดลอง: จัดตัวเลือกไว้กลางจอ ───────── */
+.qa.solo { justify-content: center; }
+.qa.solo .qa-q { display: none; }
+.qa.solo .qa-a { flex: 1; max-width: 640px; }
+.lab-panel { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+.lab-ask { margin: 0; font-weight: 800; font-size: 15px; color: var(--ink-2); }
+.lab-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.lab-it { display: flex; flex-direction: column; align-items: center; width: 112px; padding: 4px 4px 6px; border-radius: 18px; border: 3.5px solid var(--ink); background: #fff; box-shadow: 0 4px 0 var(--ink); font-size: 14px; }
+.lab-it .item { width: 66px; height: 66px; }
+.lab-it.tested { background: #f2fff8; }
+.lab-ev { min-height: 4px; margin-top: 2px; text-align: center; }
+.lab-ev .rchip { font-size: 11.5px; padding: 0 7px; white-space: normal; line-height: 1.3; }
+.lab-it .scard-test { margin-top: 3px; }
+.minilab { position: fixed; inset: 0; z-index: 75; display: flex; align-items: center; justify-content: center; background: rgba(34,48,90,.5); padding: 12px; animation: fadein .2s; }
+.ml-card { background: var(--paper); border: 5px solid var(--ink); border-radius: 26px; box-shadow: 0 8px 0 var(--ink); padding: 10px 12px 12px; width: min(94vw, 440px); animation: popin .35s cubic-bezier(.3,1.6,.5,1); }
+.ml-title { display: flex; align-items: center; gap: 6px; justify-content: center; font-size: 17px; margin-bottom: 6px; }
+.ml-title .ic { width: 24px; height: 24px; color: var(--pink); }
+.ml-card svg { width: 100%; height: auto; display: block; border-radius: 18px; border: 3px solid var(--ink); }
+.ml-cap { text-align: center; min-height: 32px; margin: 8px 0 0; }
+.ml-cap .rchip { font-size: 16px; padding: 2px 14px; }
+@media (max-height: 520px) and (orientation: landscape) { .ml-card { width: min(60vh * 1.4, 94vw); } }

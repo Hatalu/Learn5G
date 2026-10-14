@@ -34,6 +34,29 @@
   };
   const PROP_KEY = { 1: 'hard', 2: 'elastic', 3: 'heat', 4: 'elec' };
 
+
+  /* แผงทดสอบ: ปุ่มทดสอบใต้วัสดุแต่ละอัน กดแล้วเห็นการทดลองจริง */
+  const LAB_KIND = { 1: 'press', 2: 'elastic', 3: 'heat', 4: 'elec' };
+  const LAB_EV = {
+    1: id => MM.hardGroup(id) === 'hard' ? rchip('กดไม่บุ๋ม', 'ok') : rchip('กดแล้วบุ๋ม', 'warn'),
+    2: id => MM.isElastic(id) ? rchip('ปล่อยแล้วกลับเหมือนเดิม', 'ok') : rchip('ค้างอยู่ / ไม่เปลี่ยนรูป', 'warn'),
+    3: id => MM.heatGood(id) ? rchip('เนยละลายเร็ว', 'ok') : rchip('เนยยังไม่ละลาย', 'warn'),
+    4: id => MM.isConductor(id) ? rchip('ไฟติด', 'ok') : rchip('ไฟไม่ติด', 'warn')
+  };
+  function labPanel(q, zone, ids, onTest) {
+    q.innerHTML = '<div class="lab-panel"><p class="lab-ask">ทดสอบวัสดุแต่ละอันก่อนเลือก</p><div class="lab-row">' + ids.map(id =>
+      '<div class="lab-it" data-id="' + id + '">' + art.item(id) + '<b>' + nm(id) + '</b><div class="lab-ev"></div><button class="scard-test">' + art.icon('magnify') + '<span>ทดสอบ</span></button></div>').join('') + '</div></div>';
+    q.querySelectorAll('.lab-it').forEach(c => c.querySelector('.scard-test').addEventListener('click', () => {
+      const id = c.dataset.id;
+      MM.W.miniLab(LAB_KIND[zone], id, { caption: LAB_EV[zone](id) }).then(() => {
+        c.querySelector('.lab-ev').innerHTML = LAB_EV[zone](id); c.classList.add('tested');
+        if (MM.know) { const p = { 1: 'hard', 2: 'elastic', 3: 'heat', 4: 'elec' }[zone]; MM.know(MM.ITEM[id].mat, p); }
+        if (onTest) onTest(id);
+      });
+    }));
+    return { testAll() { q.querySelectorAll('.lab-it .scard-test').forEach(b => b.click()); } };
+  }
+
   /* ────────── ภารกิจเลือกวัสดุไปใช้งาน (ใช้ร่วมกันทุกเรื่อง 1–4) ────────── */
   function tUse(zone, level, run) {
     const u = used(run);
@@ -49,7 +72,8 @@
       explain: q.why,
       wrongMsg: id => nm(id) + 'ยังไม่เหมาะกับงานนี้',
       hints: [USE_HINT[zone][0], USE_HINT[zone][1], 'ดูป้ายคุณสมบัติบนการ์ดนะ แล้วเลือกอันที่ตรงกับงาน'],
-      fx3: (b, t) => L.badgeOptions(t.ch, PROP_KEY[zone], PROP_OF[zone]),
+      fx3: (b, t) => { L.badgeOptions(t.ch, PROP_KEY[zone], PROP_OF[zone]); if (b) b.testAll(); },
+      fig: qq => labPanel(qq, zone, q.options),
       answerText: nm(q.answer)
     });
   }
@@ -141,7 +165,7 @@
           bins: [{ id: 'hard', label: 'แข็ง', note: 'กดไม่บุ๋ม', icon: 'gem', color: '#3b82f6' }, { id: 'soft', label: 'นิ่ม', note: 'กดแล้วบุ๋ม', icon: 'pillow', color: '#ec4899' }],
           answer: it => MM.hardGroup(it.id),
           evidence: it => MM.hardGroup(it.id) === 'hard' ? rchip('กดไม่บุ๋ม', 'ok') : rchip('กดแล้วบุ๋ม', 'warn'),
-          testIcon: 'press', testLabel: 'กด',
+          testIcon: 'press', testLabel: 'กด', lab: () => 'press',
           onTest: it => { if (MM.know) MM.know(MM.ITEM[it.id].mat, 'hard'); },
           onWrong: (it, b, card) => api.wrong('ใบนี้ยังไม่ใช่ถังนี้ ลองกดปุ่ม "กด" ก่อนนะ', card),
           onDone: () => api.correct(praise() + ' {c:hard} กดไม่บุ๋ม · {c:soft} กดแล้วบุ๋ม', el)
@@ -293,7 +317,7 @@
           bins: [{ id: 'yes', label: 'ยืดหยุ่น', note: 'ปล่อยแล้วกลับเหมือนเดิม', icon: 'coil', color: '#ec4899' }, { id: 'no', label: 'ไม่ยืดหยุ่น', note: 'ค้างอยู่ หรือไม่เปลี่ยนรูป', icon: 'bent', color: '#64748b' }],
           answer: it => MM.isElastic(it.id) ? 'yes' : 'no',
           evidence: it => MM.isElastic(it.id) ? rchip('ปล่อยแล้วกลับเหมือนเดิม', 'ok') : (MM.ITEM[it.id].rigid ? rchip('ออกแรงแล้วรูปไม่เปลี่ยน', 'gray') : rchip('ปล่อยแล้วค้างอยู่', 'warn')),
-          testIcon: 'pull', testLabel: 'ทดลอง',
+          testIcon: 'pull', testLabel: 'ทดลอง', lab: () => 'elastic',
           onTest: it => { if (MM.know) MM.know(MM.ITEM[it.id].mat, 'elastic'); },
           onWrong: (it, b, card) => api.wrong('ใบนี้ยังไม่ใช่ถังนี้ ลองกดปุ่ม "ทดลอง" ก่อนนะ', card),
           onDone: () => api.correct(praise() + ' ต้องปล่อยแล้ว **กลับเหมือนเดิม** ถึงเรียก {c:elastic}', el)
@@ -418,7 +442,7 @@
           bins: [{ id: 'good', label: 'นำความร้อนดี', note: 'เนยละลายเร็ว', icon: 'flame', color: '#f97316' }, { id: 'poor', label: 'นำความร้อนไม่ดี', note: 'เนยละลายช้ามาก', icon: 'thermo', color: '#64748b' }],
           answer: it => MM.heatGood(it.id) ? 'good' : 'poor',
           evidence: it => MM.heatGood(it.id) ? rchip('เนยละลายเร็ว', 'ok') : rchip('เนยยังไม่ละลาย', 'warn'),
-          testIcon: 'flame', testLabel: 'จุ่มน้ำร้อน',
+          testIcon: 'flame', testLabel: 'จุ่มน้ำร้อน', lab: () => 'heat',
           onTest: it => { if (MM.know) MM.know(MM.ITEM[it.id].mat, 'heat'); },
           onWrong: (it, b, card) => api.wrong('ใบนี้ยังไม่ใช่ถังนี้ ลองกดปุ่ม "จุ่มน้ำร้อน" ก่อนนะ', card),
           onDone: () => api.correct(praise() + ' โลหะ {c:heatY} ส่วนไม้ พลาสติก ยาง {c:heatN}', el)
@@ -497,5 +521,5 @@
     ]
   });
 
-  MM.zone1 = { tUse, tClaim, used, showZone, showItems, showHtml, host, PROP_OF, PROP_KEY };
+  MM.zone1 = { labPanel, tUse, tClaim, used, showZone, showItems, showHtml, host, PROP_OF, PROP_KEY };
 })();

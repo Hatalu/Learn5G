@@ -750,5 +750,5 @@
     };
   }
 
-  Object.assign(W, { scratchBench, duelBench, forceBench, heatBench, circuitBench, toSvg, at, chip, ROD_COL });
+  Object.assign(W, { KIND, SQ_M, scratchBench, duelBench, forceBench, heatBench, circuitBench, toSvg, at, chip, ROD_COL });
 })();

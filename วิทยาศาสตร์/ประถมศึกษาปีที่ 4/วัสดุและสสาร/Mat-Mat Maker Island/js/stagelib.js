@@ -55,7 +55,7 @@
     const t = {
       skill: o.skill, title: o.title, say: o.say, judSay: o.judSay, answer: o.answerText || '',
       render(el, api) {
-        el.innerHTML = storyP(o.story) + '<div class="qa"><div class="qa-q"><div class="w-host q-host"></div></div><div class="qa-a"><div class="w-host ch-host"></div></div></div>';
+        el.innerHTML = storyP(o.story) + '<div class="qa' + (o.fig ? '' : ' solo') + '"><div class="qa-q"><div class="w-host q-host"></div></div><div class="qa-a"><div class="w-host ch-host"></div></div></div>';
         const q = el.querySelector('.q-host');
         if (o.fig) { if (typeof o.fig === 'function') bench = o.fig(q, api, t) || null; else q.innerHTML = o.fig; }
         ch = W.choice(el.querySelector('.ch-host'), {

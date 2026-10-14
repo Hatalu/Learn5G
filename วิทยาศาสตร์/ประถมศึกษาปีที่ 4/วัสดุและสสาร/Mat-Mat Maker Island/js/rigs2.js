@@ -285,12 +285,13 @@
         if (card.classList.contains('tested')) return;
         audio.sfx('pop', 1);
         card.classList.add('testing');
-        setTimeout(() => {
+        const wait = cfg.lab ? W.miniLab(cfg.lab(it), it.id, { caption: cfg.evidence(it) }) : new Promise(r => setTimeout(r, 520));
+        wait.then(() => {
           card.classList.remove('testing'); card.classList.add('tested');
           card.querySelector('.scard-ev').innerHTML = cfg.evidence(it);
           ui.restart(card.querySelector('.scard-ev'), 'pop');
           if (cfg.onTest) cfg.onTest(it, card);
-        }, 520);
+        });
       });
       ui.drag(card, {
         onStart(p, e) { audio.unlock(); if (e.target.closest && e.target.closest('.scard-test')) return false; return true; },
@@ -547,5 +548,126 @@
     };
   }
 
-  Object.assign(W, { pourBench, spaceBench, sortBins, choice, buildBench, mysteryBench, PROFILES });
+  /* ════════════════════════════════════════════════════
+     miniLab : แอนิเมชันการทดลองสั้น ๆ เด้งขึ้นกลางจอ (กดทดสอบแล้วเห็นภาพการทดลองจริง)
+     kind = press | elastic | heat | elec | state · id = ตัวอย่าง · o = {caption(html)}
+     ════════════════════════════════════════════════════ */
+  function miniLab(kind, id, o) {
+    o = o || {};
+    return new Promise(resolve => {
+      const T = { press: 'กดด้วยนิ้ว', elastic: 'ออกแรงแล้วปล่อย', heat: 'จุ่มน้ำร้อน', elec: 'ต่อวงจรไฟฟ้า', state: 'เทลงภาชนะ' }[kind];
+      const IC = { press: 'press', elastic: 'pull', heat: 'flame', elec: 'bolt', state: 'drop' }[kind];
+      const ov = document.createElement('div');
+      ov.className = 'minilab';
+      ov.innerHTML = '<div class="ml-card"><div class="ml-title">' + art.icon(IC) + '<b>' + T + ': ' + nm(id) + '</b></div>' +
+        '<svg viewBox="0 0 320 220" aria-hidden="true"><rect x="2" y="2" width="316" height="216" rx="18" fill="#eefaff"/><g class="ml-s"></g></svg><p class="ml-cap"></p></div>';
+      document.body.appendChild(ov);
+      const g = ov.querySelector('.ml-s'), cap = ov.querySelector('.ml-cap');
+      let closed = false;
+      const close = () => { if (closed) return; closed = true; ov.remove(); resolve(); };
+      ov.addEventListener('click', close);
+      const done = () => { cap.innerHTML = o.caption || ''; ui.restart(cap, 'pop'); setTimeout(close, 1500); };
+      const it = MM.ITEM[id] || MM.SI[id] || {};
+      const floor = '<rect x="20" y="168" width="280" height="10" rx="5" fill="#d9a066" stroke="' + INK + '" stroke-width="3"/>';
+      const finger = (x, y) => '<g transform="translate(' + x + ' ' + y + ')"><rect x="-13" y="-56" width="26" height="56" rx="13" fill="#ffcfa3" stroke="' + INK + '" stroke-width="3.4"/><ellipse cx="0" cy="-12" rx="8" ry="9" fill="#fff0e0" stroke="' + INK + '" stroke-width="2.2"/></g>';
+      const osc = (d0, w, z, ms, fn, end) => ui.tween(ms, (e, k) => fn(d0 * Math.exp(-z * k * 1.2) * Math.cos(w * k * 1.2)), end, ui.ease.linear);
+      const KD = W.KIND[id];
+
+      if (kind === 'press' || (kind === 'elastic' && ['squash', 'crumple', 'rigid'].indexOf(KD) >= 0)) {
+        const el = kind === 'elastic';
+        const amt = el ? (KD === 'rigid' ? 0 : (W.SQ_M[id] || .5)) : (it.hard <= 1 ? .4 : it.hard === 2 ? .16 : it.hard === 3 ? .02 : 0);
+        const back = it.elastic === true;
+        const base = 160, cx = 160;
+        const draw = (sy, fy) => {
+          const sx = 1 + (1 - sy) * .5;
+          g.innerHTML = floor + '<ellipse cx="160" cy="166" rx="56" ry="6" fill="rgba(34,48,90,.2)"/>' +
+            '<rect x="102" y="52" width="116" height="116" rx="14" fill="none" stroke="#ff8fb0" stroke-width="3" stroke-dasharray="7 7" opacity="' + (el ? .8 : 0) + '"/>' +
+            '<g transform="translate(' + cx + ' ' + base + ') scale(' + sx.toFixed(3) + ' ' + sy.toFixed(3) + ') translate(' + (-cx) + ' ' + (-base) + ')">' + at(art.item(id), 100, 52, 120, 120) + '</g>' + finger(cx, fy);
+        };
+        draw(1, 20);
+        audio.sfx('whoosh');
+        ui.tween(600, e => draw(1, 20 + e * 36), () => {
+          audio.sfx(amt > 0 ? 'squish' : 'knockHard');
+          ui.tween(500, e => draw(1 - amt * e, 56 + e * amt * 55), () => {
+            setTimeout(() => {
+              if (back && amt > 0) {
+                audio.sfx(id === 'ball' ? 'boing' : 'squishUp');
+                osc(amt, 9, 5, 800, d => draw(1 - Math.max(-.08, d), 30 + 26 * Math.min(1, Math.abs(d / amt))), () => { draw(1, 10); done(); });
+              } else {
+                audio.sfx('stay');
+                ui.tween(500, e => draw(1 - amt * (1 - e * .06), 56 + amt * 55 - e * (30 + amt * 55)), () => done());
+              }
+            }, 350);
+          });
+        });
+      } else if (kind === 'elastic') {
+        const back = it.elastic === true;
+        const stretch = KD === 'stretch' || KD === 'spring';
+        const draw = (sx, hx, rot) => {
+          g.innerHTML = floor + '<ellipse cx="160" cy="166" rx="70" ry="6" fill="rgba(34,48,90,.2)"/>' +
+            '<line x1="70" y1="52" x2="70" y2="170" stroke="' + INK + '" stroke-width="5"/>' +
+            '<line x1="180" y1="70" x2="180" y2="160" stroke="#ff8fb0" stroke-width="3" stroke-dasharray="6 6"/>' +
+            '<g transform="translate(70 0) scale(' + sx.toFixed(3) + ' 1) translate(-70 0) rotate(' + rot + ' 70 160)">' + at(art.item(id), 70, 66, 110, 110) + '</g>' +
+            '<g transform="translate(' + hx + ' 124)"><circle r="14" fill="#ffcfa3" stroke="' + INK + '" stroke-width="3.4"/></g>';
+        };
+        draw(1, 190, 0);
+        ui.tween(900, e => draw(stretch ? 1 + .9 * e : 1, 190 + (stretch ? 90 * e : 20 * e), KD === 'bend' ? -30 * e : 0), () => {
+          setTimeout(() => {
+            if (stretch && back) { audio.sfx(KD === 'spring' ? 'sproing' : 'twang'); osc(.9, 14, 4, 900, d => draw(1 + d, 190 + 90 * d, 0), () => { draw(1, 190, 0); done(); }); }
+            else { audio.sfx('stay'); setTimeout(done, 400); }
+          }, 300);
+        });
+      } else if (kind === 'heat') {
+        const col = (W.ROD_COL && W.ROD_COL[id]) || art.look(id);
+        const gid = art.uid('ml'), Tt = it.heat || 60;
+        const draw = (p, melt) => {
+          const hh = 30 + 130 * p;
+          g.innerHTML = '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + col[0] + '"/><stop offset="1" stop-color="' + col[1] + '"/></linearGradient>' +
+            '<linearGradient id="' + gid + 'h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd23f" stop-opacity=".1"/><stop offset=".25" stop-color="#ffb02e"/><stop offset="1" stop-color="#ff3d2e"/></linearGradient>' +
+            '<clipPath id="' + gid + 'c"><rect x="150" y="30" width="20" height="160" rx="10"/><circle cx="160" cy="176" r="20"/></clipPath></defs>' +
+            '<rect x="150" y="30" width="20" height="160" rx="10" fill="url(#' + gid + ')"/><circle cx="160" cy="176" r="20" fill="url(#' + gid + ')"/>' +
+            '<g clip-path="url(#' + gid + 'c)"><rect x="140" y="' + (200 - hh) + '" width="40" height="' + hh + '" fill="url(#' + gid + 'h)"/></g>' +
+            '<rect x="150" y="30" width="20" height="160" rx="10" fill="none" stroke="' + INK + '" stroke-width="3.4"/><circle cx="160" cy="176" r="20" fill="none" stroke="' + INK + '" stroke-width="3.4"/>' +
+            '<g transform="translate(0 ' + (melt * 8) + ') translate(160 30) scale(' + (1 + melt * .7).toFixed(2) + ' ' + (1 - melt * .8).toFixed(2) + ') translate(-160 -30)"><rect x="143" y="8" width="34" height="22" rx="6" fill="#ffe27a" stroke="' + INK + '" stroke-width="3.2"/></g>' +
+            (melt > .6 ? '<ellipse cx="160" cy="' + (36 + melt * 30) + '" rx="4" ry="5" fill="#ffd23f" stroke="' + INK + '" stroke-width="2"/>' : '') +
+            '<path d="M80 130 H240 L232 205 Q231 212 222 212 H98 Q89 212 88 205 Z" fill="rgba(190,230,255,.3)" stroke="' + INK + '" stroke-width="4"/>' +
+            '<path d="M84 150 Q120 142 160 150 T236 150 L232 205 Q231 209 222 209 H98 Q91 209 90 205 Z" fill="#ff7a5c" opacity=".55"/>' +
+            '<g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M110 120 q7 -8 0 -16 t0 -16"/><path d="M210 120 q7 -8 0 -16 t0 -16"/></g>';
+        };
+        draw(0, 0); audio.sfx('fireup');
+        ui.tween(2200, (e, k) => { const t = k * 14; const p = Math.min(1, t / Tt); const m = p >= 1 ? Math.min(1, (t - Tt) / 2) : 0; draw(p, m); }, () => { if (Tt <= 6) { audio.sfx('sizzle'); audio.sfx('drip'); } done(); }, ui.ease.linear);
+      } else if (kind === 'elec') {
+        const on = it.elec === true;
+        const wire = d => '<path d="' + d + '" fill="none" stroke="' + INK + '" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="#ff7a5c" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/>';
+        const draw = (lit, flow) => {
+          g.innerHTML = wire('M50 100 V40 H270 V70') + wire('M270 130 V176 H212') + wire('M108 176 H50 V150') +
+            '<g transform="translate(28 98)"><rect width="44" height="54" rx="9" fill="#2d3b66" stroke="' + INK + '" stroke-width="3.4"/><rect y="18" width="44" height="18" fill="#ffd23f"/><path d="M0 18 H44 M0 36 H44" stroke="' + INK + '" stroke-width="2.6"/></g>' +
+            '<circle cx="108" cy="176" r="7" fill="#c9d6e4" stroke="' + INK + '" stroke-width="3"/><circle cx="212" cy="176" r="7" fill="#c9d6e4" stroke="' + INK + '" stroke-width="3"/>' +
+            '<g transform="translate(120 112)">' + at(art.item(id), 0, 0, 80, 80) + '</g>' +
+            '<g transform="translate(270 100)"><circle r="' + (lit ? 52 : 0) + '" fill="rgba(255,240,120,.55)"/><rect x="-10" y="18" width="20" height="14" rx="3" fill="#c9d6e4" stroke="' + INK + '" stroke-width="3"/><circle cy="-4" r="24" fill="' + (lit ? '#fff6a8' : '#eef4fb') + '" stroke="' + INK + '" stroke-width="3.6"/><path d="M-8 18 V6 L0 -8 L8 6 V18" fill="none" stroke="' + (lit ? '#ff8a00' : '#8798ab') + '" stroke-width="2.8"/></g>' +
+            (flow ? '<path d="M50 100 V40 H270 V70" fill="none" stroke="#fff6a8" stroke-width="3" stroke-dasharray="3 12" stroke-dashoffset="' + (-flow * 90).toFixed(0) + '" stroke-linecap="round"/>' : '');
+        };
+        draw(false, 0); audio.sfx('plug');
+        ui.tween(1900, (e, k) => draw(on && k > .35, on && k > .35 ? k : 0), () => { audio.sfx(on ? 'bulbOn' : 'bulbOff'); done(); }, ui.ease.linear);
+      } else {
+        const st = it.s || 'solid';
+        const cont = '<path d="M110 60 H210 L204 188 Q203 196 194 196 H126 Q117 196 116 188 Z" fill="rgba(235,248,255,.4)" stroke="' + INK + '" stroke-width="4.4" stroke-linejoin="round"/>';
+        const clip = '<defs><clipPath id="mlc"><path d="M111 62 H209 L203 188 Q202 195 194 195 H126 Q118 195 117 188 Z"/></clipPath></defs>';
+        const lc = { water: '#4aa8ff', milk: '#fffdf7', oil: '#ffd23f', honey: '#e0900a', juice: '#ff9a3a' }[id] || '#4aa8ff';
+        const draw = k => {
+          let inner = '';
+          if (st === 'solid') { const y = -60 + 210 * ui.ease.back(Math.min(1, k * 1.4)); inner = '<g transform="translate(0 ' + y.toFixed(1) + ')">' + at(art.item(id), 120, 70, 80, 80) + '</g>'; }
+          else if (st === 'liquid') { const lvl = 196 - 70 * Math.min(1, k * (it.slow ? .8 : 1.3)); inner = '<g clip-path="url(#mlc)"><path d="M100 ' + (lvl + Math.sin(k * 20) * 2).toFixed(1) + ' H220 V200 H100 Z" fill="' + lc + '"/></g>' + (k < .8 ? '<path d="M160 20 V' + lvl.toFixed(1) + '" stroke="' + lc + '" stroke-width="' + (it.slow ? 5 : 8) + '" stroke-linecap="round"/>' : ''); }
+          else { inner = '<g clip-path="url(#mlc)"><rect x="100" y="60" width="120" height="140" fill="#52d3b8" opacity="' + (.85 * Math.min(1, k * 1.4)).toFixed(2) + '"/>' + [0, 1, 2, 3, 4, 5, 6].map(i => '<circle cx="' + (128 + (i * 17) % 70) + '" cy="' + (80 + (i * 29) % 100) + '" r="' + (3 + i % 3) + '" fill="#fff" opacity="' + Math.min(1, k * 2).toFixed(2) + '"/>').join('') + '</g>'; }
+          g.innerHTML = clip + floor.replace('y="168"', 'y="196"') + inner + cont;
+        };
+        draw(0);
+        audio.sfx(st === 'solid' ? 'thud' : st === 'liquid' ? 'pour' : 'gas');
+        ui.tween(1700, e => draw(e), done, ui.ease.linear);
+      }
+    });
+  }
+
+
+  Object.assign(W, { miniLab, pourBench, spaceBench, sortBins, choice, buildBench, mysteryBench, PROFILES });
 })();

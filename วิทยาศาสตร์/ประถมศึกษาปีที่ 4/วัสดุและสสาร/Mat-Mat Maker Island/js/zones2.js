@@ -65,7 +65,7 @@
           bins: [{ id: 'yes', label: 'นำไฟฟ้า', note: 'ไฟติด', icon: 'bolt', color: '#eab308' }, { id: 'no', label: 'ไม่นำไฟฟ้า', note: 'ไฟไม่ติด', icon: 'plug', color: '#64748b' }],
           answer: it => MM.isConductor(it.id) ? 'yes' : 'no',
           evidence: it => MM.isConductor(it.id) ? rchip('ไฟติด', 'ok') : rchip('ไฟไม่ติด', 'warn'),
-          testIcon: 'bolt', testLabel: 'ต่อวงจร',
+          testIcon: 'bolt', testLabel: 'ต่อวงจร', lab: () => 'elec',
           onTest: it => { if (MM.know) MM.know(MM.ITEM[it.id].mat, 'elec'); },
           onWrong: (it, b, card) => api.wrong('ใบนี้ยังไม่ใช่ถังนี้ ลองกดปุ่ม "ต่อวงจร" ก่อนนะ', card),
           onDone: () => api.correct(praise() + ' โลหะ {c:elecY} · ไม้ พลาสติก ยาง แก้ว {c:elecN}', el)
@@ -303,7 +303,7 @@
           bins: BIN_ST,
           answer: it => MM.SI[it.id].s,
           evidence: it => rchip(EVID[it.id][0], EVID[it.id][1]),
-          testIcon: 'magnify', testLabel: 'ตรวจดู',
+          testIcon: 'magnify', testLabel: 'ตรวจดู', lab: () => 'state',
           onWrong: (it, b, card) => api.wrong('ใบนี้ยังไม่ใช่ถังนี้ ลองกดปุ่ม "ตรวจดู" ก่อนนะ', card),
           onDone: () => api.correct(praise() + ' ' + items.filter(id => ['sand', 'salt', 'honey', 'soda'].indexOf(id) >= 0).map(id => ({ sand: 'ทรายเทได้แต่ทุกเม็ดเป็นของแข็ง', salt: 'เกลือทุกเม็ดเป็นของแข็ง', honey: 'น้ำผึ้งไหลช้าแต่เป็นของเหลว', soda: 'ฟองในน้ำอัดลมเป็นแก๊ส' })[id]).join(' · ') || 'แยกสถานะได้ถูกหมดเลย', el)
         });
@@ -425,6 +425,14 @@
       wrongMsg: () => 'นึกถึงตอนเทลงภาชนะ แล้วเทียบสมบัติของสามสถานะดูนะ',
       hints: ['อย่าเชื่อตุ๊บตุ๊บ ต้องคิดจากสิ่งที่ทดลองมา', '{c:solid} รูปร่างคงที่ · {c:liquid} ไหลตามภาชนะ ปริมาตรเท่าเดิม · {c:gas} แผ่เต็มภาชนะ', 'ลองนึกภาพเทของนั้นลงขวดหลายแบบ'],
       noDim: true,
+      fig: q => {
+        if (c.idx === 0) { q.innerHTML = sandFigure('sand'); return null; }
+        if (c.idx === 1) return W.pourBench(q, { samples: ['liquid'] });
+        if (c.idx === 2) return W.spaceBench(q, {});
+        if (c.idx === 3) { q.innerHTML = '<div class="lab-panel"><div class="lab-row"><div class="lab-it" data-id="honey">' + art.item('honey') + '<b>น้ำผึ้ง</b><div class="lab-ev"></div><button class="scard-test">' + art.icon('magnify') + '<span>ทดสอบ</span></button></div></div></div>'; q.querySelector('.scard-test').addEventListener('click', () => W.miniLab('state', 'honey', { caption: rchip('ไหลช้า แต่ไหลตามภาชนะ', 'ok') }).then(() => { q.querySelector('.lab-ev').innerHTML = rchip('ไหลตามภาชนะ', 'ok'); })); return null; }
+        if (c.idx === 4) return W.pourBench(q, { samples: ['gas'] });
+        return W.pourBench(q, { samples: ['solid'] });
+      },
       answerText: c.truth ? 'จริง' : 'ไม่จริง'
     });
   }
