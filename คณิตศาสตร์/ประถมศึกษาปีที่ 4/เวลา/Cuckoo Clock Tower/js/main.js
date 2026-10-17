@@ -326,7 +326,15 @@
           ui.ripple(ui.center(at || work));
           ui.floatText(ui.center(at || work), '+' + pts, 'pts');
           ui.restart($('#trailTik'), 'hop');
-          G.say(text, { mood: 'cheer', keepFon: false });
+          /* คำชมนำหน้า (praise()) → ใช้คลิปจากคลังเสียงกลาง แล้วอ่านคำอธิบายที่เหลือต่อ */
+          const o = { mood: 'cheer', keepFon: false };
+          const pre = (CT.PRAISE || []).find(p => text.startsWith(p));
+          const ln = pre != null && audio.hasClips() ? audio.clipLine('guide_m', 'praise') : null;
+          if (ln) {
+            o.clip = ln; o.rest = text.slice(pre.length).trim();
+            text = (ln.text + ' ' + o.rest).trim();
+          }
+          G.say(text, o);
           finish();
         },
         wrong(text, at) {
@@ -339,8 +347,14 @@
           ui.restart($('#trailTik'), 'wobble');
           Tk.hintLevel = Math.min(3, Tk.hintLevel + 1);
           const h = task.hint(Tk.hintLevel);
-          const lead = text || T.pick(CT.LEAD_WRONG);
-          G.say(lead + '\n' + h, { mood: 'think', keepFon: !!task.judSay });
+          /* เปิดด้วยคลิปให้กำลังใจจากคลังเสียงกลาง แล้วอ่านคำอธิบาย/คำใบ้ที่เหลือต่อ */
+          const ln = audio.hasClips() ? audio.clipLine('guide_m', 'oops') : null;
+          if (ln) {
+            const rest = (text ? text + '\n' : '') + h;
+            G.say(ln.text + '\n' + rest, { mood: 'think', keepFon: !!task.judSay, clip: ln, rest });
+          } else {
+            G.say((text || T.pick(CT.LEAD_WRONG)) + '\n' + h, { mood: 'think', keepFon: !!task.judSay });
+          }
           if (Tk.wrongs >= 3) G.setNext('ให้กุ๊กกู๊ช่วย', help);
         },
         nudge(text, at) {

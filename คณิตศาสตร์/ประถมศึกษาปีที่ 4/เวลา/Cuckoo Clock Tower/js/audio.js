@@ -384,10 +384,32 @@
     return out;
   }
 
+  /* ── คลิปเสียงพากย์จากคลังกลาง (AI Voice) : มีคลิปก็ใช้ ไม่มีก็ตกไปใช้เสียงอ่านเดิม ── */
+  const lib = window.Learn5GVoice ? window.Learn5GVoice.create({ base: 'audio/lib/' }) : null;
+  const clipLine = (voice, cat, id) => (lib ? lib.choose(voice, cat, id) : null);
+
+  /* เล่นคลิป 1 อัน แล้วอ่านข้อความที่เหลือต่อด้วยเสียงอ่านเดิม
+     o = {emo, who, prefixOnFail} — ถ้าคลิปเล่นไม่ได้ จะอ่านข้อความของคลิปด้วยเสียงอ่านแทน */
+  function sayClip(line, rest, o) {
+    o = o || {};
+    if (!lib || !line || volume <= 0) { speak(((o.prefixOnFail === false ? '' : (line ? line.text + ' ' : '')) + (rest || '')).trim(), o); return; }
+    const id = ++speakId;
+    clearTimeout(speakTimer);
+    try { if (canSpeak()) window.speechSynthesis.cancel(); } catch (e) {}
+    duck(true);
+    lib.setVolume(Math.min(1, volume + 0.2));
+    lib.playLine(line).then(ok => {
+      if (id !== speakId) return;                  /* มีเสียงใหม่แทรกแล้ว */
+      if (!ok) { speak(((o.prefixOnFail === false ? '' : line.text + ' ') + (rest || '')).trim(), o); return; }
+      if (rest) speak(rest, o); else duck(false);
+    });
+  }
+
   let speakId = 0, speakTimer = null;
   function speak(text, o) {
     o = o || {};
-    if (!canSpeak() || !text || volume <= 0 || !voice) return;
+    if (lib) lib.stop();
+    if (!canSpeak() || !text || volume <= 0 || !voice) { if (!text) duck(false); return; }
     const clean = CT.T ? CT.T.speakify(text) : text;
     const E = EMO[o.emo] || EMO.talk, W = WHO[o.who] || WHO.guk;
     const chunks = hype ? plan(clean, o.emo, o.who)
@@ -415,6 +437,7 @@
   }
   function stopSpeak() {
     speakId++;
+    if (lib) lib.stop();
     clearTimeout(speakTimer);
     try { if (canSpeak()) window.speechSynthesis.cancel(); } catch (e) {}
     duck(false);
@@ -430,7 +453,8 @@
     setVoice(name) { voicePref = name || ''; findVoices(); },
     voices: () => thVoices.map(v => v.name),
     voiceName: () => voice ? voice.name : '',
-    speak, stopSpeak, canSpeak,
+    speak, stopSpeak, canSpeak, clipLine, sayClip,
+    hasClips: () => !!lib,
     hasThaiVoice: () => !!voice
   };
 })();

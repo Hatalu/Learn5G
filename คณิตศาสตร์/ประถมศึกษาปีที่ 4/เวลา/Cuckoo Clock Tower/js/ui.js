@@ -169,7 +169,8 @@
       const el = who === 'fon' ? $('#gFon svg') : $('#gGuk svg');
       if (el) el.setAttribute('class', (who === 'fon' ? 'fon' : 'guk') + ' mood-' + m);
     },
-    /* o = {who, mood, emo, keepFon, sfx, silent} */
+    /* o = {who, mood, emo, keepFon, sfx, silent, clip, rest}
+       clip = คลิปจากคลังเสียงกลาง (audio.clipLine) เล่นก่อน แล้วอ่าน rest ต่อด้วยเสียงอ่าน */
     say(text, o) {
       o = o || {};
       const who = o.who || 'guk';
@@ -200,7 +201,17 @@
         }, 2200);
       }
       if (o.sfx) audio.sfx(o.sfx);
-      if (G.autoVoice && !o.silent) audio.speak(speech(text), { emo: G.emo, who });
+      if (G.autoVoice && !o.silent) {
+        /* เจ้าเฟืองซนหัวเราะ: เปิดด้วยเสียงหัวเราะจากคลังกลาง (ตัวป่วน) แล้วอ่านข้อความต่อ */
+        let clip = o.clip, rest = o.rest;
+        if (!clip && who === 'fon' && mood === 'laugh' && audio.hasClips()) {
+          clip = audio.clipLine('trickster', 'taunt', 'laugh');
+          rest = text;
+          o = Object.assign({}, o, { prefixOnFail: false });
+        }
+        if (clip) audio.sayClip(clip, speech(rest == null ? '' : rest), { emo: G.emo, who, prefixOnFail: o.prefixOnFail });
+        else audio.speak(speech(text), { emo: G.emo, who });
+      }
     },
     setNext(label, cb, tapToNext) {
       const btn = $('#btnNext');

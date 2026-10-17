@@ -1137,5 +1137,6 @@
   CT.STAGES = STAGES;
   CT.SKILLS = SKILLS;
   CT.LEAD_WRONG = LEAD_WRONG;
+  CT.PRAISE = PRAISE;
   CT.TASKS = { tSortUnits, tUnitPick, tConvert, tClaim, tSpan, tCal, tMonthDays, tMonthsPick, tCompare, tOrderDur, tEq, tTable, tBackward, tPlan, tDiff, tShowdown, tMix, genShowdown };
 })();
