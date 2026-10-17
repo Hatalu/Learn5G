@@ -94,16 +94,21 @@
     const f = M.figure({ b: 0, dir: 1, size: 0 });
     let st, idx = 0;
     const T = () => targets[Math.min(idx, targets.length - 1)];
-    const askTxt = t => t.ask || ('ลากแขนสีชมพูให้เปิดเป็น ' + D(t.deg) + ' ดูเลขที่ขึ้นข้าง ๆ ได้เลย!');
+    const askTxt = t => t.ask || ('ลากแขนสีชมพูให้เปิดเป็น ' + D(t.deg) + ' แล้วกดยืนยันคำตอบ!');
     return {
       skill: o.skill || 'parts',
       title: o.title || 'ลากแขนมุมให้เปิดตามที่ต้องการ',
       say: askTxt(targets[0]),
       render(el, api) {
-        el.innerHTML = storyP(o.story) + '<div class="w-stage"></div>';
+        el.innerHTML = storyP(o.story) + '<div class="w-stage"></div>' + goBtn('ยืนยันคำตอบ');
+        const go = el.querySelector('.act-go');
         st = W.angleStage(el.querySelector('.w-stage'), {
           mode: 'fan', fig: f, prot: 'ideal', lite: false, startDeg: targets[0].start == null ? 20 : targets[0].start,
-          onArm(deg) {
+          onArm() {}
+        });
+        go.addEventListener('click', () => {
+          {
+            const deg = st.state().arm;
             const t = T();
             const d = Math.abs(deg - t.deg);
             if (d === 0) {
