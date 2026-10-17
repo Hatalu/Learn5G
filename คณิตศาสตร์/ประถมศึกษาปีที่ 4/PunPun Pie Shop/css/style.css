@@ -277,11 +277,12 @@ body.has-guide .bg-counter { opacity: 1; }
 @media (orientation: portrait) and (max-width: 820px) {
   .node { flex-direction: row; transform: translate(-50%, -50%); gap: 6px; }
   .node:nth-child(even) { flex-direction: row-reverse; }
-  .node:nth-child(1) { left: 34%; top: 10%; }
-  .node:nth-child(2) { left: 64%; top: 29%; }
+  /* ไล่ด่านจากล่างขึ้นบน: ร้าน 1 อยู่ล่างสุด ร้าน 5 อยู่บนสุด */
+  .node:nth-child(1) { left: 36%; top: 88%; }
+  .node:nth-child(2) { left: 64%; top: 68%; }
   .node:nth-child(3) { left: 34%; top: 49%; }
-  .node:nth-child(4) { left: 64%; top: 68%; }
-  .node:nth-child(5) { left: 40%; top: 88%; }
+  .node:nth-child(4) { left: 64%; top: 29%; }
+  .node:nth-child(5) { left: 38%; top: 10%; }
   .node-shop { width: clamp(66px, 18vw, 110px); }
   .node-card { width: auto; max-width: 150px; min-width: 110px; }
 }
