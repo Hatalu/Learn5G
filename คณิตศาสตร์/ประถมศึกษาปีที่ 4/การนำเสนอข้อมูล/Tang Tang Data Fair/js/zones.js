@@ -17,8 +17,10 @@
 
   /* ── แผนภูมิ: ภารกิจสร้าง ── */
   function labelQs(s) {
-    const others = POOLS.filter(p => p.id !== s.pool);
-    const o3 = sample(others, 2);
+    /* ตัวลวงต้องมีชื่อต่างจากคำตอบและต่างกันเอง */
+    const others = POOLS.filter(p => p.id !== s.pool && p.title !== s.title && p.x !== s.xLabel && p.y !== s.yLabel);
+    let o3 = sample(others, 2);
+    for (let t = 0; t < 30 && (o3[0].x === o3[1].x || o3[0].y === o3[1].y || o3[0].y === s.xLabel); t++) o3 = sample(others, 2);
     return [
       { key: 'title', q: 'ตั้งชื่อแผนภูมิว่าอะไรดี?', options: shuffle([s.title].concat(o3.map(p => p.title))), ans: s.title, why: 'ชื่อแผนภูมิต้องบอกเรื่องของข้อมูล คือ "' + s.title + '"' },
       { key: 'x', q: 'แกนนอนบอกชื่อรายการ เขียนว่าอะไรดี?', options: shuffle([s.xLabel, s.yLabel, o3[0].x]), ans: s.xLabel, why: 'แกนนอนเป็นชื่อรายการของข้อมูล คือ "' + s.xLabel + '"' },
@@ -309,7 +311,7 @@
           const s = chartOfCols(tb);
           const sums = TT.chart.tableSums(tb);
           const idx = sample([0, 1, 2], 2);
-          const qs = idx.map(c => ({ by: 'cell', q: 'แท่ง' + tb.cols[c].n + ' สูง ' + sums.ct[c] + ' ตรงกับช่องรวมช่องไหนในตาราง? แตะช่องนั้น', ans: ['ct' + c], tapKeys: true, colN: c,
+          const qs = idx.map(c => ({ by: 'cell', q: 'แผนภูมิบอกว่า ' + tb.cols[c].n + ' มี ' + sums.ct[c] + ' ' + tb.unit + ' ช่องไหนในตารางบอกค่าเดียวกัน? แตะช่องนั้น', ans: ['ct' + c], tapKeys: true, colN: c,
             why: 'ผลรวมหลัก' + tb.cols[c].n + ' = ' + sums.ct[c] + ' ตรงกับยอดแท่ง',
             hints: ['ผลรวมของแต่ละหลักอยู่ที่แถวล่างสุด', 'หลักที่ต้องดูถูกไฮไลต์แล้ว', 'ช่องที่ถูกกะพริบอยู่ แตะได้เลย'] }));
           return { type: 'table', table: tb, totals: true, chart: s, qs };
