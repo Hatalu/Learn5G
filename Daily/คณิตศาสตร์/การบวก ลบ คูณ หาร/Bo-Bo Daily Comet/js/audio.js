@@ -116,13 +116,41 @@
 
   /* ── เสียงพากย์ ── */
   const pathOf = id => (id.indexOf('/') >= 0 ? 'audio/lib/' + id + '.mp3' : 'audio/voice/' + id + '.mp3');
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  /* โหลดไฟล์ดิบ (มี timeout, ล้มเหลวแล้วลองใหม่ได้ ไม่จำค่าว่างไว้ถาวร) */
+  const raw = new Map();
+  function getRaw(id) {
+    if (raw.has(id)) return raw.get(id);
+    const ctl = root.AbortController ? new root.AbortController() : null;
+    const to = setTimeout(() => { if (ctl) ctl.abort(); }, 8000);
+    const p = fetch(pathOf(id), ctl ? { signal: ctl.signal } : undefined)
+      .then(r => { if (!r.ok) throw new Error('404'); return r.arrayBuffer(); })
+      .then(ab => { clearTimeout(to); return ab; })
+      .catch(() => { clearTimeout(to); raw.delete(id); return null; });
+    raw.set(id, p);
+    return p;
+  }
   function load(id) {
     if (bufCache.has(id)) return bufCache.get(id);
     const c = ensure();
-    const p = c ? fetch(pathOf(id)).then(r => { if (!r.ok) throw new Error('404'); return r.arrayBuffer(); })
-      .then(ab => new Promise((res, rej) => c.decodeAudioData(ab, res, rej))).catch(() => null) : Promise.resolve(null);
+    if (!c) return Promise.resolve(null);
+    const p = getRaw(id)
+      .then(ab => ab ? new Promise((res, rej) => { c.decodeAudioData(ab.slice(0), res, rej); }) : null)
+      .catch(() => null)
+      .then(b => { if (!b) bufCache.delete(id); return b; });
     bufCache.set(id, p);
     return p;
+  }
+  /* โหลดล่วงหน้าเงียบ ๆ ตั้งแต่เปิดเกม จะได้ไม่ต้องรอตอนเล่น */
+  function warm(ids) {
+    const q = (ids || []).filter(Boolean); let live = 0;
+    const pump = () => {
+      while (live < 4 && q.length) {
+        const id = q.shift(); live++;
+        load(id).then(() => { live--; pump(); }, () => { live--; pump(); });
+      }
+    };
+    pump();
   }
   const isNum = id => /^n(\d|_)/.test(id) || id === 'n_jud';
   function gapAfter(a, b) {
@@ -133,12 +161,14 @@
     if (a.indexOf('/') >= 0 || /^d_/.test(a)) return 0.22;
     return 0.12;
   }
-  let token = 0, live = [], endTimer = null;
+  let token = 0, live = [], endTimer = null, pend = null, endAt = 0;
   function stopVoice() {
     token++;
     live.forEach(s => { try { s.stop(); } catch (e) { /* ปล่อยผ่าน */ } });
     live = [];
     if (endTimer) { clearTimeout(endTimer); endTimer = null; }
+    endAt = 0;
+    if (pend) { const r = pend; pend = null; r(false); }       // ปลดล็อกคนที่รอเสียงนี้อยู่ ไม่ให้ค้าง
     try { if (root.speechSynthesis) root.speechSynthesis.cancel(); } catch (e) { /* ไม่มี TTS */ }
   }
   function thaiVoice() {
@@ -148,11 +178,13 @@
     return new Promise(res => {
       const v = thaiVoice();
       if (!v || !text) return res(false);
+      let done = false; const fin = r => { if (!done) { done = true; res(r); } };
+      setTimeout(() => fin(false), 800 + text.length * 120);
       try {
         const u = new root.SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.voice = v; u.rate = 1.0; u.volume = S.vol;
-        u.onend = () => res(true); u.onerror = () => res(false);
+        u.onend = () => fin(true); u.onerror = () => fin(false);
         root.speechSynthesis.speak(u);
-      } catch (e) { res(false); }
+      } catch (e) { fin(false); }
     });
   }
   /* say(['n3','op_plus','n2','q_equals']) → Promise<boolean> จบเมื่อเล่นครบ (false = ถูกขัดจังหวะ) */
@@ -165,10 +197,13 @@
     if (!S.voice) return true;
     const c = ensure();
     if (!c) return true;
-    if (c.state === 'suspended') { try { await c.resume(); } catch (e) { /* รอปฏิสัมพันธ์ */ } }
-    const bufs = await Promise.all(ids.map(load));
+    if (c.state === 'suspended') { try { await Promise.race([c.resume(), wait(250)]); } catch (e) { /* รอปฏิสัมพันธ์ */ } }
+    if (c.state !== 'running') return true;               // ยังไม่ได้แตะหน้าจอ → ข้ามเสียง ไม่ค้าง
+    /* รอคลิปไม่เกิน 1.2 วินาที ถ้ายังไม่มา → ข้ามเสียงข้อนี้ไปเลย (เกมไม่รอ) */
+    const bufs = await Promise.race([Promise.all(ids.map(load)), wait(1200).then(() => null)]);
     if (my !== token) return false;
-    if (bufs.some(b => !b)) {                              // คลิปหาย → เสียงสำรอง
+    if (!bufs) return true;
+    if (bufs.some(b => !b)) {                              // คลิปหายถาวร → เสียงสำรอง
       const text = ids.map(i => VOICED[i] || (DC.NV && DC.NV.TEXT[i]) || '').join(' ');
       return ttsSpeak(text);
     }
@@ -178,7 +213,9 @@
       t += b.duration + gapAfter(ids[i], ids[i + 1]);
     });
     if (opt.onStart) opt.onStart();
-    return new Promise(res => { endTimer = setTimeout(() => { endTimer = null; res(my === token); }, Math.max(0, (t - c.currentTime) * 1000)); });
+    const ms = Math.max(0, (t - c.currentTime) * 1000);
+    endAt = Date.now() + ms;
+    return new Promise(res => { pend = res; endTimer = setTimeout(() => { endTimer = null; endAt = 0; pend = null; res(my === token); }, ms); });
   }
   /* ระยะเวลาโดยประมาณของลำดับคลิป (ใช้ซิงก์ภาพ) */
   async function lengthOf(ids) {
@@ -186,7 +223,9 @@
     let t = 0; bufs.forEach((b, i) => { if (b) t += b.duration + gapAfter(ids[i], ids[i + 1]); });
     return t;
   }
-  function preload(ids) { ids.forEach(load); }
+  /* เสียงที่กำลังเล่นอยู่จะจบอีกกี่ ms (ใช้ต่อคิวไม่ให้ตัดกลางประโยค) */
+  function remaining() { return endAt ? Math.max(0, endAt - Date.now()) : 0; }
+  function preload(ids) { warm(ids); }
 
   function set(o) {
     Object.assign(S, o);
@@ -196,6 +235,6 @@
     }
   }
 
-  DC.audio = { unlock, sfx, musicStart, musicStop, say, stopVoice, lengthOf, preload, set, S, ensure, thaiVoice };
+  DC.audio = { unlock, sfx, musicStart, musicStop, say, stopVoice, lengthOf, remaining, preload, warm, set, S, ensure, thaiVoice };
   if (typeof module !== 'undefined' && module.exports) module.exports = DC;
 })(typeof window !== 'undefined' ? window : globalThis);

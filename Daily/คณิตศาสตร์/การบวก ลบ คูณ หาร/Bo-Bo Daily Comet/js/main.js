@@ -120,9 +120,6 @@
     buildBlipHp();
     $('#stem').innerHTML = ''; $('#work').innerHTML = '';
     guide.set('cheer');
-    const tok = R.token;
-    await guide.say(['d_welcome'], { mood: 'cheer', hold: 200 });
-    if (tok !== R.token) return;
     nextRound();
   }
 
@@ -190,10 +187,12 @@
     if (p.line && (!R.mechSeen[p.mech + p.ask] || !p.speak.length)) ids.push(p.line);
     R.mechSeen[p.mech + p.ask] = true;
     p.speak.forEach(x => ids.push(x));
+    if (c.i === 0 && !p.final) ids.unshift('d_welcome');
     audio.preload(ids);
-    if (p.final) { await guide.say(['d_final'], { mood: 'cheer' }); if (tok !== R.token || c !== cur) return; }
+    { const rem = audio.remaining(); if (rem > 0) await wait(Math.min(rem + 80, 1900)); if (tok !== R.token || c !== cur) return; }
+    if (p.final) { await Promise.race([guide.say(['d_final'], { mood: 'cheer' }), wait(2600)]); if (tok !== R.token || c !== cur) return; }
     if (!ids.length) { guide.text(askText(p) || p.text || '', 'happy'); }
-    else await guide.say(ids, { text: p.line && !p.speak.length ? textOf([p.line]) : (askText(p) || humanAsk(p)), mood: 'talk' });
+    else await Promise.race([guide.say(ids, { text: p.line && !p.speak.length ? textOf([p.line]) : (askText(p) || humanAsk(p)), mood: 'talk' }), wait(4200)]);
     if (tok !== R.token || c !== cur) return;
     startMischief();
   }
@@ -225,8 +224,8 @@
     if (!kind) return;
     const alive = () => tok === R.token && c === cur && !cur.solved;
     blip.arrive(kind === 'boss');
-    if (!R.blipSeen) { R.blipSeen = true; await guide.say(['d_blip'], { mood: 'oops' }); if (!alive()) return; }
-    else if (Math.random() < 0.5) { await blip.speak([pickR(L.tIntro)], 'laugh'); if (!alive()) return; }
+    if (!R.blipSeen) { R.blipSeen = true; await Promise.race([guide.say(['d_blip'], { mood: 'oops' }), wait(2200)]); if (!alive()) return; }
+    else if (kind === 'boss') { await Promise.race([blip.speak([pickR(L.tIntro)], 'laugh'), wait(3000)]); if (!alive()) return; }
     const seq = kind === 'boss' ? ['goo', p.mech === 'choice' ? 'shuffle' : null, 'whisper'].filter(Boolean) : [kind];
     for (const k of seq) {
       if (!alive()) return;
@@ -256,29 +255,35 @@
       ov.appendChild(g);
     }
     audio.sfx('splat'); blip.set('laugh');
-    await guide.say(['d_goo'], { mood: 'oops' });
+    if ((R.gooSaid = (R.gooSaid || 0) + 1) <= 2) await Promise.race([guide.say(['d_goo'], { mood: 'oops' }), wait(2800)]);
+    else guide.text('แตะเช็ดเมือกออกให้หมดนะ', 'oops');
   }
   async function doWhisper(alive) {
     const p = cur.p;
     if (p.mech === 'choice') {
       const b = cur.rig.bait && cur.rig.bait();
       if (!b) return;
-      await blip.speak([pickR(L.tWrong)], 'sneaky');
-      if (!alive()) return;
-      await guide.say(['d_whisper'], { mood: 'think' });
+      if ((R.whiSaid = (R.whiSaid || 0) + 1) <= 2) {
+        await Promise.race([blip.speak([pickR(L.tWrong)], 'sneaky'), wait(3200)]);
+        if (!alive()) return;
+        await Promise.race([guide.say(['d_whisper'], { mood: 'think' }), wait(2200)]);
+      } else { blip.set('sneaky'); blip.say('ข้อนี้ต้องเลือกอันนี้แน่ ๆ!', 2400); guide.text('อย่าเพิ่งเชื่อบลิ๊บนะ คิดเองก่อน!', 'think'); }
     } else if (p.mech === 'keypad') {
       const a = +p.answer; const w = Math.max(0, Math.round(a + (Math.random() < 0.5 ? -1 : 1) * Math.max(1, Math.round(Math.abs(a) * 0.1 + 1))));
       blip.say('ข้าว่าคำตอบคือ ' + DC.core.fm(w) + '!', 3200);
-      await blip.speak([pickR(L.tWrong)], 'sneaky', 'ข้าว่าคำตอบคือ ' + DC.core.fm(w) + '!');
-      if (!alive()) return;
-      await guide.say(['d_whisper'], { mood: 'think' });
+      if ((R.whiSaid = (R.whiSaid || 0) + 1) <= 2) {
+        await Promise.race([blip.speak([pickR(L.tWrong)], 'sneaky', 'ข้าว่าคำตอบคือ ' + DC.core.fm(w) + '!'), wait(3200)]);
+        if (!alive()) return;
+        await Promise.race([guide.say(['d_whisper'], { mood: 'think' }), wait(2200)]);
+      } else guide.text('อย่าเพิ่งเชื่อบลิ๊บนะ คิดเองก่อน!', 'think');
     }
   }
   async function doShuffle(alive) {
     if (!cur.rig.shuffleNow) return;
     await wait(500); if (!alive()) return;
     blip.set('laugh'); cur.rig.shuffleNow();
-    await guide.say(['d_shuffle'], { mood: 'oops' });
+    if ((R.shufSaid = (R.shufSaid || 0) + 1) <= 2) await Promise.race([guide.say(['d_shuffle'], { mood: 'oops' }), wait(2400)]);
+    else guide.text('ตัวเลือกวิ่งไปมา ตามให้ทันนะ!', 'oops');
   }
 
   /* ═════════ ผลการตอบ ═════════ */
@@ -298,7 +303,7 @@
     blip.set(meta.baited ? 'laugh' : 'sneaky');
     guide.react('oops');
     const alive = () => tok === R.token && c === cur && !cur.solved;
-    if (meta.baited) { blip.say('ฮิฮิ โดนหลอกแล้ว!', 2000); await audio.say([pickR(['trickster/gotcha', 'trickster/laugh'])]); if (!alive()) return; }
+    if (meta.baited) { blip.say('ฮิฮิ โดนหลอกแล้ว!', 2000); audio.say([pickR(['trickster/gotcha', 'trickster/laugh'])]); await wait(900); if (!alive()) return; }
     const line = pickR(L.oops);
     if (cur.wrongs >= 4 && !cur.revealed) { await guide.say([line], { mood: 'oops' }); if (alive()) await doHint(3); return; }
     await guide.say([line], { text: textOf([line]), mood: 'oops', after: 'think' });
@@ -330,8 +335,7 @@
     const line = cur.revealed ? null : pickR(L.praise);
     if (R.i < ROUNDS - 1) {
       const sp = line ? guide.say([line], { text: textOf([line]), mood: 'cheer', after: 'happy' }) : guide.say([], { text: cur.p.exp, hold: 1300, mood: 'think' });
-      const minWait = wait(FAST ? 50 : 1500);
-      await Promise.all([sp, minWait]);
+      await wait(FAST ? 50 : 900);
       if (tok !== R.token || c !== cur) return;
       nextRound();
     } else {
@@ -343,13 +347,8 @@
     const tok = R.token;
     blip.arrive(true); blip.set('shock'); $('#blipZone').classList.add('hit');
     audio.sfx('lose'); confetti(50);
-    await Promise.all([guide.say([line || 'guide_m/praise1'], { mood: 'cheer' }), wait(300)]);
-    if (tok !== R.token) return;
-    await blip.speak(['trickster/lose'], 'sad', 'ยอมแล้ว ๆ ข้าแพ้แล้ว');
-    if (tok !== R.token) return;
-    await blip.speak(['trickster/sorry'], 'nice', 'ข้าขอโทษ ข้าจะช่วยแล้วกัน');
-    if (tok !== R.token) return;
-    await guide.say(['d_blipwin'], { mood: 'happy' });
+    guide.text('ชนะบลิ๊บแล้ว!', 'cheer');
+    await Promise.race([blip.speak(['trickster/lose'], 'sad', 'ยอมแล้ว ๆ ข้าแพ้แล้ว'), wait(3200)]);
     if (tok !== R.token) return;
     finishRun();
   }
@@ -495,6 +494,15 @@
   let confirmCb = null;
   function confirmBox(text, cb) { confirmCb = cb; $('#cfText').textContent = text; $('#ovConfirm').classList.remove('hidden'); }
 
+  /* โหลดคลิปเสียงทั้งหมดล่วงหน้า (ประมาณ 2.5 MB) เรียงตามความสำคัญ จะได้ไม่ต้องรอตอนเล่น */
+  function warmVoices() {
+    if (DC.fast) return;
+    const own = Object.keys(VOICED);
+    const core = own.filter(k => /^(n|op_|q_|a_)/.test(k)).concat(['d_welcome', 'd_win', 'd_tomorrow']);
+    const rest = own.filter(k => core.indexOf(k) < 0);
+    audio.warm(core.concat(L.praise, L.oops, L.hint, rest, L.tIntro, L.tWrong, L.tHit, L.tWin, ['trickster/lose', 'trickster/sorry', 'trickster/gotcha']));
+  }
+
   /* ═════════ เริ่มต้น ═════════ */
   function boot() {
     wire();
@@ -505,6 +513,7 @@
     applyAudio();
     renderTitle();
     show('scr-title');
+    warmVoices();
     setTimeout(() => { const l = $('#loading'); if (l) { l.classList.add('gone'); setTimeout(() => l.remove(), 600); } }, 250);
     if (DEV) {
       root.BB = {
