@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a1f7a">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>โบโบ้ ดาวหางประจำวัน — คณิตศาสตร์ บวก ลบ คูณ หาร</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%232a1f7a'/%3E%3Ccircle cx='12' cy='12' r='6' fill='%23ffd23f'/%3E%3Cpath d='M5 19L11 13' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<div id="loading"><div class="ld-rocket"></div><p>กำลังเตรียมดาวหางประจำวัน...</p></div>
+
+<!-- ฉากหลังอวกาศ -->
+<div class="bg-sky"></div>
+<div class="bg-stars s1"></div><div class="bg-stars s2"></div><div class="bg-stars s3"></div>
+<div class="bg-neb n1"></div><div class="bg-neb n2"></div>
+<div class="bg-comet"></div>
+
+<!-- ═════════ หน้าแรก ═════════ -->
+<section id="scr-title" class="screen active">
+  <header class="top-actions">
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+    <div class="streak" id="titleStreak"></div>
+    <button class="icon-btn" id="btnCal" data-icon="book" aria-label="สมุดสะสมดาว"></button>
+  </header>
+  <div class="title-wrap">
+    <div class="title-card">
+      <div class="tc-l">
+      <p class="kicker">คณิตศาสตร์ · บวก ลบ คูณ หาร</p>
+      <h1 class="logo"><span class="lg-a">โบโบ้</span><span class="lg-b">ดาวหางประจำวัน</span></h1>
+      <p class="date" id="titleDate"></p>
+      <div class="dest"><div class="pl" id="titlePlanet"></div><div class="pt"><small>ปลายทางวันนี้</small><b id="titlePlanetName"></b></div></div>
+      </div>
+      <div class="tc-r">
+      <div class="grade-pick"><small>ชั้นของฉัน</small><div id="gradeRow" class="grade-row"></div></div>
+      <div class="done-note hidden" id="doneNote"></div>
+      <button class="btn btn-big btn-go" id="btnStart" data-icon="rocket"><span>เริ่มภารกิจวันนี้</span></button>
+      <button class="btn btn-soft btn-sm hidden" id="btnAgain" data-icon="refresh"><span>เล่นโจทย์วันนี้อีกครั้ง</span></button>
+      </div>
+    </div>
+    <div class="title-stage">
+      <div class="t-bobo" id="titleBobo"></div>
+      <div class="t-blip" id="titleBlip"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ เล่น ═════════ -->
+<section id="scr-play" class="screen">
+  <header class="hud">
+    <button class="icon-btn" id="btnPlayHome" data-icon="home" aria-label="หน้าแรก"></button>
+    <div class="track" id="track"></div>
+    <div class="round-no" id="roundNo"></div>
+    <div class="hud-chip" id="hudStars"></div>
+    <button class="icon-btn hint-btn" id="btnHint" data-icon="bulb" aria-label="ขอคำใบ้"><i class="pips"><u></u><u></u><u></u></i></button>
+    <button class="icon-btn btn-settings" data-icon="gear" aria-label="ตั้งค่า"></button>
+  </header>
+  <div class="blip-zone" id="blipZone"><div class="blip-bubble hidden" id="blipBubble"></div><div class="blip-char" id="blipChar"></div><div class="blip-hp" id="blipHp"></div></div>
+  <main class="play">
+    <div class="stem" id="stem"></div>
+    <div class="aid hidden" id="aidBox"></div>
+    <div class="work" id="work"></div>
+  </main>
+</section>
+
+<!-- ═════════ สรุปผล ═════════ -->
+<section id="scr-final" class="screen"><div class="final-scroll"><div class="final-card" id="finalBody"></div></div></section>
+
+<!-- ═════════ สมุดสะสมดาว ═════════ -->
+<section id="scr-cal" class="screen">
+  <header class="cal-top">
+    <button class="icon-btn" id="btnCalBack" data-icon="left" aria-label="กลับ"></button>
+    <h2>สมุดสะสมดาว</h2>
+  </header>
+  <div class="cal-card">
+    <div class="cal-nav"><button class="icon-btn" id="calPrev" data-icon="left" aria-label="เดือนก่อน"></button><b id="calTitle"></b><button class="icon-btn" id="calNext" data-icon="right" aria-label="เดือนถัดไป"></button></div>
+    <div class="cal-week"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-stats" id="calStats"></div>
+    <p class="cal-note">ทำภารกิจประจำวันครั้งแรกของวัน = ได้ดาวเคราะห์ดวงใหม่เก็บในสมุด</p>
+  </div>
+</section>
+
+<!-- ═════════ ผู้นำทาง (แถบล่าง) ═════════ -->
+<div id="guide" class="guide hidden">
+  <div class="g-char" id="gChar"></div>
+  <div class="g-bubble" id="gBubble"><div class="g-name">โบโบ้</div><div class="g-text" id="gText"></div></div>
+  <button class="icon-btn g-speak" id="gSpeak" aria-label="ฟังอีกครั้ง"></button>
+</div>
+
+<!-- ═════════ OVERLAYS ═════════ -->
+<div class="ov hidden" id="ovSettings">
+  <div class="ov-card set-card">
+    <div class="ov-top"><h3>ตั้งค่า</h3><button class="icon-btn" id="setClose" data-icon="cross" aria-label="ปิด"></button></div>
+    <label class="set-row"><span>ความดังเสียง</span><input type="range" id="setVol" min="0" max="100" step="5"></label>
+    <label class="set-row"><span>เพลงประกอบ</span><input type="checkbox" class="tgl" id="setMusic"></label>
+    <label class="set-row"><span>เสียงพากย์<small>โบโบ้อ่านโจทย์ให้ฟัง</small></span><input type="checkbox" class="tgl" id="setVoice"></label>
+    <label class="set-row"><span>โหมดครู<small>รายงานผลทีละข้อตอนจบ</small></span><input type="checkbox" class="tgl" id="setTeacher"></label>
+    <button class="btn btn-soft" id="setReset" data-icon="refresh"><span>ล้างสมุดสะสมทั้งหมด</span></button>
+    <p class="set-note">ข้อมูลเก็บในเครื่องนี้เท่านั้น ไม่มีโฆษณา ไม่มีแชต</p>
+  </div>
+</div>
+<div class="ov hidden" id="ovConfirm"><div class="ov-card cf-card"><p id="cfText"></p><div class="cf-btns"><button class="btn btn-soft" id="cfNo"><span>ไม่ใช่</span></button><button class="btn btn-go" id="cfYes"><span>ใช่</span></button></div></div></div>
+
+<!-- ═════════ เข้าสู่ระบบ ═════════ -->
+<div class="ov login-ov hidden" id="ovLogin">
+  <div class="lg-card" id="lgCard">
+    <div class="lg-top"><div class="lg-mascot" id="lgMascot"></div></div>
+    <h2 class="lg-title">ยินดีต้อนรับสู่<b>ดาวหางประจำวัน</b></h2>
+    <p class="lg-sub">ลงชื่อก่อนขึ้นยานนะ</p>
+    <form id="lgForm" autocomplete="off">
+      <label class="lg-field"><span class="lg-ic" id="lgIcU"></span><input id="lgUser" type="text" placeholder="ชื่อผู้ใช้งาน" autocomplete="off" name="bb-user-x" autocapitalize="off" spellcheck="false"></label>
+      <label class="lg-field"><span class="lg-ic" id="lgIcP"></span><input id="lgPass" type="password" placeholder="รหัสผ่าน" autocomplete="new-password" name="bb-pass-x"><button type="button" class="lg-eye" id="lgEye" aria-label="แสดงรหัสผ่าน"></button></label>
+      <div class="lg-alert hidden" id="lgAlert"></div>
+      <button class="btn btn-big btn-go lg-go" id="lgGo" type="submit"><span>ขึ้นยาน</span></button>
+    </form>
+    <p class="lg-note">ใส่ชื่อที่คุณได้รับมาจากเพจ</p>
+  </div>
+</div>
+<div class="user-badge hidden" id="userBadge"><div class="ub-txt"><b id="ubName"></b><small id="ubRole"></small></div><button class="ub-out" id="ubOut" title="ออกจากระบบ" aria-label="ออกจากระบบ"></button></div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div id="fx"></div>
+
+<script src="js/voiced.js?v=1"></script>
+<script src="js/rng.js?v=1"></script>
+<script src="js/numvoice.js?v=1"></script>
+<script src="js/gen-core.js?v=1"></script>
+<script src="js/gen-ladders.js?v=1"></script>
+<script src="js/gen-misc.js?v=1"></script>
+<script src="js/gen-plan.js?v=1"></script>
+<script src="js/art.js?v=1"></script>
+<script src="js/audio.js?v=1"></script>
+<script src="js/ui.js?v=1"></script>
+<script src="js/scenes.js?v=1"></script>
+<script src="js/rigs.js?v=1"></script>
+<script src="js/main.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/l5g-trial.js?v=8"></script>
+<script src="js/auth.js?v=1"></script>
+</body>
+</html>

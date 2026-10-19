@@ -1,0 +1,203 @@
+{
+ "note": "snapshot of AI Voice/manifest.json (guide_m + trickster) used by this game",
+ "lines": [
+  {
+   "id": "praise1",
+   "voice": "guide_m",
+   "cat": "praise",
+   "text": "[excited] เยี่ยมเลย! ตอบถูกแล้ว!"
+  },
+  {
+   "id": "praise2",
+   "voice": "guide_m",
+   "cat": "praise",
+   "text": "[amazed] โห เก่งสุด ๆ!"
+  },
+  {
+   "id": "praise3",
+   "voice": "guide_m",
+   "cat": "praise",
+   "text": "[happy] แม่นจริง ๆ ไปต่อเลย!"
+  },
+  {
+   "id": "praise4",
+   "voice": "guide_m",
+   "cat": "praise",
+   "text": "[excited] ยอดเยี่ยม! ผ่านเลย!"
+  },
+  {
+   "id": "oops1",
+   "voice": "guide_m",
+   "cat": "oops",
+   "text": "[gently] ยังไม่ใช่นะ ลองอีกที"
+  },
+  {
+   "id": "oops2",
+   "voice": "guide_m",
+   "cat": "oops",
+   "text": "[encouraging] ใกล้แล้ว! ลองดูใหม่นะ"
+  },
+  {
+   "id": "oops3",
+   "voice": "guide_m",
+   "cat": "oops",
+   "text": "[gently] ไม่เป็นไร ผิดได้ ลองใหม่ได้"
+  },
+  {
+   "id": "hint1",
+   "voice": "guide_m",
+   "cat": "hint",
+   "text": "[cheerfully] ใบ้ให้นิดนึงนะ ดูตรงที่เรืองแสง"
+  },
+  {
+   "id": "hint2",
+   "voice": "guide_m",
+   "cat": "hint",
+   "text": "[gently] ค่อย ๆ คิดนะ ไม่ต้องรีบ"
+  },
+  {
+   "id": "think",
+   "voice": "guide_m",
+   "cat": "hint",
+   "text": "[curious] อืม ลองคิดดูนะ"
+  },
+  {
+   "id": "hello",
+   "voice": "guide_m",
+   "cat": "flow",
+   "text": "[cheerfully] สวัสดีจ้า! วันนี้มีอะไรสนุก ๆ รออยู่เพียบ!"
+  },
+  {
+   "id": "go",
+   "voice": "guide_m",
+   "cat": "flow",
+   "text": "[excited] ลุยกันเลย!"
+  },
+  {
+   "id": "stageclear",
+   "voice": "guide_m",
+   "cat": "flow",
+   "text": "[excited] ด่านนี้ผ่านแล้ว! เก็บดาวเลย!"
+  },
+  {
+   "id": "bonus",
+   "voice": "guide_m",
+   "cat": "flow",
+   "text": "[amazed] เก่งขนาดนี้! ลองด่านท้าทายไหม?"
+  },
+  {
+   "id": "alldone",
+   "voice": "guide_m",
+   "cat": "flow",
+   "text": "[excited] ครบทุกด่านแล้ว! สุดยอดไปเลย!"
+  },
+  {
+   "id": "intro1",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ฮิฮิ! ข้ามาป่วนอีกแล้วนะ! [laughs]"
+  },
+  {
+   "id": "intro2",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ใครจะหยุดข้าได้ล่ะ?"
+  },
+  {
+   "id": "final",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ถึงด่านสุดท้ายแล้ว! เจอข้าหน่อย! [laughs]"
+  },
+  {
+   "id": "wrong1",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[mischievously] ข้าว่าข้อนี้แหละถูก! เชื่อข้าสิ!"
+  },
+  {
+   "id": "wrong2",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[sly] ข้อนี้ชัวร์เลย ไม่ต้องคิดมาก!"
+  },
+  {
+   "id": "wrong3",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[mischievously] ตามข้ามาเลย ข้าไม่หลอกหรอก!"
+  },
+  {
+   "id": "wrong4",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[sly] คำตอบอยู่ตรงนั้นแหละ ลองเลือกสิ!"
+  },
+  {
+   "id": "trick1",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ลองดูสิ ถ้าตาไวพอ!"
+  },
+  {
+   "id": "taunt1",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ทำไม่ได้หรอก ฮิฮิ! [laughs]"
+  },
+  {
+   "id": "taunt2",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ยากไปไหม? ยอมแพ้ซะเถอะ!"
+  },
+  {
+   "id": "gotcha",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] โดนหลอกเข้าให้แล้ว! [laughs]"
+  },
+  {
+   "id": "laugh",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[laughs] ฮ่า ฮ่า ฮ่า!"
+  },
+  {
+   "id": "hit1",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[shocked] โอ๊ย! ทำได้อีกแล้ว!"
+  },
+  {
+   "id": "hit2",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[shocked] อะไรกัน! ไม่นะ!"
+  },
+  {
+   "id": "hit3",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[annoyed] ข้ายังไม่ยอมแพ้!"
+  },
+  {
+   "id": "surprise",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[surprised] เอ๊ะ! รู้ได้ยังไงเนี่ย!"
+  },
+  {
+   "id": "lose",
+   "voice": "trickster",
+   "cat": "lose",
+   "text": "[sighs] ยอมแล้ว ๆ ข้าแพ้แล้ว"
+  },
+  {
+   "id": "sorry",
+   "voice": "trickster",
+   "cat": "lose",
+   "text": "[sadly] ข้าขอโทษ ข้าจะช่วยแล้วกัน"
+  }
+ ]
+}
