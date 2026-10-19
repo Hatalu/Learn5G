@@ -1,0 +1,197 @@
+/* ═══════════════════════════════════════════════════════════
+   MOON-MOON SKY STATION — ธีมท้องฟ้ากลางคืน + สไตล์ของตัวทดลอง
+   โหลดต่อจาก style.css (ฐานสไตล์สติกเกอร์หนานุ่มของโปรเจกต์) เพื่อเปลี่ยนธีมและเพิ่มส่วนของเกมนี้
+   ═══════════════════════════════════════════════════════════ */
+:root { --night-1: #141c4a; --night-2: #2b3584; --night-3: #5b46b8; --moon: #ffe38a; }
+body { background: var(--night-1); }
+#loading { background: linear-gradient(180deg, #141c4a, #3a3a96); color: #fff6c2; }
+.bg-isle { background: linear-gradient(180deg, #141c4a 0%, #2b3584 55%, #5b46b8 100%); }
+.bg-isle::after { opacity: .18; mix-blend-mode: screen; }
+div.bgstar { position: absolute; border-radius: 50%; background: #fff6c2; }
+.bgstar { animation: twinkle 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.bg-moon { position: absolute; right: 7%; top: 6%; width: clamp(60px, 11vmin, 120px); opacity: .95; animation: bob 7s ease-in-out infinite; }
+.bg-pl { position: absolute; opacity: .85; }
+.bg-pl svg { width: 100%; height: auto; display: block; }
+.bg-pl1 { left: 4%; bottom: 7%; width: clamp(70px, 14vmin, 140px); transform: rotate(-12deg); }
+.bg-pl2 { right: 5%; bottom: 30%; width: clamp(36px, 7vmin, 70px); }
+.bg-float .fl { width: 22px; opacity: .55; animation-name: riseUp; }
+.bg-float .fl .balloon { filter: drop-shadow(0 0 6px rgba(255, 246, 194, .6)); }
+
+/* หัวเรื่อง / ปุ่มหลัก */
+.hud { background: linear-gradient(180deg, #f6f3ff, #e3dcff); }
+.title-sign { background: #fbf9ff; }
+.title-sign::before { background: repeating-linear-gradient(90deg, #8b5cf6 0 34px, #ffd23f 34px 68px, #3ccf9a 68px 102px, #4aa8ff 102px 136px, #ff8fc1 136px 170px); }
+.logo-a { color: #b9a6ff; }
+.logo-b { color: var(--yellow); }
+.title-kicker { color: var(--moon); }
+.tc-mat { width: 150px; } .tc-tub { width: 118px; bottom: 16px; }
+.work { background: rgba(250, 247, 255, .97); }
+.task-title { background: #fbf9ff; }
+.story { background: #f1ecff; border-color: rgba(91, 70, 184, .4); }
+
+/* เส้นทางบนแผนที่ = ทางช้างเผือก */
+.road-ink { stroke: var(--ink); } .road-beach { stroke: #6b57d6; } .road-land { stroke: #3a43a0; } .road-land2 { stroke: #4c58c0; }
+.road-curb { stroke: var(--ink); } .road-base { stroke: #8f9bff; } .road-dash { stroke: #fff6c2; }
+.node-card { background: #fbf9ff; }
+.node.locked .node-card { background: #dcd8ee; }
+.decor-svg { overflow: visible; }
+
+/* ชิปคำศัพท์ */
+.kchip.k-east { background: #fff0d6; border-color: #e07b00; color: #a85300; }
+.kchip.k-west { background: #ffe3f0; border-color: #d6457f; color: #a02456; }
+.kchip.k-later { background: #e6ecff; border-color: #4a63d8; color: #2c3f9c; }
+.kchip.k-wax { background: #fff6bf; border-color: #d9a400; color: #8a6700; }
+.kchip.k-wane { background: #ece4ff; border-color: #7a55d8; color: #4d2fa0; }
+.kchip.k-full { background: #fffbe0; border-color: #d9a400; color: #8a6700; }
+.kchip.k-newm { background: #dfe4fa; border-color: #3a4690; color: #26306e; }
+.kchip.k-star { background: #fff0c9; border-color: #e08a00; color: #965a00; }
+.kchip.k-planet { background: #dcf0ff; border-color: #2a7fd6; color: #1b5a9c; }
+.kchip.k-period { background: #f0e4ff; border-color: #8b3fe0; color: #5d24a0; }
+.kchip.k-far { background: #e6ecff; border-color: #4a63d8; color: #2c3f9c; }
+.kchip.k-near { background: #fff0d6; border-color: #e07b00; color: #a85300; }
+
+/* ดวงจันทร์ / ดาวเคราะห์ ทั่วไป */
+.moonpl { width: 100%; height: auto; display: block; overflow: visible; }
+.plsvg { display: block; overflow: visible; }
+.big-moon { width: min(150px, 34vw); margin: 0 auto; filter: drop-shadow(0 0 14px rgba(255, 227, 138, .55)); }
+.big-moon.sm { width: min(104px, 26vw); }
+.omoon { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 100%; }
+.omoon .moonpl { width: min(76px, 100%); }
+.omoon b { font-size: 14px; line-height: 1.25; text-align: center; }
+.oplanet { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 100%; }
+.oplanet b { font-size: 14px; line-height: 1.25; text-align: center; }
+.otxt { display: flex; flex-direction: column; align-items: center; line-height: 1.3; text-align: center; }
+.otxt small { font-size: 14px; color: var(--ink-2); font-weight: 600; }
+.opts-moon, .opts-planet { grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(560px, 100%); }
+.opts-moon .opt, .opts-planet .opt { flex-direction: column; padding: 8px 4px; min-height: 0; }
+.opts-orbit { grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(600px, 100%); }
+.opts-orbit .opt { padding: 4px; }
+.miniorbit, .minisky { width: 100%; height: auto; display: block; border-radius: 12px; }
+.opts-2.opts-planet { grid-template-columns: repeat(2, minmax(0, 170px)); justify-content: center; }
+.icard-btn .moonpl, .ord-c .moonpl { width: 64px; }
+.ord-c .minisky { width: 104px; }
+.ord-c .omoon .moonpl, .ring-card .moonpl { width: 58px; }
+.icard-btn { width: auto; min-width: 84px; }
+.ord-cards { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.moon-hint { animation: pulseRing 1.3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pulseRing { 50% { transform: scale(1.25); opacity: .35; } }
+@keyframes logpop { from { transform: translate(var(--tx, 0), var(--ty, 0)) scale(.2); opacity: 0; } }
+.logpop { animation: popin .5s both; }
+@keyframes lapflash { 40% { transform: scale(1.12); background: #fff6a8; } }
+.lapflash { animation: lapflash .6s ease-out; }
+.sun-rays { transform-box: fill-box; transform-origin: center; animation: spin 40s linear infinite; }
+
+/* ยังไม่มีคำถาม: ซ่อนช่องตัวเลือกที่ว่าง เพื่อให้ภาพทดลองอยู่กลางจอ (เมื่อคำถามขึ้นมาจะแสดงเอง) */
+.qa-a:has(> .w-host:empty) { display: none; }
+
+/* skyRig */
+.skyrig { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.skyrig:not(.with-earth) { align-items: stretch; }
+.skyrig:not(.with-earth) .sky-main { flex: 0 0 auto; width: 100%; margin: 0 auto; }
+.skyrig.with-earth { flex-direction: row; align-items: stretch; flex-wrap: wrap; justify-content: center; }
+.sky-main { flex: 1 1 320px; max-width: 460px; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.sky-earth { flex: 0 1 190px; min-width: 150px; }
+.sky-svg2 { width: 100%; height: auto; display: block; touch-action: none; border-radius: 22px; border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); background: #18235a; }
+.sky-ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.sky-state { background: #fff; border: 3px solid var(--ink); border-radius: 999px; padding: 2px 14px; font-weight: 700; font-size: 15px; }
+
+/* moonLog */
+.moonlog { width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.lg-svg { width: 100%; height: auto; border-radius: 22px; border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); touch-action: none; }
+.lg-row { cursor: pointer; }
+.lg-pt { transform-box: fill-box; }
+
+/* phaseLab */
+.plab { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; width: 100%; }
+.plab-orbit { flex: 1 1 260px; max-width: 340px; min-width: 0; }
+.plab-orbit svg { width: 100%; height: auto; display: block; touch-action: none; border-radius: 24px; border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); cursor: grab; }
+.plab-view { flex: 0 1 190px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.plab.hide-view .plab-view { display: none; }
+.plab-card { background: #1a2250; border: 4px solid var(--ink); border-radius: 22px; box-shadow: 0 5px 0 var(--ink); padding: 10px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.plab-img { width: min(124px, 100%); }
+.plab-name { color: #fff6c2; font-weight: 800; font-size: 15px; min-height: 22px; text-align: center; }
+.plab-cap { font-size: 13px; color: var(--ink-2); font-weight: 700; }
+.plab-target { display: flex; align-items: center; gap: 8px; background: #fff8d6; border: 3px dashed var(--ink); border-radius: 16px; padding: 4px 10px; font-weight: 700; font-size: 14px; }
+.plab-target[hidden] { display: none; }
+.pt-img { width: 38px; flex: none; }
+
+/* cycleRing */
+.ring { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; width: 100%; }
+.ring > svg { flex: 1 1 250px; max-width: 320px; width: 100%; height: auto; border: 4px solid var(--ink); border-radius: 26px; box-shadow: 0 5px 0 var(--ink); }
+.ring-slot { cursor: pointer; }
+.ring-tray { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; flex: 1 1 170px; max-width: 360px; }
+.ring-card { width: 76px; padding: 4px; }
+.ring-card b { font-size: 11.5px; line-height: 1.2; text-align: center; }
+.ring-card.sel { outline: 4px solid var(--yellow); }
+
+/* dayDial */
+.dial { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 460px; }
+.dial-img { width: min(132px, 32vw); filter: drop-shadow(0 0 14px rgba(255, 227, 138, .5)); }
+.dial-info { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+.dial-day { font-size: 20px; }
+.dial-name { font-size: 17px; font-weight: 700; color: var(--ink-2); min-height: 24px; }
+.dial-tag { padding: 1px 14px; border-radius: 999px; border: 3px solid var(--ink); font-weight: 800; font-size: 15px; background: #fff; }
+.dial-tag.wax { background: #fff6bf; } .dial-tag.wane { background: #ece4ff; } .dial-tag.mid { background: #e6ecff; }
+.dial-range { display: flex; align-items: center; gap: 8px; width: 100%; font-size: 13px; font-weight: 700; }
+.dial-range input { flex: 1; height: 34px; accent-color: #8b5cf6; }
+
+/* orbit maps */
+.omap { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1 1 260px; max-width: 340px; min-width: 0; }
+.omap svg { width: 100%; height: auto; display: block; touch-action: manipulation; border-radius: 24px; border: 4px solid var(--ink); box-shadow: 0 5px 0 var(--ink); }
+.omap svg.armed .ob-hit { stroke: rgba(255, 210, 63, .22); }
+.omap-note { margin: 0; font-size: 12.5px; color: var(--ink-2); text-align: center; }
+.obuild, .orace { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; width: 100%; }
+.ob-tray { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; flex: 1 1 170px; max-width: 360px; }
+.ob-card { min-width: 74px; padding: 4px 6px 6px; }
+.ob-card b { font-size: 13px; line-height: 1.2; text-align: center; }
+.ob-card small { font-size: 12px; color: var(--ink-2); font-weight: 700; text-align: center; line-height: 1.2; }
+.ob-card.sel { outline: 4px solid var(--yellow); }
+.orace-side { flex: 1 1 200px; max-width: 320px; display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.orace-time { display: flex; align-items: baseline; justify-content: center; gap: 6px; background: #fff; border: 3px solid var(--ink); border-radius: 16px; padding: 2px 10px; }
+.orace-time b { font-family: var(--num-font); font-size: 30px; color: #6a3fd0; }
+.orace-time span { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.orace-ctl { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.orace-range { width: 100%; height: 30px; accent-color: #8b5cf6; }
+.lap-chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.lap-chip { display: flex; align-items: center; gap: 4px; background: #fff; border: 3px solid var(--ink); border-radius: 14px; padding: 2px 6px; font-size: 13px; }
+.lap-chip b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; }
+.lap-chip .lap-n { font-family: var(--num-font); font-size: 18px; color: #6a3fd0; }
+.lap-chip small { font-size: 11px; color: var(--ink-2); }
+.lap-chip.done { background: #e2ffe9; border-color: #12804a; }
+.ptable { display: flex; flex-direction: column; gap: 4px; width: min(100%, 440px); }
+.pt-row { display: flex; align-items: center; gap: 8px; background: #fff; border: 3px solid var(--ink); border-radius: 14px; padding: 2px 8px; }
+.pt-row.hl { background: #fff6bf; }
+.pt-row b { width: 92px; flex: none; font-size: 14px; }
+.pt-bar { flex: 1; height: 14px; border-radius: 999px; background: #e8e3f6; border: 2px solid var(--ink); overflow: hidden; }
+.pt-bar i { display: block; height: 100%; border-radius: 999px; }
+.pt-v { width: 104px; flex: none; text-align: right; font-size: 13px; font-weight: 800; }
+.pred-fig { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.pred-arrow { display: flex; flex-direction: column; align-items: center; font-weight: 800; font-size: 14px; }
+.pred-arrow .ic { width: 34px; height: 34px; }
+.pred-q { width: 74px; height: 74px; border-radius: 50%; border: 4px dashed var(--ink); display: grid; place-items: center; font-size: 40px; font-weight: 800; background: #f1ecff; }
+
+/* การ์ดท้องฟ้าในสมุด */
+.sk-h { margin: 10px 0 4px; font-size: 16px; }
+.skgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.skcard { background: #1a2250; color: #fff6c2; border: 3px solid var(--ink); border-radius: 14px; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 1px; text-align: center; line-height: 1.2; }
+.skcard .moonpl, .skcard .plsvg { width: 48px; height: 48px; }
+.skcard b { font-size: 12px; } .skcard small { font-size: 10.5px; color: #cfd8ff; font-weight: 600; }
+.skcard.unk { background: #dcd8ee; color: #6b6a86; }
+.skcard .qmark { font-size: 30px; font-weight: 800; height: 48px; display: grid; place-items: center; }
+
+.lap-chip b { white-space: normal; line-height: 1.1; }
+@media (max-width: 640px) {
+  .obuild, .orace, .ring { flex-direction: column; }
+  .omap { max-width: 300px; width: 100%; }
+  .ring > svg { max-width: 300px; }
+  .ob-tray, .ring-tray { max-width: 100%; flex: 0 0 auto; }
+  .orace-side { max-width: 100%; width: 100%; }
+  .skgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pt-row b { width: 74px; font-size: 12.5px; } .pt-v { width: 86px; font-size: 12px; }
+  .sky-earth { flex-basis: 100%; max-width: 230px; }
+  .opts-moon .omoon b, .opts-planet .oplanet b { font-size: 12.5px; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .plab-orbit { max-width: 250px; } .omap { max-width: 250px; } .sky-main { max-width: 340px; }
+  .big-moon { width: 96px; }
+}

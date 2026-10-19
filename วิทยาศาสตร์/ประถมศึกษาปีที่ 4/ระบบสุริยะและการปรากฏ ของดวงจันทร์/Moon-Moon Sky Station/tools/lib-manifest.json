@@ -1,0 +1,274 @@
+{
+ "lines": [
+  {
+   "id": "praise1",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[excited] เก่งมาก! ถูกต้องเลย!"
+  },
+  {
+   "id": "praise2",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[amazed] สุดยอดไปเลย!"
+  },
+  {
+   "id": "praise3",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[happy] ใช่เลย! แม่นมาก!"
+  },
+  {
+   "id": "praise4",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[cheerfully] เยี่ยมไปเลย! ไปต่อกัน!"
+  },
+  {
+   "id": "praise5",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[excited] ว้าว! ผ่านฉลุย!"
+  },
+  {
+   "id": "praise6",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[happy] ถูกต้องจ้า! เก่งจังเลย!"
+  },
+  {
+   "id": "streak",
+   "voice": "guide_f",
+   "cat": "praise",
+   "text": "[amazed] ถูกติดกันเลย! ร้อนแรงมาก!"
+  },
+  {
+   "id": "oops1",
+   "voice": "guide_f",
+   "cat": "oops",
+   "text": "[gently] ยังไม่ใช่จ้า ลองอีกทีนะ"
+  },
+  {
+   "id": "oops2",
+   "voice": "guide_f",
+   "cat": "oops",
+   "text": "[encouraging] เกือบแล้ว! สังเกตอีกนิดนะ"
+  },
+  {
+   "id": "oops3",
+   "voice": "guide_f",
+   "cat": "oops",
+   "text": "[gently] ไม่เป็นไร ลองใหม่ได้เรื่อย ๆ"
+  },
+  {
+   "id": "oops4",
+   "voice": "guide_f",
+   "cat": "oops",
+   "text": "[softly] อุ๊ปส์ ลองดูอีกทีนะ"
+  },
+  {
+   "id": "retry",
+   "voice": "guide_f",
+   "cat": "oops",
+   "text": "[gently] ลองอีกทีนะ"
+  },
+  {
+   "id": "hint1",
+   "voice": "guide_f",
+   "cat": "hint",
+   "text": "[cheerfully] ดูตรงที่กระพริบนะ มีคำใบ้อยู่!"
+  },
+  {
+   "id": "hint2",
+   "voice": "guide_f",
+   "cat": "hint",
+   "text": "[gently] เราช่วยชี้ให้แล้ว ลองอีกครั้งนะ"
+  },
+  {
+   "id": "hint3",
+   "voice": "guide_f",
+   "cat": "hint",
+   "text": "[curious] ลองนับดูทีละอันสิ"
+  },
+  {
+   "id": "look",
+   "voice": "guide_f",
+   "cat": "hint",
+   "text": "[curious] สังเกตดี ๆ นะ"
+  },
+  {
+   "id": "hello",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[cheerfully] สวัสดีจ้า! พร้อมผจญภัยกันหรือยัง?"
+  },
+  {
+   "id": "go",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[excited] ไปลุยกันเลย!"
+  },
+  {
+   "id": "countdown",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[excited] สาม สอง หนึ่ง ลุย!"
+  },
+  {
+   "id": "stageclear",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[excited] ผ่านด่านนี้แล้ว! รับดาวไปเลย!"
+  },
+  {
+   "id": "bonus",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[excited] เก่งขนาดนี้! ลองภารกิจพิเศษไหม?"
+  },
+  {
+   "id": "easy",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[gently] ซ้อมอีกข้อสบาย ๆ ก่อนไหม?"
+  },
+  {
+   "id": "map",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[cheerfully] แตะที่เรืองแสงเพื่อเริ่มได้เลย!"
+  },
+  {
+   "id": "lock",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[gently] ด่านนี้ยังปิดอยู่ เล่นด่านก่อนหน้าก่อนนะ"
+  },
+  {
+   "id": "alldone",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[excited] ครบทุกด่านแล้ว! เก่งที่สุดเลย!"
+  },
+  {
+   "id": "thanks",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[happy] ขอบคุณที่ช่วยนะ เจอกันใหม่!"
+  },
+  {
+   "id": "timeup",
+   "voice": "guide_f",
+   "cat": "flow",
+   "text": "[gently] เวลาใกล้หมดแล้วนะ"
+  },
+  {
+   "id": "intro1",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ฮิฮิ! ข้ามาป่วนอีกแล้วนะ! [laughs]"
+  },
+  {
+   "id": "intro2",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ใครจะหยุดข้าได้ล่ะ?"
+  },
+  {
+   "id": "final",
+   "voice": "trickster",
+   "cat": "intro",
+   "text": "[mischievously] ถึงด่านสุดท้ายแล้ว! เจอข้าหน่อย! [laughs]"
+  },
+  {
+   "id": "wrong1",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[mischievously] ข้าว่าข้อนี้แหละถูก! เชื่อข้าสิ!"
+  },
+  {
+   "id": "wrong2",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[sly] ข้อนี้ชัวร์เลย ไม่ต้องคิดมาก!"
+  },
+  {
+   "id": "wrong3",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[mischievously] ตามข้ามาเลย ข้าไม่หลอกหรอก!"
+  },
+  {
+   "id": "wrong4",
+   "voice": "trickster",
+   "cat": "wrong",
+   "text": "[sly] คำตอบอยู่ตรงนั้นแหละ ลองเลือกสิ!"
+  },
+  {
+   "id": "trick1",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ลองดูสิ ถ้าตาไวพอ!"
+  },
+  {
+   "id": "taunt1",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ทำไม่ได้หรอก ฮิฮิ! [laughs]"
+  },
+  {
+   "id": "taunt2",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] ยากไปไหม? ยอมแพ้ซะเถอะ!"
+  },
+  {
+   "id": "gotcha",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[mischievously] โดนหลอกเข้าให้แล้ว! [laughs]"
+  },
+  {
+   "id": "laugh",
+   "voice": "trickster",
+   "cat": "taunt",
+   "text": "[laughs] ฮ่า ฮ่า ฮ่า!"
+  },
+  {
+   "id": "hit1",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[shocked] โอ๊ย! ทำได้อีกแล้ว!"
+  },
+  {
+   "id": "hit2",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[shocked] อะไรกัน! ไม่นะ!"
+  },
+  {
+   "id": "hit3",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[annoyed] ข้ายังไม่ยอมแพ้!"
+  },
+  {
+   "id": "surprise",
+   "voice": "trickster",
+   "cat": "hit",
+   "text": "[surprised] เอ๊ะ! รู้ได้ยังไงเนี่ย!"
+  },
+  {
+   "id": "lose",
+   "voice": "trickster",
+   "cat": "lose",
+   "text": "[sighs] ยอมแล้ว ๆ ข้าแพ้แล้ว"
+  },
+  {
+   "id": "sorry",
+   "voice": "trickster",
+   "cat": "lose",
+   "text": "[sadly] ข้าขอโทษ ข้าจะช่วยแล้วกัน"
+  }
+ ]
+}
