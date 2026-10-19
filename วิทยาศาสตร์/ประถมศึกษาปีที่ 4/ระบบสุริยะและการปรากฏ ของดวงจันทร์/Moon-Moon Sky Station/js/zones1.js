@@ -34,12 +34,12 @@
 
   /* ภาพย่อท้องฟ้า (ดวงจันทร์ที่จุดหนึ่งบนเส้นโค้ง) ใช้เป็นการ์ดเรียงลำดับ */
   function miniSky(t, eps) {
-    const X = u => 12 + 96 * u, Y = u => 54 - 40 * Math.sin(Math.PI * u);
+    const X = u => 108 - 96 * u, Y = u => 54 - 40 * Math.sin(Math.PI * u);
     let p = '';
     for (let i = 0; i <= 20; i++) p += (i ? 'L' : 'M') + X(i / 20).toFixed(1) + ' ' + Y(i / 20).toFixed(1);
     return '<svg class="minisky" viewBox="0 0 120 72" aria-hidden="true"><rect width="120" height="72" rx="12" fill="#2a3590"/><path d="' + p + '" fill="none" stroke="#fff6c2" stroke-width="1.8" stroke-dasharray="2 5" opacity=".8"/>' +
       art.at(art.moon(eps == null ? 170 : eps), (X(t) - 8).toFixed(1), (Y(t) - 8).toFixed(1), 16) + '<rect y="54" width="120" height="18" rx="9" fill="#1d1850"/>' +
-      '<text x="10" y="67" font-size="8" font-weight="800" fill="#ffb347" font-family="Mali">ตะวันออก</text><text x="110" y="67" font-size="8" font-weight="800" fill="#ff9fc8" text-anchor="end" font-family="Mali">ตะวันตก</text></svg>';
+      '<text x="110" y="67" font-size="8" font-weight="800" fill="#ffb347" text-anchor="end" font-family="Mali">ตะวันออก</text><text x="10" y="67" font-size="8" font-weight="800" fill="#ff9fc8" font-family="Mali">ตะวันตก</text></svg>';
   }
   /* ภาพย่อวงโคจรดวงจันทร์ (ใช้เป็นตัวเลือก) */
   function miniOrbit(eps) {
@@ -84,7 +84,7 @@
             cls: 'opts-words',
             options: [{ html: textOpt('ขึ้นทางตะวันออก ตกทางตะวันตก'), value: 'EW' }, { html: textOpt('ขึ้นทางตะวันตก ตกทางตะวันออก'), value: 'WE' }, { html: textOpt('ขึ้นทางเหนือ ตกทางใต้'), value: 'NS' }],
             onPick(v, b) {
-              if (v === 'EW') { b.classList.add('good'); ch.lock(); api.correct('ดวงจันทร์ขึ้นทาง{c:east} แล้วเคลื่อนเป็นเส้นโค้งไปตกทาง{c:west}', b); } else { ch.dim(b); api.wrong('ลองลากดวงจันทร์ดูอีกรอบ ซ้ายสุดคือทิศตะวันออก', b); }
+              if (v === 'EW') { b.classList.add('good'); ch.lock(); api.correct('ดวงจันทร์ขึ้นทาง{c:east} แล้วเคลื่อนเป็นเส้นโค้งไปตกทาง{c:west}', b); } else { ch.dim(b); api.wrong('ลองลากดวงจันทร์ดูอีกรอบ ขวาสุดคือทิศตะวันออก', b); }
             }
           });
         };
@@ -92,7 +92,7 @@
       },
       hint(l) {
         if (l === 3 && rig) rig.play();
-        return ['ลากดวงจันทร์ไปซ้ายสุด แล้วไปขวาสุด ดูว่าเริ่มและจบตรงไหน', 'ด้านซ้ายคือทิศตะวันออก ด้านขวาคือทิศตะวันตก', 'กดดูมูนมูนเล่นให้ดู แล้วสังเกตจุดเริ่มกับจุดตก'][l - 1];
+        return ['ลากดวงจันทร์ไปขวาสุด แล้วไปซ้ายสุด ดูว่าเริ่มและจบตรงไหน', 'ด้านขวาคือทิศตะวันออก ด้านซ้ายคือทิศตะวันตก', 'กดดูมูนมูนเล่นให้ดู แล้วสังเกตจุดเริ่มกับจุดตก'][l - 1];
       },
       answer: 'ดวงจันทร์ขึ้นทางทิศตะวันออก ตกทางทิศตะวันตก',
       solve() { if (rig) rig.setT(0.95); if (ask) ask(); if (ch) ch.mark('EW', 'good'); }
@@ -149,15 +149,15 @@
           ask: 'แตะเรียง: เพิ่งขึ้น → ใกล้ตก', cards: o.shuffled.map(t => ({ id: String(t), html: miniSky(t) })),
           onComplete(order) {
             if (order.join() === o.ts.map(String).join()) api.correct('ดวงจันทร์เริ่มจากทิศตะวันออก ไต่ขึ้นสูง แล้วลดต่ำลงไปทางทิศตะวันตก', el);
-            else { api.wrong('ลำดับยังไม่ถูก นึกถึงเส้นโค้งจากซ้ายไปขวา', el.querySelector('.o-host')); setTimeout(() => ord.reset(), 700); }
+            else { api.wrong('ลำดับยังไม่ถูก นึกถึงเส้นโค้งจากขวาไปซ้าย', el.querySelector('.o-host')); setTimeout(() => ord.reset(), 700); }
           }
         });
       },
       hint(l) {
         if (l === 3 && ord) { const c = ord.cards.find(x => x.dataset.id === String(o.ts[0])); if (c) c.classList.add('hl'); }
-        return ['ดวงจันทร์เริ่มจากฝั่งตะวันออก ซึ่งอยู่ทางซ้าย', 'เรียงจากซ้ายไปขวา ตามเส้นโค้งที่ดวงจันทร์เดินทาง', 'ภาพที่เรืองแสง คือภาพแรก ที่ดวงจันทร์เพิ่งขึ้น'][l - 1];
+        return ['ดวงจันทร์เริ่มจากฝั่งตะวันออก ซึ่งอยู่ทางขวา', 'เรียงจากขวาไปซ้าย ตามเส้นโค้งที่ดวงจันทร์เดินทาง', 'ภาพที่เรืองแสง คือภาพแรก ที่ดวงจันทร์เพิ่งขึ้น'][l - 1];
       },
-      answer: 'เรียงจากซ้าย (ตะวันออก) ไปขวา (ตะวันตก)',
+      answer: 'เรียงจากขวา (ตะวันออก) ไปซ้าย (ตะวันตก)',
       solve() { if (ord) ord.set(o.ts.map(String)); }
     };
   }
@@ -175,7 +175,7 @@
     gen(level, i, run) {
       if (i === 0) return tSkyQ(level, run);
       if (i === 1) return level >= 2 ? tArcOrder(level) : tSkyQ(level, run);
-      return tClaim(1, run, host => W.skyRig(host, { t: 0.5, earth: false }), 'ลากดวงจันทร์ดูเส้นทางจริง ซ้ายสุดคือทิศตะวันออก');
+      return tClaim(1, run, host => W.skyRig(host, { t: 0.5, earth: false }), 'ลากดวงจันทร์ดูเส้นทางจริง ขวาสุดคือทิศตะวันออก');
     },
     recap: [
       'ดวงจันทร์ขึ้นทาง{c:east} แล้วเคลื่อนเป็นเส้นโค้งไปตกทาง{c:west}',
@@ -189,7 +189,7 @@
     book: [
       '**ดวงจันทร์ขึ้นทางทิศตะวันออก** ไต่ขึ้นสูงเป็นเส้นโค้ง แล้ว**ตกทางทิศตะวันตก**',
       'โลก**หมุนรอบตัวเอง** จากตะวันตกไปตะวันออก เราจึงเห็นดวงจันทร์เหมือนเคลื่อนที่ไปทางตะวันตก',
-      'ภาพท้องฟ้าในเกม: หันหน้าไปทางทิศใต้ มือซ้ายเป็นทิศตะวันออก มือขวาเป็นทิศตะวันตก'
+      'ภาพท้องฟ้าในเกม: เรียงทิศตามแผนที่สากล: ตะวันออกอยู่ขวามือ ตะวันตกอยู่ซ้ายมือ'
     ]
   });
 

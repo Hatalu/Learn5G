@@ -108,7 +108,7 @@
   }
 
   /* ════════════════════════════════════════════════════
-     skyRig : ท้องฟ้ามองไปทางทิศใต้ (ซ้าย = ตะวันออก, ขวา = ตะวันตก)
+     skyRig : ท้องฟ้ามองไปทางทิศใต้ (ขวา = ตะวันออก, ซ้าย = ตะวันตก ตามแผนที่สากล)
      ลากดวงจันทร์ตามเส้นโค้ง หรือกด "เล่นต่อเนื่อง" · cfg.earth = แสดงแบบจำลองโลกหมุนข้างกัน
      cfg = {t, eps, earth, trail, onMove(t), onVisit(kind)}   kind = rise | mid | set
      ════════════════════════════════════════════════════ */
@@ -117,7 +117,7 @@
     const eps = cfg.eps != null ? cfg.eps : 160;
     let t = cfg.t != null ? cfg.t : 0.5, anim = null;
     const visited = { rise: false, mid: false, set: false };
-    const X = u => 50 + 320 * u, Y = u => 190 - 140 * Math.sin(Math.PI * u);
+    const X = u => 370 - 320 * u, Y = u => 190 - 140 * Math.sin(Math.PI * u);
     let path = '';
     for (let i = 0; i <= 40; i++) path += (i ? 'L' : 'M') + f1(X(i / 40)) + ' ' + f1(Y(i / 40));
     let stars = '';
@@ -125,7 +125,7 @@
     let dots = '';
     [0.12, 0.3, 0.7, 0.88].forEach(u => { dots += '<circle cx="' + f1(X(u)) + '" cy="' + f1(Y(u)) + '" r="3" fill="#fff6c2" opacity=".5"/>'; });
     const earthHtml = cfg.earth ? '<div class="sky-earth"><svg class="sky-svg2" id="earthSvg" viewBox="0 0 200 220" aria-hidden="true"></svg></div>' : '';
-    host.innerHTML = '<div class="skyrig' + (cfg.earth ? ' with-earth' : '') + '"><div class="sky-main"><svg class="sky-svg2" viewBox="0 0 420 250" aria-label="ท้องฟ้ามองไปทางทิศใต้">' +
+    host.innerHTML = '<div class="skyrig' + (cfg.earth ? ' with-earth' : '') + '"><div class="sky-main"><svg class="sky-svg2" viewBox="0 0 420 250" aria-label="ท้องฟ้าตามทิศแผนที่สากล">' +
       '<defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18235a"/><stop offset=".7" stop-color="#3f3f9e"/><stop offset="1" stop-color="#7a5bc0"/></linearGradient></defs>' +
       '<rect width="420" height="250" rx="22" fill="url(#skyg)"/>' + stars +
       '<path d="' + path + '" fill="none" stroke="#fff6c2" stroke-width="2.6" stroke-dasharray="3 7" stroke-linecap="round" opacity=".7"/>' + dots +
@@ -134,9 +134,9 @@
       '<path d="M30 200 l10 -22 l10 22Z M62 200 l8 -16 l8 16Z M352 200 l10 -24 l10 24Z M384 200 l8 -15 l8 15Z" fill="#13103a"/>' +
       '<g transform="translate(210 198)"><circle cx="0" cy="-16" r="6" fill="#0f0c30"/><path d="M-7 0 V-8 Q0 -13 7 -8 V0Z" fill="#0f0c30"/></g>' +
       '<line x1="14" y1="198" x2="406" y2="198" stroke="#fff6c2" stroke-width="1.6" opacity=".5"/>' +
-      '<text x="16" y="224" font-size="17" font-weight="800" fill="#ffb347" font-family="Mali">ตะวันออก</text>' +
-      '<text x="404" y="224" font-size="17" font-weight="800" fill="#ff9fc8" text-anchor="end" font-family="Mali">ตะวันตก</text>' +
-      '<text x="210" y="238" font-size="12" font-weight="700" fill="#cfd8ff" text-anchor="middle" font-family="Mali">หันหน้าไปทางทิศใต้</text></svg>' +
+      '<text x="404" y="224" font-size="17" font-weight="800" fill="#ffb347" text-anchor="end" font-family="Mali">ตะวันออก</text>' +
+      '<text x="16" y="224" font-size="17" font-weight="800" fill="#ff9fc8" font-family="Mali">ตะวันตก</text>' +
+      '<text x="210" y="238" font-size="12" font-weight="700" fill="#cfd8ff" text-anchor="middle" font-family="Mali">ทิศตามแผนที่สากล</text></svg>' +
       '<div class="sky-ctl"><button class="btn btn-sm btn-soft sky-play">' + art.icon('play') + '<span>เล่นต่อเนื่อง</span></button><span class="sky-state"></span></div></div>' + earthHtml + '</div>';
     const svg = host.querySelector('.sky-main svg'), mg = svg.querySelector('.sk-moon');
     const stateEl = host.querySelector('.sky-state'), playBtn = host.querySelector('.sky-play');
@@ -195,8 +195,8 @@
       mg.querySelector('.moon-hint').style.display = 'none';
     } else {
       ui.drag(svg, {
-        onStart(p) { audio.unlock(); stop(); mg.querySelector('.moon-hint').style.display = 'none'; const q = svgPt(svg, p); setT((q.x - 50) / 320); return true; },
-        onMove(p) { const q = svgPt(svg, p); setT((q.x - 50) / 320); },
+        onStart(p) { audio.unlock(); stop(); mg.querySelector('.moon-hint').style.display = 'none'; const q = svgPt(svg, p); setT((370 - q.x) / 320); return true; },
+        onMove(p) { const q = svgPt(svg, p); setT((370 - q.x) / 320); },
         onEnd() { audio.sfx('phase'); }
       });
     }
