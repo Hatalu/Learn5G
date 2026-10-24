@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#7b5cff" />
+  <title>Sky Rally ซิ่งฟ้าสายรุ้ง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <canvas id="world"></canvas>
+
+  <!-- Title -->
+  <section id="title" class="screen show">
+    <div class="topbar"><div class="coin-pill wallet" id="walletTitle"></div><button class="icon-btn" data-act="sound" aria-label="เสียง"></button></div>
+    <div class="logo">
+      <div class="logo-main"><span>SKY</span><span>RALLY</span></div>
+      <div class="logo-sub">ซิ่งฟ้าสายรุ้ง</div>
+    </div>
+    <div class="kart-pick">
+      <button class="round-btn" data-act="kart-prev" aria-label="ก่อนหน้า"></button>
+      <div class="kart-name" id="kartName"></div>
+      <button class="round-btn" data-act="kart-next" aria-label="ถัดไป"></button>
+    </div>
+    <div class="title-btns">
+      <button class="jelly ghost" data-act="garage" id="garageBtn"></button>
+      <button class="jelly big go" data-act="start">เริ่มเลย</button>
+    </div>
+  </section>
+
+  <!-- Garage -->
+  <section id="garage" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" data-act="garage-back" aria-label="ย้อนกลับ"></button>
+      <div class="crumbs">อู่แต่งรถ</div>
+      <div class="coin-pill wallet" id="walletGarage"></div>
+    </div>
+    <div class="garage-list" id="garageList"></div>
+    <p class="garage-note">เก็บดาวในสนาม และตอบถูก เพื่อได้ดาวมาแต่งรถ</p>
+  </section>
+
+  <!-- Generic picker (subject / grade / topic / level) -->
+  <section id="pick" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" data-act="back" aria-label="ย้อนกลับ"></button>
+      <div class="crumbs" id="crumbs"></div>
+      <button class="icon-btn" data-act="sound" aria-label="เสียง"></button>
+    </div>
+    <h2 class="pick-title" id="pickTitle"></h2>
+    <div class="pick-grid" id="pickGrid"></div>
+  </section>
+
+  <!-- Lesson -->
+  <section id="lesson" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" data-act="back" aria-label="ย้อนกลับ"></button>
+      <div class="crumbs" id="lessonCrumbs"></div>
+      <button class="icon-btn" data-act="sound" aria-label="เสียง"></button>
+    </div>
+    <div class="lesson-wrap">
+      <div class="lesson-toc" id="lessonToc"></div>
+      <div class="guide" id="guide"></div>
+      <div class="lesson-card" id="lessonCard"></div>
+      <div class="lesson-nav">
+        <button class="jelly ghost" data-act="lesson-prev">ย้อน</button>
+        <button class="jelly" data-act="lesson-next" id="lessonNext">ต่อไป</button>
+      </div>
+      <button class="skip-link" data-act="lesson-skip">ข้ามไปแข่งเลย</button>
+    </div>
+  </section>
+
+  <!-- Race HUD -->
+  <section id="hud" class="screen">
+    <div class="hud-top">
+      <div class="rank-pill" id="rank"><b>4</b><small>/4</small></div>
+      <div class="track-bar"><div class="track-fill" id="trackFill"></div><div class="track-gates" id="trackGates"></div><div class="track-kart" id="trackKart"></div></div>
+      <div class="coin-pill" id="coins"></div>
+      <button class="icon-btn" data-act="pause" aria-label="หยุดพัก"></button>
+    </div>
+    <div class="qpanel" id="qpanel">
+      <div class="qhead"><span class="qnum" id="qnum"></span><div class="qtext" id="qtext"></div><button class="icon-btn small" data-act="speak" aria-label="อ่านโจทย์"></button></div>
+      <div class="qhint" id="qhint"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="count" id="count"></div>
+    <div class="tutorial" id="tutorial"></div>
+    <div class="controls">
+      <button class="pad left" data-hold="left" aria-label="เลี้ยวซ้าย"></button>
+      <div class="mid-ctrl">
+        <button class="pad brake" data-hold="brake" aria-label="ชะลอ"></button>
+        <button class="item-slot" id="itemBtn" data-act="item" aria-label="ใช้ไอเทม"><span class="item-ico" id="itemIco"></span><small id="itemName">ไอเทม</small></button>
+      </div>
+      <button class="pad right" data-hold="right" aria-label="เลี้ยวขวา"></button>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="result" class="screen">
+    <div class="result-card">
+      <div class="trophy" id="trophy"></div>
+      <h2 id="resultTitle"></h2>
+      <div id="resultStars"></div>
+      <div class="stats" id="stats"></div>
+      <div class="review" id="review"></div>
+      <div class="result-btns">
+        <button class="jelly ghost" data-act="menu"></button>
+        <button class="jelly ghost" data-act="relearn"></button>
+        <button class="jelly" data-act="again"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pause -->
+  <div id="pause" class="modal">
+    <div class="modal-card">
+      <h2>พักก่อน</h2>
+      <button class="jelly" data-act="resume">เล่นต่อ</button>
+      <button class="jelly ghost" data-act="again">เริ่มใหม่</button>
+      <button class="jelly ghost" data-act="menu">เลือกเรื่องใหม่</button>
+    </div>
+  </div>
+
+  <div id="fade" class="fade"></div>
+  <div id="loading" class="loading"><div class="spinner"></div><p>กำลังเตรียมสนามแข่ง</p></div>
+  <noscript>เกมนี้ต้องเปิด JavaScript</noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
