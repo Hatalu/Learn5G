@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fraction Bakery - ร้านขนมเศษส่วน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section id="title" class="scene on">
+  <div class="logo"><b>ร้านขนมเศษส่วน</b><span>Fraction Bakery กับมิมิและจิ๊ดจิ๊ด</span></div>
+  <div class="duo" id="titleDuo"></div>
+  <button class="btn" id="startBtn">เปิดร้านกันเลย!</button>
+</section>
+
+<section id="map" class="scene">
+  <div class="topbar">
+    <div class="pill"><span class="coinIcon"></span><span class="coins">0</span></div>
+    <div class="grow"></div>
+    <button class="iconbtn" id="shopBtn" aria-label="ร้านของแต่ง"></button>
+    <button class="iconbtn sndBtn" aria-label="เสียง"></button>
+  </div>
+  <div class="street">
+    <div id="front"></div>
+    <div class="menus" id="menus"></div>
+  </div>
+</section>
+
+<section id="play" class="scene">
+  <div class="topbar">
+    <button class="iconbtn homeBtn" aria-label="กลับร้าน"></button>
+    <div class="pill"><span class="coinIcon"></span><span class="coins">0</span></div>
+    <div class="grow"></div>
+    <div class="dots" id="dots"></div>
+    <div class="grow"></div>
+    <button class="iconbtn sndBtn" aria-label="เสียง"></button>
+  </div>
+  <div class="side" id="mimiSide"></div>
+  <div class="board">
+    <div class="bubble m" id="bubble"></div>
+    <div class="qcard">
+      <div class="ribbon" id="ribbon"></div>
+      <div class="order" id="order"></div>
+      <div class="work" id="work"></div>
+      <div class="actions" id="actions"></div>
+    </div>
+  </div>
+  <div class="side" id="jidSide"></div>
+</section>
+
+<div id="peek"></div>
+
+<div class="modal" id="result">
+  <div class="sheet">
+    <h2 id="resTitle"></h2>
+    <div class="bigstars" id="resStars"></div>
+    <div class="review" id="resReview"></div>
+    <div class="actions"><button class="btn ghost" id="again">เล่นอีกครั้ง</button><button class="btn mint" id="toMap">กลับร้าน</button></div>
+  </div>
+</div>
+
+<div class="modal" id="shop">
+  <div class="sheet">
+    <h2>แต่งร้าน</h2>
+    <div class="pill" style="display:inline-flex"><span class="coinIcon"></span><span class="coins">0</span></div>
+    <div class="items" id="items"></div>
+    <button class="btn mint" id="shopClose">เสร็จแล้ว</button>
+  </div>
+</div>
+
+<div id="fx"></div>
+<div id="fade"></div>
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
