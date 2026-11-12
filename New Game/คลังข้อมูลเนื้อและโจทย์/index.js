@@ -6,6 +6,7 @@ import { english } from './english.js';
 import { mathLessons } from './lessons-math.js';
 import { scienceLessons } from './lessons-science.js';
 import { englishLessons } from './lessons-english.js';
+import { general, AGE_BANDS, GENERAL_CATS } from './general.js';
 import { rng, toPlayable } from './util.js';
 
 export const SUBJECTS = [
@@ -20,7 +21,13 @@ export const LEVELS = [
   { d: 3, name: 'ท้าทาย', en: 'Advanced' },
 ];
 
-const subj = (id) => SUBJECTS.find((s) => s.id === id);
+// ชุดเสริมที่ไม่อยู่ใน SUBJECTS (เกมเก่าวนลูป SUBJECTS พร้อมไอคอน/ธีมของตัวเอง จึงแยกไว้)
+// ความรู้รอบตัว: "ชั้น" = ช่วงวัยใน AGE_BANDS (1 = ป.1–3, 2 = ป.4–6, 3 = ม.ต้นขึ้นไป, 4 = ผู้ใหญ่)
+export { AGE_BANDS, GENERAL_CATS };
+export const GENERAL = { id: 'general', name: 'ความรู้รอบตัว', en: 'General Knowledge', color: '#ffb02e', data: general, bands: AGE_BANDS };
+export const EXTRA_SUBJECTS = [GENERAL];
+
+const subj = (id) => SUBJECTS.find((s) => s.id === id) || EXTRA_SUBJECTS.find((s) => s.id === id);
 
 export function listTopics(subject, grade) {
   return (subj(subject)?.data[grade] || []).map((t) => ({ id: t.id, name: t.name }));
@@ -53,8 +60,8 @@ export function lessonFor(topic, q) {
   return { index: best, card: topic.lesson[best] };
 }
 
-// Static tuple [d, q, a, w, hint] -> question object.
-const fromTuple = (t, i, topicId) => ({ id: `${topicId}-${i}`, d: t[0], q: t[1], a: t[2], w: t[3], hint: t[4], explain: `${t[2]} — ${t[4]}` });
+// Static tuple [d, q, a, w, hint, explain?] -> question object. explain (ข้อ 6) ไม่บังคับ: ถ้าไม่มีใช้คำใบ้แทน
+const fromTuple = (t, i, topicId) => ({ id: `${topicId}-${i}`, d: t[0], q: t[1], a: t[2], w: t[3], hint: t[4], explain: `${t[2]} — ${t[5] || t[4]}` });
 
 // A deck hands out questions one at a time at any difficulty without repeating.
 export function createDeck(subject, grade, topicId, { seed = Date.now(), choices = 3 } = {}) {

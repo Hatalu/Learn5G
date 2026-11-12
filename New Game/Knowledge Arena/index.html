@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#6b4dff" />
+  <title>Knowledge Arena สนามประลองรอบรู้</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <canvas id="world"></canvas>
+  <div id="fade"></div>
+
+  <!-- Main menu -->
+  <section id="menu" class="screen">
+    <div class="topbar"><div class="chip stars" id="starChip"></div><button class="icon-btn" data-act="sound" aria-label="เสียง"></button></div>
+    <div class="logo">
+      <div class="logo-main"><span>KNOWLEDGE</span><span>ARENA</span></div>
+      <div class="logo-sub">สนามประลองรอบรู้</div>
+    </div>
+    <div class="menu-btns">
+      <button class="jelly big gold" data-act="solo"><i data-ic="bot"></i><span>เล่นกับบอท</span></button>
+      <button class="jelly blue" data-act="local"><i data-ic="users"></i><span>2 คนเครื่องเดียว</span></button>
+      <div class="row2">
+        <button class="jelly pink" data-act="host"><i data-ic="plus"></i><span>สร้างห้อง</span></button>
+        <button class="jelly mint" data-act="join"><i data-ic="door"></i><span>เข้าห้อง</span></button>
+      </div>
+      <div class="row2">
+        <button class="jelly ghost" data-act="avatar"><i data-ic="crown"></i><span>แต่งตัวละคร</span></button>
+        <button class="jelly ghost" data-act="cards"><i data-ic="book"></i><span>การ์ดความรู้</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Character -->
+  <section id="avatar" class="screen">
+    <div class="topbar"><button class="icon-btn" data-act="back" aria-label="กลับ"></button><h2>ตัวละครของฉัน</h2><div class="chip stars" data-stars></div></div>
+    <div class="av-panel card">
+      <div class="namebar"><span id="nameOut" class="name-out"></span><button class="mini-btn" data-act="rename"><i data-ic="dice"></i>สุ่มชื่อ</button></div>
+      <div class="label">สี</div><div class="swatches" id="colors"></div>
+      <div class="label">หู</div><div class="opts" id="ears"></div>
+      <div class="label">หมวก <small>(สะสมดาวเพื่อปลดล็อก)</small></div><div class="opts" id="hats"></div>
+      <div class="label">ช่วงวัย <small>(ความยากของคำถาม)</small></div><div class="opts" id="bands"></div>
+      <button class="jelly gold wide" data-act="back"><i data-ic="check"></i><span>เสร็จแล้ว</span></button>
+    </div>
+  </section>
+
+  <!-- Match setup (bots / local) -->
+  <section id="setup" class="screen">
+    <div class="topbar"><button class="icon-btn" data-act="back" aria-label="กลับ"></button><h2 id="setupTitle">ตั้งค่าการแข่ง</h2><span></span></div>
+    <div class="card setup-card">
+      <div class="label">เวลาแข่ง</div><div class="opts" id="durs"></div>
+      <div class="label" id="botsLabel">จำนวนบอท</div><div class="opts" id="botsOpt"></div>
+      <div class="label">หมวดคำถาม</div><div class="opts cats" id="catsOpt"></div>
+      <div class="local-only">
+        <div class="label">ผู้เล่น 2: ช่วงวัย</div><div class="opts" id="p2bands"></div>
+        <div class="keys" id="keyHelp"></div>
+      </div>
+      <label class="toggle"><input type="checkbox" id="learnFirst" /><span>อ่านการ์ดความรู้ก่อนลงสนาม</span></label>
+      <button class="jelly big gold wide" data-act="go"><i data-ic="play"></i><span>ลงสนาม!</span></button>
+    </div>
+  </section>
+
+  <!-- Join -->
+  <section id="join" class="screen">
+    <div class="topbar"><button class="icon-btn" data-act="back" aria-label="กลับ"></button><h2>เข้าห้อง</h2><span></span></div>
+    <div class="card join-card">
+      <div class="label">ใส่รหัสห้อง 5 ตัว</div>
+      <input id="codeIn" class="code-in" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" />
+      <div class="status" id="joinStatus"></div>
+      <button class="jelly big mint wide" data-act="joinGo"><i data-ic="door"></i><span>เข้าห้อง</span></button>
+    </div>
+  </section>
+
+  <!-- Lobby -->
+  <section id="lobby" class="screen">
+    <div class="topbar"><button class="icon-btn" data-act="leave" aria-label="ออกจากห้อง"></button><h2>ห้องรอ</h2><span></span></div>
+    <div class="card lobby-card">
+      <div class="code-box"><small>รหัสห้อง</small><b id="codeOut">-----</b><button class="mini-btn" data-act="copy"><i data-ic="copy"></i>คัดลอก</button></div>
+      <div class="roster" id="roster"></div>
+      <div class="host-only">
+        <div class="row2"><button class="jelly ghost" data-act="addBot"><i data-ic="bot"></i><span>เพิ่มบอท</span></button><button class="jelly ghost" data-act="rmBot"><i data-ic="cross"></i><span>เอาบอทออก</span></button></div>
+        <div class="label">เวลาแข่ง</div><div class="opts" id="ldurs"></div>
+        <button class="jelly big gold wide" data-act="startNet"><i data-ic="play"></i><span>เริ่มแข่ง!</span></button>
+      </div>
+      <div class="guest-only status">รอเจ้าของห้องกดเริ่ม...</div>
+      <div class="status" id="lobbyStatus"></div>
+    </div>
+  </section>
+
+  <!-- Warm-up lesson cards / card library -->
+  <section id="learn" class="screen">
+    <div class="topbar"><button class="icon-btn" data-act="back" aria-label="กลับ"></button><h2 id="learnTitle">ความรู้ก่อนลงสนาม</h2><span class="chip" id="learnCount"></span></div>
+    <div class="learn-cats opts" id="learnCats"></div>
+    <div class="card lesson-card" id="lessonCard"></div>
+    <div class="learn-nav">
+      <button class="jelly ghost" data-act="lprev"><i data-ic="back"></i><span>ก่อนหน้า</span></button>
+      <button class="jelly gold" data-act="lnext"><span id="lnextTxt">ถัดไป</span><i data-ic="next"></i></button>
+    </div>
+  </section>
+
+  <!-- In-game HUD -->
+  <section id="hud" class="screen">
+    <div class="tags" id="tags"></div>
+    <div class="pops" id="pops"></div>
+    <div class="hud-top">
+      <div class="me-box" id="meBox"></div>
+      <div class="timer" id="timer"><i data-ic="clock"></i><b>3:00</b></div>
+      <div class="board" id="board"></div>
+    </div>
+    <div class="mission" id="mission"></div>
+    <div class="orb-arrow" id="orbArrow"><i data-ic="q"></i></div>
+    <div class="banner" id="banner"></div>
+    <div class="count" id="count"></div>
+    <div class="quizzes" id="quizzes"></div>
+    <div class="touch" id="touch">
+      <div class="stick-zone"></div>
+      <div class="stick"><div class="knob"></div></div>
+      <div class="tbtns">
+        <button class="tbtn skill" data-btn="skill" id="tSkill" aria-label="ใช้สกิล"></button>
+        <button class="tbtn dash" data-btn="dash" aria-label="พุ่งหลบ"><i data-ic="dash"></i></button>
+        <button class="tbtn atk" data-btn="atk" aria-label="ชน"><i data-ic="fist"></i></button>
+      </div>
+    </div>
+    <div class="skill-pc" id="skillPc"></div>
+    <div class="keyhint" id="keyhint"></div>
+    <button class="icon-btn hud-exit" data-act="quit" aria-label="ออก"></button>
+  </section>
+
+  <!-- Results -->
+  <section id="results" class="screen">
+    <div class="res-wrap">
+      <div class="res-title" id="resTitle"></div>
+      <div class="card res-card">
+        <div class="rank" id="rankList"></div>
+        <div class="earn" id="earn"></div>
+        <div class="label">ทบทวนคำถามของฉัน</div>
+        <div class="review" id="review"></div>
+      </div>
+      <div class="row2 res-btns">
+        <button class="jelly ghost" data-act="menu"><i data-ic="back"></i><span>เมนู</span></button>
+        <button class="jelly big gold" data-act="again"><i data-ic="again"></i><span>เล่นอีกครั้ง</span></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal" id="modal"><div class="card modal-card"><div id="modalBody"></div><button class="jelly gold wide" data-act="closeModal"><span>เข้าใจแล้ว</span></button></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 // - ทุกหัวข้อมีบทเรียน + โจทย์ครบ 3 ระดับ
 // - คำตอบถูกไม่ซ้ำตัวลวง, ตัวลวงอย่างน้อย 2 ตัวไม่ซ้ำกัน
 // - ไม่มีค่าว่าง/NaN/undefined, ไม่มีอิโมจิ, ตัวเลือกยาวไม่เกินป้าย
-import { SUBJECTS, GRADES, listTopics, createDeck } from '../index.js';
+import { SUBJECTS, EXTRA_SUBJECTS, GRADES, listTopics, createDeck } from '../index.js';
 
 const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F000}-\u{1F2FF}]/u;
 const MAX_CHOICE = 26;
@@ -12,8 +12,8 @@ let errors = 0, questions = 0, topics = 0, lessonCards = 0;
 const perTopic = {};
 const err = (where, msg) => { errors++; perTopic[where] = (perTopic[where] || 0) + 1; if (perTopic[where] <= 2) console.log(`  x ${where}: ${msg}`); };
 
-for (const s of SUBJECTS) {
-  for (const g of GRADES) {
+for (const s of [...SUBJECTS, ...EXTRA_SUBJECTS]) {
+  for (const g of s.bands ? s.bands.map((b) => b.g) : GRADES) {
     const list = listTopics(s.id, g);
     if (list.length < 4) err(`${s.id} ป.${g}`, `หัวข้อน้อยเกินไป (${list.length})`);
     for (const t of list) {
